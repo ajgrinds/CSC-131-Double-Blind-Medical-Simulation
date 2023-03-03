@@ -9,6 +9,7 @@ import Patient from "./scenes/patient";
 import PatientDetails from "./scenes/patientdetails";
 import FDADashboard from "./scenes/FDA";
 
+
 //import Invoices from "./scenes/invoices";
 //import Contacts from "./scenes/contacts";
 //import Bar from "./scenes/bar";
@@ -23,7 +24,7 @@ function App() {
 
   const [theme, colorMode] = useMode();
 
- return (
+  return ( 
   <ColorModeContext.Provider value={colorMode}>
     <ThemeProvider theme={theme}>
       <CssBaseline/>
