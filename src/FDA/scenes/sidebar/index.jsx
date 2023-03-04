@@ -3,7 +3,7 @@ import { ProSidebar, Menu, MenuItem } from "react-pro-sidebar";
 import 'react-pro-sidebar/dist/css/styles.css';
 import { Box,IconButton, Typography, useTheme } from '@mui/material';
 import {Link} from 'react-router-dom';
-import {tokens} from "../../theme";
+import { tokens } from "../../theme";
 import HomeOutlinedIcon from "@mui/icons-material/HomeOutlined";
 import PeopleOutlinedIcon from "@mui/icons-material/PeopleOutlined";
 import ContactsOutlinedIcon from "@mui/icons-material/ContactsOutlined";
@@ -13,7 +13,7 @@ import CalendarTodayOutlinedIcon from "@mui/icons-material/CalendarTodayOutlined
 //import HelpOutlinedIcon from "@mui/icons-material/HelpOutlined";
 import AssignmentReturnedIcon from '@mui/icons-material/AssignmentReturned';
 import MenuOutlinedIcon from "@mui/icons-material/MenuOutlined";
-import avatar from '../../components/squiliem.jpeg'
+import avatar from "../../pictures/squiliem.jpeg"
 
 
 const Item =({title, to, icon, selected, setSelected}) => {
@@ -22,7 +22,7 @@ const Item =({title, to, icon, selected, setSelected}) => {
   return(
     <MenuItem 
       active={selected === title} 
-      style={{color: colors.grey[100]}} 
+      style={{color: colors.grey[900]}} 
       onClick={() => setSelected(title)} 
       icon={icon}
     >
@@ -77,7 +77,7 @@ const FDASidebar = () => {
                 alignItems="center"
                 ml="15px"
               >
-              <Typography variant="h5" color={colors.grey[100]}>
+              <Typography variant="h5" color={colors.grey[700]}>
                   Food & Drug
                 </Typography>
                 <IconButton onClick={() => setIsCollapsed(!isCollapsed)}>
@@ -102,13 +102,13 @@ const FDASidebar = () => {
               <Box textAlign="center">
                 <Typography
                   variant="h4"
-                  color={colors.grey[100]}
+                  color={colors.grey[700]}
                   fontWeight="bold"
                   sx={{m: "10px 0 0 0"}}
                 >
                   Big Boss FDA Man
                 </Typography>
-                <Typography variant="h5" color={colors.greenAccent[500]}>
+                <Typography variant="h5" color={colors.blueAccent[500]}>
                   FDA
                 </Typography>
               </Box>
@@ -169,6 +169,22 @@ const FDASidebar = () => {
             >
               Pages
             </Typography>
+
+            <Item
+              title="Jane Hopkins"
+              to="/"
+              icon={<PersonOutlinedIcon/>}
+              selected={selected}
+              setSelected={setSelected}
+            />
+
+            <Item
+              title="Bavaria"
+              to="/bavaria"
+              icon={<PersonOutlinedIcon/>}
+              selected={selected}
+              setSelected={setSelected}
+            />
 
             <Item
               title="Profile Form"
