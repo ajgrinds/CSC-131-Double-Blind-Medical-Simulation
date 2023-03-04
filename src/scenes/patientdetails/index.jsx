@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from "react-router-dom";
 import { useParams } from 'react-router-dom';
-import useJaneHopkins from '../vendiaHooks/useJaneHopkins';
+import useJaneHopkins from '../../vendiaHooks/useJaneHopkins';
 import {Box, Typography, useTheme} from "@mui/material";
-import { tokens } from "../theme";
-import Header from '../components/Header';
+import { tokens } from "../../theme";
+import Header from '../../components/Header';
 import InputAdornment from '@mui/material/InputAdornment';
 import TextField from '@mui/material/TextField';
 import MenuItem from '@mui/material/MenuItem';
@@ -14,7 +14,7 @@ import InputLabel from '@mui/material/InputLabel';
 import Button from '@mui/material/Button';
 import { styled } from '@mui/material/styles';
 import { purple } from '@mui/material/colors';
-import avatar from '../squiliem.jpeg';
+import avatar from '../../components/squiliem.jpeg';
 
 
 
