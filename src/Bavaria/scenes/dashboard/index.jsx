@@ -6,8 +6,6 @@ import PeopleOutlinedIcon from "@mui/icons-material/PeopleOutlined";
 import MedicalServicesIcon from '@mui/icons-material/MedicalServices';
 import FlagIcon from '@mui/icons-material/Flag';
 import * as React from 'react';
-import Stack from '@mui/material/Stack';
-import Button from '@mui/material/Button';
 //import StatBox from "../../components/StatBox";
 
 const BavariaDashboard = () => {
