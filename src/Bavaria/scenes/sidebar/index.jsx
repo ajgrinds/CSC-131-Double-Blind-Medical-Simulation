@@ -139,7 +139,7 @@ const BavariaSidebar = () => {
             />
             <Item
               title="View Progress"
-              to="/bavaria/progress"
+              to="/bavaria/patients"
               icon={<ContactsOutlinedIcon/>}
               selected={selected}
               setSelected={setSelected}

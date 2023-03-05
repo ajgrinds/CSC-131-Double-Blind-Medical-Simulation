@@ -5,9 +5,11 @@ import {Routes, Route, Navigate} from "react-router-dom";
 import TopBar from "./scenes/topbar";
 import BavariaSidebar from "./scenes/sidebar";
 import BavariaDashboard from "./scenes/dashboard";
+import BavariaPatients from "./scenes/patients";
+import Report from "./scenes/report";
+import Send from "./scenes/send";
 
-
-function FDA() {
+function Bavaria() {
 
   const [theme, colorMode] = useMode();
 
@@ -19,15 +21,19 @@ function FDA() {
 
        <BavariaSidebar/>
 
-        <main className="content">
+       <main className="content">
           <TopBar/>
           
+        
+         
           <Routes>
-            <Route path="/" element={<BavariaDashboard/>}/>
+          <Route path="/" element={<BavariaDashboard/>}/>
+          <Route path="/patients" element={<BavariaPatients/>} />
+          <Route path="/send" element={<Send/>} />
+          <Route path="/report" element={<Report/>} />
             
 
           </Routes>
-  
 
         </main>
 
@@ -39,4 +45,4 @@ function FDA() {
   );
 }
 
-export default FDA;
+export default Bavaria;

@@ -7,6 +7,9 @@ import Bavaria from "./Bavaria/Bavaria";
 import FDA from "./FDA/FDA";
 import FDAPatient from "./FDA/scenes/patient"
 import FDADashboard from "./FDA/scenes/dashboard";
+import Report from "./Bavaria/scenes/report";
+import Send from "./Bavaria/scenes/send";
+import BavariaPatients from "./Bavaria/scenes/patients";
 
 
 function App() {
@@ -34,8 +37,9 @@ function App() {
 
       {/*Routes for Bavaria page */}
       <Route path="/bavaria" element={<Bavaria/>}>
-
-
+        <Route path="/bavaria/send" element={<Send/>}/>
+        <Route path="/bavaria/patients" element={<BavariaPatients/>}/>
+        <Route path="/bavaria/report" element={<Report/>}/>
       </Route>
 
     </Routes>
