@@ -2,9 +2,9 @@ import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { Box, Button, useTheme } from "@mui/material";
 import { DataGrid } from "@mui/x-data-grid";
-import { tokens } from "../../theme";
+import { tokens } from "../../../theme";
 import Header from "../../components/Header";
-import useJaneHopkins from "../../vendiaHooks/useJaneHopkins";
+import useJaneHopkins from "../../../vendiaHooks/useJaneHopkins";
 
 
 

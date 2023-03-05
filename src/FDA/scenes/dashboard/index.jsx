@@ -1,6 +1,7 @@
 import {Box, Typography, useTheme} from "@mui/material";
 import { tokens } from "../../theme";
-import Header from '../../components/Header';
+
+import Header from "../../components/Header";
 import PeopleOutlinedIcon from "@mui/icons-material/PeopleOutlined";
 import MedicalServicesIcon from '@mui/icons-material/MedicalServices';
 import FlagIcon from '@mui/icons-material/Flag';
@@ -39,7 +40,7 @@ const FDADashboard = () => {
             justifyContent="center"
             borderRadius={5}
           >
-            <MedicalServicesIcon sx={{color: colors.greenAccent[500]}}/>
+            <MedicalServicesIcon sx={{color: colors.blueAccent[500]}}/>
             <Typography variant='h5' p={1}>
               Drugs
             </Typography>
@@ -54,7 +55,7 @@ const FDADashboard = () => {
             justifyContent="center" 
             borderRadius={5}
           >
-            <PeopleOutlinedIcon sx={{color: colors.greenAccent[500]}}/>
+            <PeopleOutlinedIcon sx={{color: colors.blueAccent[500]}}/>
             <Typography variant='h5' p={1}>
                Patients
             </Typography>
@@ -69,7 +70,7 @@ const FDADashboard = () => {
             justifyContent="center"
             borderRadius={5}
           >
-            <FlagIcon sx={{color: colors.greenAccent[500]}}/>
+            <FlagIcon sx={{color: colors.blueAccent[500]}}/>
             <Typography variant='h5' p={1}>
               Progress
             </Typography>
@@ -88,7 +89,7 @@ const FDADashboard = () => {
             
           >
             
-            <Typography variant="h4" fontWeight="500" color={colors.greenAccent[500]}>
+            <Typography variant="h4" fontWeight="500" color={colors.blueAccent[500]}>
               Assign Drugs
             </Typography>
 
@@ -107,7 +108,7 @@ const FDADashboard = () => {
             justifyContent="center"
             alignItems="flex-start"
           >
-            <Typography variant="h4" fontWeight="500" color={colors.greenAccent[500]}>
+            <Typography variant="h4" fontWeight="500" color={colors.blueAccent[500]}>
               Send Results
             </Typography> 
 

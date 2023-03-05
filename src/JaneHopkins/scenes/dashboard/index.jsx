@@ -1,6 +1,6 @@
 import {Box, Typography, useTheme} from "@mui/material";
 import { tokens } from "../../theme";
-import Header from '../../components/Header';
+import Header from "../../components/Header";
 import PeopleOutlinedIcon from "@mui/icons-material/PeopleOutlined";
 //import StatBox from "../../components/StatBox";
 
@@ -64,7 +64,7 @@ const Dashboard = () => {
 
           <Box
             gridColumn="span 8"
-            gridRow="span 10"
+            gridRow="span 2"
             backgroundColor={colors.primary[400]}
             display="flex"
             justifyContent="center"
@@ -81,7 +81,7 @@ const Dashboard = () => {
 
           <Box
             gridColumn="span 4"
-            gridRow="span 10"
+            gridRow="span 2"
             backgroundColor={colors.primary[400]}
             display="flex"
             justifyContent="center"
