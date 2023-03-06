@@ -1,9 +1,16 @@
-import React from 'react'
+import { createVendiaClient } from '@vendia/client'
 
-const useFDA = () => {
-  return (
-    <div>useFDA</div>
-  )
-}
 
-export default useFDA
+const client = createVendiaClient({
+    apiUrl: ``,
+    websocketUrl: ``,
+    apiKey: ``, // <---- API key
+})
+
+const {entities} = client;
+
+const useFDA = () =>{
+    return {entities};
+};
+
+export default useFDA;

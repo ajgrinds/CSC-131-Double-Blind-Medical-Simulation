@@ -1,3 +1,4 @@
+import { useState } from "react";
 import {Box, Typography, useTheme} from "@mui/material";
 import { tokens } from "../../theme";
 import Header from "../../components/Header";
@@ -10,6 +11,7 @@ const Dashboard = () => {
 
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
+  const [status, getStatus] = useState("Not Complete");
 
 
   return (
@@ -35,7 +37,12 @@ const Dashboard = () => {
             alignItems="center"
             justifyContent="center"
           >
-            Hello
+            <Typography> 
+              Trial Status: <span style={{color: status === "Not Complete" ? "red" : "green"}}>
+                {status}
+              </span>
+            
+            </Typography>
           </Box>
 
           <Box 
