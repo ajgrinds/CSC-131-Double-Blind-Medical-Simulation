@@ -79,27 +79,26 @@ const FDADashboard = () => {
 
           </Box>
 
-            {/*Row 2 */}
-            {/* Assign Drugs Box */}
-         {/* Assign Drugs Box */}
-         <Box
-            gridColumn="span 6"
-            gridRow="span 1"
-            backgroundColor={colors.primary[400]}
-            display="flex"
-            justifyContent="center"
-            alignItems="center"
-            flexDirection="column"
-            borderRadius={5}
-          >
-            <AssignmentOutlinedIcon sx={{color: colors.blueAccent[500]}}/>
-            <Typography variant='h4' p={1} fontWeight="500" color="white">
-              Assign Drugs
-            </Typography>
-            
-            <Button variant="contained" size="medium" sx={{borderRadius: 40, backgroundColor: colors.blueAccent[500], color: "white", mt: 1}}>
-              Assign
-            </Button>
+           {/*Row 2 */}
+           {/* Assign Drugs Box */}
+           <Box
+              gridColumn="span 6"
+              gridRow="span 1"
+              backgroundColor={colors.primary[400]}
+              display="flex"
+              justifyContent="center"
+              alignItems="center"
+              flexDirection="column"
+              borderRadius={5}
+            >
+              <AssignmentOutlinedIcon sx={{color: colors.blueAccent[500]}}/>
+              <Typography variant='h4' p={1} fontWeight="500" color="white">
+                Assign Drugs
+              </Typography>
+
+              <Button variant="contained" size="medium" sx={{borderRadius: 40, backgroundColor: colors.blueAccent[500], color: "white", mt: 1}}>
+                Assign
+              </Button>
           </Box>  
 
           {/* Send Results Box */}
