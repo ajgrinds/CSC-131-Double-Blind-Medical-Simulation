@@ -6,8 +6,10 @@ import PeopleOutlinedIcon from "@mui/icons-material/PeopleOutlined";
 import MedicalServicesIcon from '@mui/icons-material/MedicalServices';
 import FlagIcon from '@mui/icons-material/Flag';
 import * as React from 'react';
-import Stack from '@mui/material/Stack';
 import Button from '@mui/material/Button';
+import AssignmentOutlinedIcon from '@mui/icons-material/AssignmentOutlined';
+import MailOutlineOutlinedIcon from '@mui/icons-material/MailOutlineOutlined';
+
 //import StatBox from "../../components/StatBox";
 
 const FDADashboard = () => {
@@ -78,50 +80,49 @@ const FDADashboard = () => {
           </Box>
 
             {/*Row 2 */}
-
+            {/* Assign Drugs Box */}
+         {/* Assign Drugs Box */}
          <Box
             gridColumn="span 6"
             gridRow="span 1"
             backgroundColor={colors.primary[400]}
             display="flex"
             justifyContent="center"
-            alignItems="flex-start"
-            
+            alignItems="center"
+            flexDirection="column"
+            borderRadius={5}
           >
-            
-            <Typography variant="h4" fontWeight="500" color={colors.blueAccent[500]}>
+            <AssignmentOutlinedIcon sx={{color: colors.blueAccent[500]}}/>
+            <Typography variant='h4' p={1} fontWeight="500" color="white">
               Assign Drugs
             </Typography>
-
-            {/*<Button variant="contained" size="large">
+            
+            <Button variant="contained" size="medium" sx={{borderRadius: 40, backgroundColor: colors.blueAccent[500], color: "white", mt: 1}}>
               Assign
-            </Button> */}
-
-          
+            </Button>
           </Box>  
 
+          {/* Send Results Box */}
           <Box
             gridColumn="span 6"
             gridRow="span 1"
             backgroundColor={colors.primary[400]}
             display="flex"
             justifyContent="center"
-            alignItems="flex-start"
+            alignItems="center"
+            flexDirection="column"
+            borderRadius={5}
           >
-            <Typography variant="h4" fontWeight="500" color={colors.blueAccent[500]}>
+            <MailOutlineOutlinedIcon sx={{color: colors.blueAccent[500]}}/>
+            <Typography variant='h4' p={1} fontWeight="500" color="white">
               Send Results
             </Typography> 
-
-
-            {/* SEND RESULT BUTTON
-            <Button variant="contained" size="large">
+            <Button variant="contained" size="medium" sx={{borderRadius: 40, backgroundColor: colors.blueAccent[500], color: "white", mt: 1}}>
               Send Result
-            </Button> */}
+          </Button >
             
           </Box>
           
-          
-
         </Box> 
         
     </Box>
