@@ -134,6 +134,14 @@ const Sidebar = () => {
               selected={selected}
               setSelected={setSelected}
             />
+
+            <Item
+              title="Add Patient"
+              to="/addpatient"
+              icon={<PeopleOutlinedIcon/>}
+              selected={selected}
+              setSelected={setSelected}
+            />
             
             <Typography
               variant="h6"
