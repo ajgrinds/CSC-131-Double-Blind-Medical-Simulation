@@ -15,25 +15,30 @@ function App() {
 
     <Routes>
       
-      {/*Routes for JaneHopkins Page */}
-      <Route path="/" element={<Doctor/>}>
+      {/*Login Page 
 
+      <Route exact path="/" element={<LoginPage/>}/>
+
+      */}
+
+      {/*Routes for JaneHopkins Page */}
+      <Route path="/*" element={<Doctor/>}>
         
-        <Route path="/patient" element={<Patient/>}/>
-        <Route path="/patient/:id" element={<PatientDetails/>}/>
+        <Route path="patient" element={<Patient/>}/>
+        <Route path="patient/:id" element={<PatientDetails/>}/>
 
       </Route>
 
       {/*Routes for FDA page */}
-      {/* Make sure to put pull path name with /fda/... <-- (...) = the route you want it to go to  */}
-      <Route exact path="/fda" element={<FDA/>}>
+      
+      <Route exact path="/fda/*" element={<FDA/>}>
 
-        <Route path="/fda/patient" element={<FDAPatient/>} />
+        <Route path="patient" element={<FDAPatient/>} />
         
       </Route>
 
       {/*Routes for Bavaria page */}
-      <Route path="/bavaria" element={<Bavaria/>}>
+      <Route path="/bavaria/*" element={<Bavaria/>}>
 
 
       </Route>

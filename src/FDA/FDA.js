@@ -31,7 +31,6 @@ function FDA() {
             <Route path="/" element={<FDADashboard/>}/>
             <Route path="/patient" element={<FDAPatient/>} />
             
-
           </Routes>
 
         </main>
