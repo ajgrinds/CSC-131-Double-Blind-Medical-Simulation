@@ -1,70 +1,49 @@
-import { ColorModeContext, useMode } from "./theme";
-import { CssBaseline, ThemeProvider } from "@mui/material";
 import {Routes, Route, Navigate} from "react-router-dom";
-import TopBar from "./components/TopBar";
-import JaneHopkinsSideBar from "./components/Sidebar";
-import FDASideBar from "./scenes/FDA/Sidebar";
-import Dashboard from "./scenes/dashboard";
-import Patient from "./scenes/patient";
-import PatientDetails from "./scenes/patientdetails";
-import FDADashboard from "./scenes/FDA";
+import Dashboard from "./JaneHopkins/scenes/dashboard";
+import Patient from "./JaneHopkins/scenes/patient";
+import PatientDetails from "./JaneHopkins/scenes/patientdetails"
+import Doctor from "./JaneHopkins/JaneHopkins";
+import Bavaria from "./Bavaria/Bavaria";
+import FDA from "./FDA/FDA";
+import FDAPatient from "./FDA/scenes/patient"
+import FDADashboard from "./FDA/scenes/dashboard";
 
-
-//import Invoices from "./scenes/invoices";
-//import Contacts from "./scenes/contacts";
-//import Bar from "./scenes/bar";
-//import Form from "./scenes/form";
-//import Line from "./scenes/line";
-//import Pie from "./scenes/pie";
-//import FAQ from "./scenes/faq";
-//import Geography from "./scenes/geography";
-//import Calendar from "./scenes/calendar";
 
 function App() {
 
-  const [theme, colorMode] = useMode();
-
   return ( 
-  <ColorModeContext.Provider value={colorMode}>
-    <ThemeProvider theme={theme}>
-      <CssBaseline/>
-      <div className="app">
-        <Routes>
-          <Route path="FDA/*" element={<FDASideBar/>}/>
-          <Route path="JaneHopkins/*" element={<JaneHopkinsSideBar/>}/>
-        </Routes>
-        <main className="content">
-          <TopBar/>
-          <Routes>
-            <Route path="JaneHopkins/" element={<Dashboard/>}/>
-            <Route path="JaneHopkins/patient" element={<Patient/>}/>
-            <Route path="JaneHopkins/patient/:id" element={<PatientDetails/>}/>
 
-            {/*
-              <Route path="/invoices" element={<Invoices/>}/>
-              <Route path="/contacts" element={<Contacts/>}/>
-              <Route path="/bar" element={<Bar/>}/>
-              <Route path="/form" element={<Form/>}/>
-              <Route path="/pie" element={<Pie/>}/>
-              <Route path="/line" element={<Line/>}/>
-              <Route path="/faq" element={<FAQ/>}/>
-              <Route path="/geography" element={<Geography/>}/>
-              <Route path="/calendar" element={<Calendar/>}/>
-            */}
-          </Routes>
+    <Routes>
+      
+      {/*Login Page 
 
-          <Routes>
-            <Route path="FDA/" element={<FDADashboard/>}/>
-          </Routes>
+      <Route exact path="/" element={<LoginPage/>}/>
 
-          <Routes>
-            <Route path="/" element={ <Navigate to="/JaneHopkins" /> } />
-          </Routes>
-        </main>
-      </div>
+      */}
 
-    </ThemeProvider>
-  </ColorModeContext.Provider>
+      {/*Routes for JaneHopkins Page */}
+      <Route path="/*" element={<Doctor/>}>
+        
+        <Route path="patient" element={<Patient/>}/>
+        <Route path="patient/:id" element={<PatientDetails/>}/>
+
+      </Route>
+
+      {/*Routes for FDA page */}
+      
+      <Route exact path="/fda/*" element={<FDA/>}>
+
+        <Route path="patient" element={<FDAPatient/>} />
+        
+      </Route>
+
+      {/*Routes for Bavaria page */}
+      <Route path="/bavaria/*" element={<Bavaria/>}>
+
+
+      </Route>
+
+    </Routes>
     
   );
 }

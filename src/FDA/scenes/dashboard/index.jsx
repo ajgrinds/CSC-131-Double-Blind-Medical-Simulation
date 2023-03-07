@@ -1,12 +1,15 @@
 import {Box, Typography, useTheme} from "@mui/material";
 import { tokens } from "../../theme";
-import Header from '../../components/Header';
+
+import Header from "../../components/Header";
 import PeopleOutlinedIcon from "@mui/icons-material/PeopleOutlined";
 import MedicalServicesIcon from '@mui/icons-material/MedicalServices';
 import FlagIcon from '@mui/icons-material/Flag';
 import * as React from 'react';
-import Stack from '@mui/material/Stack';
 import Button from '@mui/material/Button';
+import AssignmentOutlinedIcon from '@mui/icons-material/AssignmentOutlined';
+import MailOutlineOutlinedIcon from '@mui/icons-material/MailOutlineOutlined';
+
 //import StatBox from "../../components/StatBox";
 
 const FDADashboard = () => {
@@ -39,7 +42,7 @@ const FDADashboard = () => {
             justifyContent="center"
             borderRadius={5}
           >
-            <MedicalServicesIcon sx={{color: colors.greenAccent[500]}}/>
+            <MedicalServicesIcon sx={{color: colors.blueAccent[500]}}/>
             <Typography variant='h5' p={1}>
               Drugs
             </Typography>
@@ -54,7 +57,7 @@ const FDADashboard = () => {
             justifyContent="center" 
             borderRadius={5}
           >
-            <PeopleOutlinedIcon sx={{color: colors.greenAccent[500]}}/>
+            <PeopleOutlinedIcon sx={{color: colors.blueAccent[500]}}/>
             <Typography variant='h5' p={1}>
                Patients
             </Typography>
@@ -69,58 +72,56 @@ const FDADashboard = () => {
             justifyContent="center"
             borderRadius={5}
           >
-            <FlagIcon sx={{color: colors.greenAccent[500]}}/>
+            <FlagIcon sx={{color: colors.blueAccent[500]}}/>
             <Typography variant='h5' p={1}>
               Progress
             </Typography>
 
           </Box>
 
-            {/*Row 2 */}
+           {/*Row 2 */}
+           {/* Assign Drugs Box */}
+           <Box
+              gridColumn="span 6"
+              gridRow="span 1"
+              backgroundColor={colors.primary[400]}
+              display="flex"
+              justifyContent="center"
+              alignItems="center"
+              flexDirection="column"
+              borderRadius={5}
+            >
+              <AssignmentOutlinedIcon sx={{color: colors.blueAccent[500]}}/>
+              <Typography variant='h4' p={1} fontWeight="500" color="white">
+                Assign Drugs
+              </Typography>
 
-         <Box
-            gridColumn="span 6"
-            gridRow="span 1"
-            backgroundColor={colors.primary[400]}
-            display="flex"
-            justifyContent="center"
-            alignItems="flex-start"
-            
-          >
-            
-            <Typography variant="h4" fontWeight="500" color={colors.greenAccent[500]}>
-              Assign Drugs
-            </Typography>
-
-            {/*<Button variant="contained" size="large">
-              Assign
-            </Button> */}
-
-          
+              <Button variant="contained" size="medium" sx={{borderRadius: 40, backgroundColor: colors.blueAccent[500], color: "white", mt: 1}}>
+                Assign
+              </Button>
           </Box>  
 
+          {/* Send Results Box */}
           <Box
             gridColumn="span 6"
             gridRow="span 1"
             backgroundColor={colors.primary[400]}
             display="flex"
             justifyContent="center"
-            alignItems="flex-start"
+            alignItems="center"
+            flexDirection="column"
+            borderRadius={5}
           >
-            <Typography variant="h4" fontWeight="500" color={colors.greenAccent[500]}>
+            <MailOutlineOutlinedIcon sx={{color: colors.blueAccent[500]}}/>
+            <Typography variant='h4' p={1} fontWeight="500" color="white">
               Send Results
             </Typography> 
-
-
-            {/* SEND RESULT BUTTON
-            <Button variant="contained" size="large">
+            <Button variant="contained" size="medium" sx={{borderRadius: 40, backgroundColor: colors.blueAccent[500], color: "white", mt: 1}}>
               Send Result
-            </Button> */}
+          </Button >
             
           </Box>
           
-          
-
         </Box> 
         
     </Box>

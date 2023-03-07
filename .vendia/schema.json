@@ -1,0 +1,138 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "PharmaStudy",
+  "x-vendia-acls": {
+    "patientACL": {
+      "type": "Patient"
+    },
+    "drugACL": {
+      "type": "Drug"
+    }
+  },
+  "type": "object",
+  "properties": {
+    "Patient": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "patientPicture": {
+            "type": "string"
+          },
+          "dob": {
+            "type": "string"
+          },
+          "insuranceNumber": {
+            "type": "string"
+          },
+          "height": {
+            "type": "string"
+          },
+          "weight": {
+            "type": "string"
+          },
+          "bloodPressure": {
+            "type": "string"
+          },
+          "bloodType": {
+            "type": "string"
+          },
+          "temperature": {
+            "type": "string"
+          },
+          "oxygenSaturation": {
+            "type": "string"
+          },
+          "uuid": {
+            "type": "string"
+          },
+          "address": {
+            "type": "string"
+          },
+          "currentMedications": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "medication": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "familyHistory": {
+            "type": "string"
+          },
+          "currentlyEmployed": {
+            "type": "string"
+          },
+          "currentlyInsured": {
+            "type": "string"
+          },
+          "icdHealthCodes": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "code": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "allergies": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "allergy": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "visits": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "patient": {
+                  "type": "string"
+                },
+                "dateTime": {
+                  "type": "string"
+                },
+                "notes": {
+                  "type": "string"
+                },
+                "hivViralLoad": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "Drug": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "placebo": {
+            "type": "boolean"
+          },
+          "batchNumber": {
+            "type": "string"
+          },
+          "id": {
+            "type": "string"
+          }
+        }
+      }
+    }
+  }
+}
