@@ -1,6 +1,6 @@
 import { useState } from "react";
-import { createUserWithEmailAndPassword, onAuthStateChanged, signOut, onAuthStateChanged } from "firebase/auth";
-import { auth } from "firebase/auth";
+import { createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged, signOut } from "firebase/auth";
+import { auth } from "./firebase-config";
 import Button from "@mui/material/Button";
 import { Box } from "@mui/system";
 
@@ -11,38 +11,43 @@ const Login = () =>  {
     const[loginEmail, setLoginEmail] = useState("");
     const[loginPassword, setLoginPassword] = useState("");
 
-    onAuthStateChanged(auth, (currentUser) = () => {
-        setUser(currentUser);
-    });
+    const[user, setUser] = useState({});
+
+    try {
+        onAuthStateChanged(auth, (currentUser) => {
+            setUser(currentUser);
+          });
+    } catch (error) {
+        console.log(error.message);
+    }
+    
 
     const register = async () => {
         try {
-            const user = await createUserWithEmailAndPassword(
-                auth,
-                registerEmail,
-                registerPassword
-            );
-            console.log(user);
+          const user = await createUserWithEmailAndPassword(
+            auth,
+            registerEmail,
+            registerPassword
+          );
+          console.log(user);
+        } catch (error) {
+          console.log(error.message);
         }
-        catch (error) {
-            console.log(error.message);
-        }
-    };
+    };    
 
     const login = async () => {
         try {
-            const user = await signInWithEmailAndPassword(
-              auth,
-              loginEmail,
-              loginPassword
-            );
-            console.log(user);
-        } 
-        catch (error) {
-            console.log(error.message);
+          const user = await signInWithEmailAndPassword(
+            auth,
+            loginEmail,
+            loginPassword
+          );
+          console.log(user);
+        } catch (error) {
+          console.log(error.message);
         }
     };
-
+    
     const logout = async () => {
         await signOut(auth);
     };
@@ -59,9 +64,9 @@ const Login = () =>  {
                     } } />
 
                 <input
-                    placeholder="Email..."
+                    placeholder="Password..."
                     onChange={(event) => {
-                        setRegisterPassword(event.target.value);
+                        setRegisterPassword(event.target.value); 
                     } } />
 
                 <Button variant = "outlined" onClick={register}> Create User </Button>
@@ -76,7 +81,7 @@ const Login = () =>  {
                     } } />
 
                 <input
-                    placeholder="Email..."
+                    placeholder="Password..."
                     onChange={(event) => {
                         setLoginPassword(event.target.value);
                     } } />
