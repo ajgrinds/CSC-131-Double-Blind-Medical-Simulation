@@ -15,6 +15,12 @@ function App() {
 
     <Routes>
       
+      {/*Login Page 
+
+      <Route exact path="/" element={<LoginPage/>}/>
+
+      */}
+
       {/*Routes for JaneHopkins Page */}
       <Route path="/*" element={<Doctor/>}>
         

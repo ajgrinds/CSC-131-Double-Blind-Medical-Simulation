@@ -9,9 +9,10 @@ import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
 import { styled } from '@mui/material/styles';
 import { purple } from '@mui/material/colors';
-import avatar from "../../pictures/squiliem.jpeg"
+//import avatar from "../../pictures/squiliem.jpeg"
 
 function PatientDetails() {
+
   // theme settings
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
@@ -29,8 +30,8 @@ function PatientDetails() {
   const [newTemperature, setNewTemperature] = useState(null);
   const [newOxygenSaturation, setNewOxygenSaturation] = useState(null);
   const [newAddress, setNewAddress] = useState(null);
-  //const [newAllergies, setNewAllergies] = useState([]);
- // const [newMedication, setNewMedication] = useState([]);
+  const [newAllergies, setNewAllergies] = useState([]);
+  //const [newMedication, setNewMedication] = useState([]);
   //const [newIcdHealthCode, setNewIcdHealthCode] = useState([]);
   //const [newDoctorVisits, setNewDoctorVisits] = useState([]);
   const [newCurrentlyInsured, setNewCurrentlyInsured] = useState("");
@@ -53,21 +54,20 @@ function PatientDetails() {
           console.log(response);
           
           setPatient(response);
-
           
+          // set the values of each entitie to the current value of the patients
           setNewWeight(response.weight);
           setNewInsuranceNumber(response.insuranceNumber);
           setNewBloodPressure(response.bloodPressure);
-          setNewTemperature(response.bloodPressure);
+          setNewTemperature(response.temperature);
           setNewOxygenSaturation(response.oxygenSaturation);
           setNewAddress(response.address);
           setNewCurrentlyInsured(response.insuranceNumber === "" ? "No" : "Yes");
           setNewCurrentlyEmployed(response.currentlyEmployed);
+          setNewAllergies(response.allergies)
           
-
       }
       catch(error){
-        
           console.log(error);
       }
       finally{
@@ -75,32 +75,40 @@ function PatientDetails() {
       }
     }
     fetchPatient();
+  
   }, [entities.patient, id]);
 
+  // Functions for the onChange in each Item component for each potential change in entities
   const handleWeightChange = (event) => {
     setNewWeight(event.target.value);
-    
   }
+
   const handleInsuranceChange = (event) => {
     setNewInsuranceNumber(event.target.value);
-    
   }
+
   const handleBloodPressureChange = (event) => {
     setNewBloodPressure(event.target.value);
   }
+
   const handleTemperatureChange = (event) => {
     setNewTemperature(event.target.value);
   }
+
   const handleOxygenSaturationChange = (event) => {
     setNewOxygenSaturation(event.target.value);
   }
+
   const handleAddressChange = (event) => {
     setNewAddress(event.target.value);
   }
-  /*
+
+  
   const handleAllergyChange = (event) => {
-    setNewAllergies(event.target.value);
+    setNewAllergies(...newAllergies, event.target.value)
+    
   }
+  /*
   const handleMedicationChange = (event) => {
     setNewMedication(event.target.value);
   }
@@ -115,12 +123,12 @@ function PatientDetails() {
   const handleCurrentlyInsuredChange = (event) => {
     setNewCurrentlyInsured(event.target.value);
   }
+
   const handleCurrentlyEmployedChange = (event) => {
     setNewCurrentlyEmployed(event.target.value);
   }
 
-
-  
+  // this function will update the patients information that is linked the the update button
   const handleUpdate = async () => {
     
     const response = await entities.patient.update({
@@ -134,14 +142,14 @@ function PatientDetails() {
         address: newAddress,
         currentlyInsured: newCurrentlyInsured,
         currentlyEmployed: newCurrentlyEmployed,
+        allergies: newAllergies,
+        
 
     })
     console.log(response);
 
   }
  
-  
-  
   return (
 
     <div>
@@ -150,7 +158,6 @@ function PatientDetails() {
         <Box m="20px">
           <Box display = "flex" justifyContent="space-between" alignItems="center">
             <Header title="PATIENT DETAILS" subtitle="Edit/Update Information" />
-            
           </Box>
 
           <Box mt='5px'> 
@@ -159,20 +166,23 @@ function PatientDetails() {
             </Link>
             
           </Box>
-        
-          <Box sx={{display: 'flex', justifyContent: 'center' }} mb='20px'>
 
-            <img
-              alt="profile-user"
-              width="100px"
-              height="100px"
-              src={avatar}
-              style={{cursor: "pointer", borderRadius: "50%"}}                                 
-            />
-          </Box>
+          <Box ml="225px" mr="200px">
 
-          <Box sx={{ display: 'flex', flexWrap: 'wrap' }}></Box>
-            <div>
+
+            <Box mr="100px" sx={{display: 'flex', justifyContent: 'center' }} mb='20px'>
+
+              <img
+                alt="profile-user"
+                width="100px"
+                height="100px"
+                src={patient.patientPicture}
+                style={{cursor: "pointer", borderRadius: "50%"}}                                 
+              />
+
+            </Box>
+
+            
               <Box
                 component="form"
                 sx={{
@@ -201,7 +211,7 @@ function PatientDetails() {
                   }}
                   variant="filled"
                 /> 
-                 <TextField
+                <TextField
                   id="outlined-read-only-input"
                   label="Insurance Number"
                   color='secondary'
@@ -209,7 +219,7 @@ function PatientDetails() {
                   onChange={handleInsuranceChange}
                   variant="filled"
                 /> 
-                 <TextField
+                <TextField
                   id="outlined-read-only-input"
                   label="Height"
                   color='secondary'
@@ -255,7 +265,7 @@ function PatientDetails() {
                   defaultValue={patient.temperature}
                   onChange={handleTemperatureChange}
                   variant="filled"
-                 
+                
                 />
                 <TextField
                   id="outlined-read-only-input"
@@ -338,8 +348,9 @@ function PatientDetails() {
                   variant="filled"
                 />
                 
-        </Box>
-          </div>
+              </Box>
+          </Box>
+          
         <Box textAlign="center" mt='50px'> 
           <ColorButton size='large' variant="contained" onClick={handleUpdate}>Update Infomation</ColorButton>
         </Box>
