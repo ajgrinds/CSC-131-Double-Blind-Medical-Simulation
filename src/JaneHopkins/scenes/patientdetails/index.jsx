@@ -161,19 +161,12 @@ function PatientDetails() {
             <Header title="PATIENT DETAILS" subtitle="Edit/Update Information" />
           </Box>
 
-          <Box mt="5px" sx={{display:"flex", justifyContent: "space-between"}}>
-              <Link to="/patient" style={{ textDecoration: "none"}}>
-                  <ColorButton variant="contained" size='large' sx={{marginLeft: "5px"}}>Back</ColorButton>
-              </Link>
-
-              <ButtonGroup variant="contained" aria-label="outlined primary button group" sx={{marginRight:"35px"}}>
-                <ColorButton size='large'>Delete Patient</ColorButton>
-                <Link to="/addpatient" style={{ textDecoration: "none"}}>
-                  <ColorButton size='large'>Add Patient</ColorButton>
-                </Link>
-              </ButtonGroup>
-
-            </Box>
+          <Box mt='5px'> 
+            <Link to="/patient" style={{ textDecoration: "none"}}>
+              <ColorButton size='large' variant="contained"> Back </ColorButton>
+            </Link>
+            
+          </Box>
 
           <Box ml="225px" mr="200px">
 
