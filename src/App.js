@@ -7,6 +7,7 @@ import Bavaria from "./Bavaria/Bavaria";
 import FDA from "./FDA/FDA";
 import FDAPatient from "./FDA/scenes/patient"
 import FDADashboard from "./FDA/scenes/dashboard";
+import AddPatient from "./JaneHopkins/scenes/addpatient";
 
 
 function App() {
@@ -25,6 +26,7 @@ function App() {
       <Route path="/*" element={<Doctor/>}>
         
         <Route path="patient" element={<Patient/>}/>
+        <Route path="addpatient" element={<AddPatient/>} />
         <Route path="patient/:id" element={<PatientDetails/>}/>
 
       </Route>
