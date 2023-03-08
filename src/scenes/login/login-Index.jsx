@@ -11,15 +11,15 @@ const Login = () =>  {
     const[loginEmail, setLoginEmail] = useState("");
     const[loginPassword, setLoginPassword] = useState("");
 
-    const[user, setUser] = useState({});
+    const[user, setUser] = useState([]);
 
-    try {
+     /* try {
         onAuthStateChanged(auth, (currentUser) => {
             setUser(currentUser);
           });
     } catch (error) {
         console.log(error.message);
-    }
+    } */
     
 
     const register = async () => {
@@ -32,6 +32,7 @@ const Login = () =>  {
           console.log(user);
         } catch (error) {
           console.log(error.message);
+          alert("Email and/or password invalid");
         }
     };    
 
@@ -45,6 +46,7 @@ const Login = () =>  {
           console.log(user);
         } catch (error) {
           console.log(error.message);
+          alert("Email and/or password not recognized");
         }
     };
     
@@ -58,13 +60,19 @@ const Login = () =>  {
             <Box>
                 <h1> Register User </h1>
                 <input
-                    placeholder="Email..."
-                    onChange={(event) => {
-                        setRegisterEmail(event.target.value);
+                     type = "text"
+                     name = "regEmail"
+                     placeholder="Email..."
+                     value = {registerEmail}
+                     onChange={(event) => {
+                         setRegisterEmail(event.target.value);
                     } } />
 
                 <input
+                    type = "text"
+                    name = "regPassword"
                     placeholder="Password..."
+                    value = {registerPassword}
                     onChange={(event) => {
                         setRegisterPassword(event.target.value); 
                     } } />
@@ -75,13 +83,19 @@ const Login = () =>  {
             <Box>
                 <h1> Login </h1>
                 <input
+                    type = "text"
+                    name = "Email"
                     placeholder="Email..."
+                    value = {loginEmail}
                     onChange={(event) => {
                         setLoginEmail(event.target.value);
                     } } />
 
                 <input
+                    type = "text"
+                    name = "Password"
                     placeholder="Password..."
+                    value = {loginPassword}
                     onChange={(event) => {
                         setLoginPassword(event.target.value);
                     } } />
