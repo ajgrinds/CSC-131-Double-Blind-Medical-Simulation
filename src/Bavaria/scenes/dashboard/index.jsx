@@ -2,9 +2,9 @@ import {Box, Typography, useTheme} from "@mui/material";
 import { tokens } from "../../theme";
 
 import Header from "../../components/Header";
-import PeopleOutlinedIcon from "@mui/icons-material/PeopleOutlined";
-import MedicalServicesIcon from '@mui/icons-material/MedicalServices';
-import FlagIcon from '@mui/icons-material/Flag';
+import ContactsOutlinedIcon from "@mui/icons-material/ContactsOutlined";
+import VaccinesIcon from '@mui/icons-material/Vaccines';
+import ReceiptOutlinedIcon from "@mui/icons-material/ReceiptOutlined";
 import * as React from 'react';
 //import StatBox from "../../components/StatBox";
 
@@ -38,7 +38,7 @@ const BavariaDashboard = () => {
             justifyContent="center"
             borderRadius={5}
           >
-            <MedicalServicesIcon sx={{color: colors.blueAccent[500]}}/>
+            <VaccinesIcon sx={{color: colors.blueAccent[500]}}/>
             <Typography variant='h5' p={1}>
               Send Batch of Drugs
             </Typography>
@@ -53,7 +53,7 @@ const BavariaDashboard = () => {
             justifyContent="center" 
             borderRadius={5}
           >
-            <PeopleOutlinedIcon sx={{color: colors.blueAccent[500]}}/>
+            <ContactsOutlinedIcon sx={{color: colors.blueAccent[500]}}/>
             <Typography variant='h5' p={1}>
                Monitor Study Progress
             </Typography>
@@ -68,7 +68,7 @@ const BavariaDashboard = () => {
             justifyContent="center"
             borderRadius={5}
           >
-            <FlagIcon sx={{color: colors.blueAccent[500]}}/>
+            <ReceiptOutlinedIcon sx={{color: colors.blueAccent[500]}}/>
             <Typography variant='h5' p={1}>
               Generate Post Trial Report
             </Typography>
