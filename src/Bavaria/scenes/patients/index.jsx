@@ -1,18 +1,15 @@
-import { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
-import { Box, Button, useTheme } from "@mui/material";
+import React, { useState, useEffect } from 'react';
+import { Box, useTheme } from "@mui/material";
 import { DataGrid } from "@mui/x-data-grid";
 import { tokens } from "../../../theme";
 import Header from "../../components/Header";
-import useJaneHopkins from "../../../vendiaHooks/useJaneHopkins";
+import useBavaria from "../../../vendiaHooks/useBavaria";
 
-
-
-const BavariaPatients = () =>{
+const BavariaPatients = () => {
     const theme = useTheme();
     const colors = tokens(theme.palette.mode);
 
-    const {entities} = useJaneHopkins();
+    const {entities} = useBavaria();
     const [patientList, setPatientList] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
 
@@ -21,14 +18,12 @@ const BavariaPatients = () =>{
         async function fetchData() {
 
             try{
-
                 const response = await entities.patient.list();
                 console.log(response);
                 setPatientList(response.items.map((patient, index) => ({
-                    ...patient,
                     id: index + 1,
-
-                }))); 
+                    name: patient.name
+                })));
             } catch(error){
                 console.log(error);
             } finally{
@@ -37,39 +32,26 @@ const BavariaPatients = () =>{
         }
 
         fetchData();
-        
+
     }, [entities.patient]);
 
     const columns = [
-
+        {   
+            field: "id", 
+            headerName: "ID",
+            flex: 1           
+        }, 
         {
             field: "name", 
             headerName: "Name", 
-            flex: 1, 
+            flex: 1,
             cellClassName: "name-column--cell"
-        },
-        {
-            field: "age",
-            headerName: "Age",
-            flex: 1,
-        },
-        {
-            field: "sex",
-            headerName: "Sex",
-            flex: 1, 
-        },
-        {
-            field: "doses",
-            headerName: "Number of Doses Taken",
-            flex: 1,
-        },
-        
+        }
     ];
 
-    return(
+    return (
         <Box m="20px">
-
-            <Header title="Progress" subtitle="Viewing Patient Status"/>
+            <Header title="Bavaria PATIENTS" subtitle="Managing Bavaria Patients"/>
             <Box m="30px 0 0 0" height="75vh"
                 sx={{
                     "& .MuiDataGrid-root":{
@@ -99,11 +81,9 @@ const BavariaPatients = () =>{
                 ) : (
                     <DataGrid rows={patientList} columns={columns}/>
                 )}
-                
             </Box>
         </Box>
-    )
-
+    );
 }
 
 export default BavariaPatients;
