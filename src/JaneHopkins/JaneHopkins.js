@@ -6,6 +6,7 @@ import Sidebar from "./scenes/sidebar";
 import Dashboard from "./scenes/dashboard";
 import Patient from "./scenes/patient";
 import PatientDetails from "./scenes/patientdetails";
+import AddPatient from "./scenes/addpatient";
 
 
 const Doctor = () => {
@@ -25,6 +26,7 @@ const Doctor = () => {
                 
                 <Route path="/" element={<Dashboard/>}/>
                 <Route path="/patient" element={<Patient/>}/>
+                <Route path="/addpatient" element={<AddPatient/>} />
                 <Route path="/patient/:id" element={<PatientDetails/>}/>
                      
             </Routes>
