@@ -172,7 +172,7 @@ const FDASidebar = () => {
 
             <Item
               title="Jane Hopkins"
-              to="/"
+              to="/JaneHopkins"
               icon={<PersonOutlinedIcon/>}
               selected={selected}
               setSelected={setSelected}

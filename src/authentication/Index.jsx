@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged, signOut } from "firebase/auth";
 import { auth } from "./firebase-config";
 import Button from "@mui/material/Button";
@@ -13,14 +13,20 @@ const Login = () =>  {
 
     const[user, setUser] = useState({});
 
+    /*
     try {
         onAuthStateChanged(auth, (currentUser) => {
             setUser(currentUser);
           });
     } catch (error) {
         console.log(error.message);
-    }
-    
+    } */
+
+    useEffect (() => {
+        onAuthStateChanged(auth, (currentUser) => {
+            setUser(currentUser);
+          });
+    });
 
     const register = async () => {
         try {
@@ -32,6 +38,7 @@ const Login = () =>  {
           console.log(user);
         } catch (error) {
           console.log(error.message);
+          alert("Invalid Email and/or Password");
         }
     };    
 
@@ -45,6 +52,7 @@ const Login = () =>  {
           console.log(user);
         } catch (error) {
           console.log(error.message);
+          alert("Unrecognized Email and/or Password");
         }
     };
     

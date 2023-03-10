@@ -7,6 +7,7 @@ import Bavaria from "./Bavaria/Bavaria";
 import FDA from "./FDA/FDA";
 import FDAPatient from "./FDA/scenes/patient"
 import FDADashboard from "./FDA/scenes/dashboard";
+import LoginPage from "./authentication/Index";
 
 
 function App() {
@@ -15,14 +16,14 @@ function App() {
 
     <Routes>
       
-      {/*Login Page 
+      { /* Login Page */}
 
       <Route exact path="/" element={<LoginPage/>}/>
 
-      */}
+      
 
       {/*Routes for JaneHopkins Page */}
-      <Route path="/*" element={<Doctor/>}>
+      <Route path="/JaneHopkins/*" element={<Doctor/>}>
         
         <Route path="patient" element={<Patient/>}/>
         <Route path="patient/:id" element={<PatientDetails/>}/>
