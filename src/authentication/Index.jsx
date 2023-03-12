@@ -3,6 +3,7 @@ import { createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthState
 import { auth } from "./firebase-config";
 import Button from "@mui/material/Button";
 import { Box } from "@mui/system";
+import { Link } from "react-router-dom";
 
 const Login = () =>  {
 
@@ -102,6 +103,10 @@ const Login = () =>  {
                 {user?.email}
 
                 <Button variant = "outlined" onClick={logout}> Sign Out </Button>
+            </Box>
+
+            <Box>
+                <Link to = "/JaneHopkins"> Go to JaneHopkins </Link>
             </Box>
         </Box>
     );
