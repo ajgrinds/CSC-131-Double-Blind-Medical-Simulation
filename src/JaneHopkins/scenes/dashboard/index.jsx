@@ -94,7 +94,7 @@ const Dashboard = () => {
                 variant="body2"
                 color={colors.greenAccent[500]}
                 style={{ textDecoration: "none"}}
-                to="/patient"
+                to="/JaneHopkins/patient"
 
             >
             <Typography variant="h6" fontWeight="500" color={colors.greenAccent[500]}>
@@ -120,7 +120,7 @@ const Dashboard = () => {
                 variant="body2"
                 color={colors.greenAccent[500]}
                 style={{ textDecoration: "none"}}
-                to="/addpatient"
+                to="/JaneHopkins/addpatient"
 
             >
               <Typography variant="h6" fontWeight="500" color={colors.greenAccent[500]}>

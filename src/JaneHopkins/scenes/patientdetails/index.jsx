@@ -161,7 +161,7 @@ function PatientDetails() {
           </Box>
 
           <Box mt='5px'> 
-            <Link to="/patient" style={{ textDecoration: "none"}}>
+            <Link to="/JaneHopkins/patient" style={{ textDecoration: "none"}}>
               <ColorButton size='large' variant="contained"> Back </ColorButton>
             </Link>
             
