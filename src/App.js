@@ -45,8 +45,11 @@ function App() {
 
       {/*Routes for Bavaria page */}
       <Route path="/bavaria" element={<Bavaria/>}>
-
-
+        
+          <Route path="/bavaria/patients" element={<BavariaPatients/>} />
+          <Route path="/bavaria/send" element={<Send/>} />
+          <Route path="/bavaria/report" element={<Report/>} />
+          
       </Route>
 
     </Routes>
