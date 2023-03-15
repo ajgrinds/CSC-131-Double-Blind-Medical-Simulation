@@ -7,6 +7,8 @@ import Bavaria from "./Bavaria/Bavaria";
 import FDA from "./FDA/FDA";
 import FDAPatient from "./FDA/scenes/patient"
 import FDADashboard from "./FDA/scenes/dashboard";
+import AddPatient from "./JaneHopkins/scenes/addpatient";
+import LoginPage from "./authentication/Index";
 import Report from "./Bavaria/scenes/report";
 import Send from "./Bavaria/scenes/send";
 import BavariaPatients from "./Bavaria/scenes/patients";
@@ -18,28 +20,33 @@ function App() {
 
     <Routes>
       
-      {/*Routes for JaneHopkins Page */}
-      <Route path="/" element={<Doctor/>}>
+      { /* Login Page */}
 
+      <Route exact path="/" element={<LoginPage/>}/>
+
+      
+
+      {/*Routes for JaneHopkins Page */}
+      <Route path="/JaneHopkins/*" element={<Doctor/>}>
         
-        <Route path="/patient" element={<Patient/>}/>
-        <Route path="/patient/:id" element={<PatientDetails/>}/>
+        <Route path="patient" element={<Patient/>}/>
+        <Route path="addpatient" element={<AddPatient/>} />
+        <Route path="patient/:id" element={<PatientDetails/>}/>
 
       </Route>
 
       {/*Routes for FDA page */}
-      {/* Make sure to put pull path name with /fda/... <-- (...) = the route you want it to go to  */}
-      <Route exact path="/fda" element={<FDA/>}>
+      
+      <Route exact path="/fda/*" element={<FDA/>}>
 
-        <Route path="/fda/patient" element={<FDAPatient/>} />
+        <Route path="patient" element={<FDAPatient/>} />
         
       </Route>
 
       {/*Routes for Bavaria page */}
       <Route path="/bavaria" element={<Bavaria/>}>
-        <Route path="/bavaria/send" element={<Send/>}/>
-        <Route path="/bavaria/patients" element={<BavariaPatients/>}/>
-        <Route path="/bavaria/report" element={<Report/>}/>
+
+
       </Route>
 
     </Routes>

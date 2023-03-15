@@ -74,7 +74,7 @@ const Patient = () =>{
             width: 100,
             renderCell: (params) => (
                 
-                <Link to={`/patient/${params.row._id}`}>
+                <Link style={{textDecoration: "none"}} to={`/JaneHopkins/patient/${params.row._id}`}>
                     <Button 
 
                         variant="contained" 
