@@ -6,85 +6,99 @@ import Header from "../../components/Header";
 import useFDA from "../../../vendiaHooks/useFDA";
 
 const FDAPatient = () => {
-    const theme = useTheme();
-    const colors = tokens(theme.palette.mode);
+  const theme = useTheme();
+  const colors = tokens(theme.palette.mode);
 
-    const {entities} = useFDA();
-    const [patientList, setPatientList] = useState([]);
-    const [isLoading, setIsLoading] = useState(true);
 
-    useEffect(() => {
+  const { entities } = useFDA();
+  const [patientList, setPatientList] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
 
-        async function fetchData() {
+  useEffect(() => {
+    async function fetchData() {
+      try {
+        const response = await entities.patient.list();
+        console.log(response);
+        setPatientList(
+          response.items.map((patient, index) => ({
+            id: index + 1,
+            uuid: patient.uuid,
+            name: patient.name,
+          }))
+        );
+      } catch (error) {
+        console.log(error);
+      } finally {
+        setIsLoading(false);
+      }
+    }
 
-            try{
-                const response = await entities.patient.list();
-                console.log(response);
-                setPatientList(response.items.map((patient, index) => ({
-                    id: index + 1,
-                    uuid: patient.uuid,
-                    name: patient.name
-                })));
-            } catch(error){
-                console.log(error);
-            } finally{
-                setIsLoading(false);
-            }
-        }
+    fetchData();
+  }, [entities.patient]);
 
-        fetchData();
+  const columns = [
+    {
+      field: "uuid",
+      headerName: "UUID",
+      flex: 1,
+      headerAlign: "center",
+      align: "center",
+      headerClassName: "header--cell",
+      cellClassName: "uuid--cell",
+    },
+    {
+      field: "name",
+      headerName: "Name",
+      flex: 1,
+      headerAlign: "center",
+      align: "center",
+      headerClassName: "header--cell",
+      cellClassName: "name--cell",
+    },
+  ];
 
-    }, [entities.patient]);
-
-    const columns = [
-        {   
-            field: "uuid", 
-            headerName: "UUID",
-            flex: 1           
-        }, 
-        {
-            field: "name", 
-            headerName: "Name", 
-            flex: 1,
-            cellClassName: "name-column--cell"
-        }
-    ];
-
-    return (
-        <Box m="20px">
-            <Header title="FDA PATIENTS" subtitle="Managing FDA Patients"/>
-            <Box m="30px 0 0 0" height="75vh"
-                sx={{
-                    "& .MuiDataGrid-root":{
-                        border: "none",
-                    },
-                    "& .MuiDataGrid-cell":{
-                        borderBottom :"none",
-                    },
-                    "& .name-column--cell":{
-                        color: colors.greenAccent[300]
-                    },
-                    "& .MuiDataGrid-columnHeaders":{
-                        backgroundColor: colors.blueAccent[700],
-                        borderBottom: "none",
-                    },
-                    "& .MuiDataGrid-virtualScroller":{
-                        backgroundColor: colors.primary[400],
-                    },
-                    "& .MuiDataGrid-footerContainer":{
-                        borderTop: "none",
-                        backgroundColor: colors.blueAccent[700],
-                    }
-                }}
-            >
-                {isLoading ? (
-                    <Box>Loading...</Box>
-                ) : (
-                    <DataGrid rows={patientList} columns={columns}/>
-                )}
-            </Box>
-        </Box>
-    );
-}
+  return (
+    <Box m="20px">
+        <Header title="FDA PATIENTS" subtitle="Managing FDA Patients"/>
+        <Box m="30px 0 0 0" height="75vh"
+            sx={{
+                "& .MuiDataGrid-root":{
+                    border: "none",
+                },
+                "& .MuiDataGrid-cell":{
+                    borderBottom :"none",
+                },
+                "& .name-column--cell":{
+                    color: colors.greenAccent[500],
+                },
+                "& .MuiDataGrid-columnHeaders":{
+                    backgroundColor: colors.patientColor[200],
+                    borderBottom: "none",
+                },
+                "& .MuiDataGrid-virtualScroller":{
+                    backgroundColor: colors.patientColor[100],
+                },
+                "& .MuiDataGrid-footerContainer":{
+                    borderTop: "none",
+                    backgroundColor: colors.patientColor[200],
+                }
+            }}
+        >
+        {isLoading ? (
+                  <Box>Loading...</Box>
+              ) : (
+                  <DataGrid rows={patientList} columns={columns} 
+                    className="custom-data-grid"
+                    disableColumnMenu
+                    disableSelectionOnClick
+                    checkboxSelection
+                    rowHeight={50}
+                    headerHeight={50}
+                  />
+              )}
+      </Box>
+    </Box>
+  );
+};
 
 export default FDAPatient;
