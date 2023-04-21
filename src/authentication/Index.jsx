@@ -75,6 +75,10 @@ return (
             display: 'flex',
             flexDirection: 'column',
             alignItems: 'center',
+            bgcolor:'#CDCCCC',
+            borderRadius: '16px',
+            border: 1,
+            borderColor:'black'
           }}
         >
         
@@ -82,7 +86,7 @@ return (
             Register New User
           </Typography>
 
-          <Box component="form" noValidate sx={{ mt: 1 }}>
+          <Box noValidate sx={{ mt: 3 }}>
                 <input
                     placeholder="Email..."
                     onChange={(event) => {
@@ -110,7 +114,7 @@ return (
             Sign in
           </Typography>
 
-          <Box component="form" noValidate sx={{ mt: 1 }}>
+          <Box noValidate sx={{ mt: 3 }}>
                 <input
                     placeholder="Email..."
                     onChange={(event) => {
@@ -139,7 +143,7 @@ return (
             {user?.email}
           </Typography>
 
-          <Box component="form" noValidate sx={{ mt: 1 }}>
+          <Box noValidate sx={{ mt: 1 }}>
             <Button
               type="submit"
               fullWidth
