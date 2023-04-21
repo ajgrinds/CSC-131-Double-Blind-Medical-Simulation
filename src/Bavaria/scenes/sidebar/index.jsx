@@ -5,11 +5,13 @@ import { Box,IconButton, Typography, useTheme } from '@mui/material';
 import {Link} from 'react-router-dom';
 import { tokens } from "../../theme";
 import HomeOutlinedIcon from "@mui/icons-material/HomeOutlined";
-import PeopleOutlinedIcon from "@mui/icons-material/PeopleOutlined";
+import ContactsOutlinedIcon from "@mui/icons-material/ContactsOutlined";
+import ReceiptOutlinedIcon from "@mui/icons-material/ReceiptOutlined";
 import PersonOutlinedIcon from "@mui/icons-material/PersonOutlined";
 import CalendarTodayOutlinedIcon from "@mui/icons-material/CalendarTodayOutlined";
+import VaccinesIcon from '@mui/icons-material/Vaccines';
 import MenuOutlinedIcon from "@mui/icons-material/MenuOutlined";
-import avatar from './squiliem.jpeg'
+import avatar from "../../pictures/squiliem.jpeg"
 
 
 const Item =({title, to, icon, selected, setSelected}) => {
@@ -18,7 +20,7 @@ const Item =({title, to, icon, selected, setSelected}) => {
   return(
     <MenuItem 
       active={selected === title} 
-      style={{color: colors.grey[100]}} 
+      style={{color: colors.grey[900]}} 
       onClick={() => setSelected(title)} 
       icon={icon}
     >
@@ -28,7 +30,7 @@ const Item =({title, to, icon, selected, setSelected}) => {
   )
 }
 
-const Sidebar = () => {
+const BavariaSidebar = () => {
 
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
@@ -73,8 +75,8 @@ const Sidebar = () => {
                 alignItems="center"
                 ml="15px"
               >
-                <Typography variant="h5" color={colors.grey[100]}>
-                  Jane Hopkins
+              <Typography variant="h5" color={colors.grey[700]}>
+                  Bavaria
                 </Typography>
                 <IconButton onClick={() => setIsCollapsed(!isCollapsed)}>
                   <MenuOutlinedIcon/>
@@ -87,24 +89,25 @@ const Sidebar = () => {
             <Box mb="25px">
               <Box display="flex" justifyContent="center" alignItems="center">
                 <img
-                  alt="profile-user"
+                  alt="Your Profile"
                   width="100px"
                   height="100px"
                   src={avatar}
                   style={{cursor: "pointer", borderRadius: "50%"}}                                 
                 />
+                
               </Box>
               <Box textAlign="center">
                 <Typography
                   variant="h4"
-                  color={colors.grey[100]}
+                  color={colors.grey[700]}
                   fontWeight="bold"
                   sx={{m: "10px 0 0 0"}}
                 >
-                  Austin M.D.
+                  Big Baller Benz
                 </Typography>
-                <Typography variant="h5" color={colors.greenAccent[500]}>
-                  Doctor
+                <Typography variant="h5" color={colors.blueAccent[500]}>
+                  Bavaria
                 </Typography>
               </Box>
             </Box>
@@ -113,7 +116,7 @@ const Sidebar = () => {
           <Box paddingLeft={isCollapsed ? undefined : "10px"}>
             <Item
               title="Dashboard"
-              to="/JaneHopkins"
+              to="/bavaria"
               icon={<HomeOutlinedIcon/>}
               selected={selected}
               setSelected={setSelected}
@@ -128,21 +131,27 @@ const Sidebar = () => {
             </Typography>
 
             <Item
-              title="Patients"
-              to="/JaneHopkins/patient"
-              icon={<PeopleOutlinedIcon/>}
+              title="Send Batch"
+              to="/bavaria/send"
+              icon={<VaccinesIcon/>}
+              selected={selected}
+              setSelected={setSelected}
+            />
+            <Item
+              title="View Progress"
+              to="/bavaria/patients"
+              icon={<ContactsOutlinedIcon/>}
+              selected={selected}
+              setSelected={setSelected}
+            />
+            <Item
+              title="Post Trial Report"
+              to="/bavaria/report"
+              icon={<ReceiptOutlinedIcon/>}
               selected={selected}
               setSelected={setSelected}
             />
 
-            <Item
-              title="Add Patient"
-              to="/JaneHopkins/addpatient"
-              icon={<PeopleOutlinedIcon/>}
-              selected={selected}
-              setSelected={setSelected}
-            />
-            
             <Typography
               variant="h6"
               color={colors.grey[300]}
@@ -152,20 +161,21 @@ const Sidebar = () => {
             </Typography>
 
             <Item
+              title="Jane Hopkins"
+              to="/JaneHopkins"
+              icon={<PersonOutlinedIcon/>}
+              selected={selected}
+              setSelected={setSelected}
+            />
+
+            <Item
               title="FDA"
               to="/fda"
               icon={<PersonOutlinedIcon/>}
               selected={selected}
               setSelected={setSelected}
             />
-            <Item
-              title="Bavaria"
-              to="/Bavaria"
-              icon={<CalendarTodayOutlinedIcon/>}
-              selected={selected}
-              setSelected={setSelected}
-            />
-           
+
           </Box>
           
         </Menu>
@@ -175,4 +185,4 @@ const Sidebar = () => {
   );
 }
 
-export default Sidebar;
+export default BavariaSidebar;

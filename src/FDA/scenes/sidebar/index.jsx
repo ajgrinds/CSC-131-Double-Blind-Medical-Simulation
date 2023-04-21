@@ -6,14 +6,14 @@ import {Link} from 'react-router-dom';
 import { tokens } from "../../theme";
 import HomeOutlinedIcon from "@mui/icons-material/HomeOutlined";
 import PeopleOutlinedIcon from "@mui/icons-material/PeopleOutlined";
-import ContactsOutlinedIcon from "@mui/icons-material/ContactsOutlined";
+import VaccinesIcon from '@mui/icons-material/Vaccines';
 import ReceiptOutlinedIcon from "@mui/icons-material/ReceiptOutlined";
 import PersonOutlinedIcon from "@mui/icons-material/PersonOutlined";
 import CalendarTodayOutlinedIcon from "@mui/icons-material/CalendarTodayOutlined";
-//import HelpOutlinedIcon from "@mui/icons-material/HelpOutlined";
+import LocalHospitalIcon from '@mui/icons-material/LocalHospital';
 import AssignmentReturnedIcon from '@mui/icons-material/AssignmentReturned';
 import MenuOutlinedIcon from "@mui/icons-material/MenuOutlined";
-import avatar from "../../pictures/squiliem.jpeg"
+import avatar from "../../pictures/fdaLogo.jpeg"
 
 
 const Item =({title, to, icon, selected, setSelected}) => {
@@ -22,7 +22,7 @@ const Item =({title, to, icon, selected, setSelected}) => {
   return(
     <MenuItem 
       active={selected === title} 
-      style={{color: colors.grey[900]}} 
+      style={{color: colors.sidebarColor[100]}} 
       onClick={() => setSelected(title)} 
       icon={icon}
     >
@@ -36,14 +36,14 @@ const FDASidebar = () => {
 
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
-  const [isCollapsed, setIsCollapsed] = useState(false);
+  const [isCollapsed, setIsCollapsed] = useState(true);
   const [selected, setSelected] = useState("Dashboard");
 
   return (
     <Box
       sx={{
         "& .pro-sidebar-inner":{
-          background: `${colors.primary[400]} !important`
+          background: `${colors.sidebarColor[200]} !important`
         },
         "& .pro-icon-wrapper":{
           backgroundColor: "transparent !important"
@@ -67,7 +67,7 @@ const FDASidebar = () => {
             icon={isCollapsed ? <MenuOutlinedIcon/> : undefined}
             sytle={{
               margin: "10px 0 20px 0",
-              color: colors.grey[100],
+              color: colors.sidebarColor[400],
             }}
           >
             {!isCollapsed && (
@@ -75,9 +75,9 @@ const FDASidebar = () => {
                 display="flex"
                 justifyContent="space-between"
                 alignItems="center"
-                ml="15px"
+                ml="35px"
               >
-              <Typography variant="h5" color={colors.grey[700]}>
+              <Typography variant="h5" color={colors.sidebarColor[300]}>
                   Food & Drug
                 </Typography>
                 <IconButton onClick={() => setIsCollapsed(!isCollapsed)}>
@@ -91,24 +91,23 @@ const FDASidebar = () => {
             <Box mb="25px">
               <Box display="flex" justifyContent="center" alignItems="center">
                 <img
-                  alt="Your Profile"
-                  width="100px"
-                  height="100px"
+                  width="220px"
+                  height="120px"
                   src={avatar}
-                  style={{cursor: "pointer", borderRadius: "50%"}}                                 
+                  style={{cursor: "pointer", borderRadius: "0%"}}                                 
                 />
                 
               </Box>
               <Box textAlign="center">
                 <Typography
                   variant="h4"
-                  color={colors.grey[700]}
+                  color={colors.sidebarColor[300]}
                   fontWeight="bold"
                   sx={{m: "10px 0 0 0"}}
                 >
                   Big Boss FDA Man
                 </Typography>
-                <Typography variant="h5" color={colors.blueAccent[500]}>
+                <Typography variant="h5" color={colors.sidebarColor[400]}>
                   FDA
                 </Typography>
               </Box>
@@ -126,7 +125,7 @@ const FDASidebar = () => {
 
             <Typography
               variant="h6"
-              color={colors.grey[300]}
+              color={colors.sidebarColor[100]}
               sx={{m: "15px 0 5px 20px"}}
             >
               Data
@@ -139,13 +138,7 @@ const FDASidebar = () => {
               selected={selected}
               setSelected={setSelected}
             />
-            <Item
-              title="Contacts"
-              to="/fda/contacts"
-              icon={<ContactsOutlinedIcon/>}
-              selected={selected}
-              setSelected={setSelected}
-            />
+            
             <Item
               title="Assign Drugs"
               to="/fda/drugs"
@@ -156,7 +149,7 @@ const FDASidebar = () => {
 
             <Item
               title="Progress Report"
-              to="/"
+              to="/janehopkins/dashboard"
               icon={<ReceiptOutlinedIcon/>}
               selected={selected}
               setSelected={setSelected}
@@ -164,7 +157,7 @@ const FDASidebar = () => {
 
             <Typography
               variant="h6"
-              color={colors.grey[300]}
+              color={colors.sidebarColor[100]}
               sx={{m: "15px 0 5px 20px"}}
             >
               Pages
@@ -173,7 +166,7 @@ const FDASidebar = () => {
             <Item
               title="Jane Hopkins"
               to="/"
-              icon={<PersonOutlinedIcon/>}
+              icon={<LocalHospitalIcon/>}
               selected={selected}
               setSelected={setSelected}
             />
@@ -181,7 +174,7 @@ const FDASidebar = () => {
             <Item
               title="Bavaria"
               to="/bavaria"
-              icon={<PersonOutlinedIcon/>}
+              icon={<VaccinesIcon/>}
               selected={selected}
               setSelected={setSelected}
             />

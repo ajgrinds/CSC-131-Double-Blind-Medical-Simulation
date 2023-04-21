@@ -1,18 +1,15 @@
-import { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
-import { Box, Button, useTheme } from "@mui/material";
+import React, { useState, useEffect } from 'react';
+import { Box, useTheme } from "@mui/material";
 import { DataGrid } from "@mui/x-data-grid";
 import { tokens } from "../../../theme";
 import Header from "../../components/Header";
-import useJaneHopkins from "../../../vendiaHooks/useJaneHopkins";
+import useBavaria from "../../../vendiaHooks/useBavaria";
 
-
-
-const Patient = () =>{
+const BavariaPatients = () => {
     const theme = useTheme();
     const colors = tokens(theme.palette.mode);
 
-    const {entities} = useJaneHopkins();
+    const {entities} = useBavaria();
     const [patientList, setPatientList] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
 
@@ -21,14 +18,12 @@ const Patient = () =>{
         async function fetchData() {
 
             try{
-
                 const response = await entities.patient.list();
                 console.log(response);
                 setPatientList(response.items.map((patient, index) => ({
-                    ...patient,
                     id: index + 1,
-
-                }))); 
+                    name: patient.name
+                })));
             } catch(error){
                 console.log(error);
             } finally{
@@ -37,62 +32,26 @@ const Patient = () =>{
         }
 
         fetchData();
-        
+
     }, [entities.patient]);
 
     const columns = [
-
         {   
-            field: "uuid", 
-            headerName: "UUID",
-            flex:1,           
+            field: "id", 
+            headerName: "ID",
+            flex: 1           
         }, 
         {
             field: "name", 
             headerName: "Name", 
-            flex: 1, 
+            flex: 1,
             cellClassName: "name-column--cell"
-        },
-        {
-            field: "dob",
-            headerName: "DOB",
-            flex : 1,
-        }, 
-        {
-            field: "address", 
-            headerName: "Address", 
-            flex: 2, 
-        }, 
-        {
-            field: "insuranceNumber", 
-            headerName: "Insurance #", 
-            flex: 1, 
-        },
-        {
-            field: "view",
-            headerName: "View/Edit",
-            width: 100,
-            renderCell: (params) => (
-                
-                <Link style={{textDecoration: "none"}} to={`/JaneHopkins/patient/${params.row._id}`}>
-                    <Button 
-
-                        variant="contained" 
-                        style={{ backgroundColor: colors.blueAccent[600]}} 
-                        
-                    > 
-                        View/Edit
-                    </Button>
-                </Link>     
-            ),
-        },
-        
+        }
     ];
 
-    return(
+    return (
         <Box m="20px">
-
-            <Header title="PATIENTS" subtitle="Managing Patients"/>
+            <Header title="Bavaria PATIENTS" subtitle="Managing Bavaria Patients"/>
             <Box m="30px 0 0 0" height="75vh"
                 sx={{
                     "& .MuiDataGrid-root":{
@@ -122,11 +81,9 @@ const Patient = () =>{
                 ) : (
                     <DataGrid rows={patientList} columns={columns}/>
                 )}
-                
             </Box>
         </Box>
-    )
-
+    );
 }
 
-export default Patient;
+export default BavariaPatients;
