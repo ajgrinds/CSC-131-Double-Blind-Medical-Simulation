@@ -1,135 +1,198 @@
-import {Box, Typography, useTheme} from "@mui/material";
+import { useState } from "react";
+import { ProSidebar, Menu, MenuItem } from "react-pro-sidebar";
+import 'react-pro-sidebar/dist/css/styles.css';
+import { Box,IconButton, Typography, useTheme } from '@mui/material';
+import {Link} from 'react-router-dom';
 import { tokens } from "../../theme";
-import Header from "../../components/Header";
-import SupervisorAccountIcon from '@mui/icons-material/SupervisorAccount';
-import MedicalServicesIcon from '@mui/icons-material/MedicalServices';
-import FlagIcon from '@mui/icons-material/Flag';
-import * as React from 'react';
-import Button from '@mui/material/Button';
-import AssignmentOutlinedIcon from '@mui/icons-material/AssignmentOutlined';
-import MailOutlineOutlinedIcon from '@mui/icons-material/MailOutlineOutlined';
-import { NoBackpackSharp, SaveSharp } from "@mui/icons-material";
-import Assign from '../../scenes/AssignDrugs/Assign.js';
-import Send from '../../scenes/SendResult/Send.js';
-import { useState } from 'react';
-import { Link } from 'react-router-dom';
+import HomeOutlinedIcon from "@mui/icons-material/HomeOutlined";
+import PeopleOutlinedIcon from "@mui/icons-material/PeopleOutlined";
+import VaccinesIcon from '@mui/icons-material/Vaccines';
+import ReceiptOutlinedIcon from "@mui/icons-material/ReceiptOutlined";
+import PersonOutlinedIcon from "@mui/icons-material/PersonOutlined";
+import CalendarTodayOutlinedIcon from "@mui/icons-material/CalendarTodayOutlined";
+import LocalHospitalIcon from '@mui/icons-material/LocalHospital';
+import AssignmentReturnedIcon from '@mui/icons-material/AssignmentReturned';
+import MenuOutlinedIcon from "@mui/icons-material/MenuOutlined";
+import avatar from "../../pictures/fdaLogo.jpeg"
 
-//import StatBox from "../../components/StatBox";
-
-  const FDADashboard = () => {
-
-  const [buttonAssign, setButtonAssign] = useState(false);
-  const [buttonSend, setButtonSend] = useState(false);
+const Item =({title, to, icon, selected, setSelected}) => {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
-
-  return (
-    <Box m="20px"> 
-
-        <Box display = "flex" justifyContent="space-between" alignItems="center">
-            <Header title="DASHBOARD" subtitle="Welcome to your dashboard" />
-        </Box>
-        
-        <Box
-          display="gtid"
-          gridTemplateColumns="repeat(12, 1fr)"
-          gridAutoRows="140px"
-          gap="20px"
-          justifyContent="space-between"
-        >
-          {/*Row 1 */}
-
-            <Box
-              gridColumn="span 10"
-              gridRow="span 1"
-              backgroundColor={colors.primary[0]}
-              display="flex"
-              justifyContent="space-evenly"
-              alignItems="flex-start"
-              flexDirection="row"
-              borderRadius={5}
-              paddingBottom={5}
-            >
-              {/*<AssignmentOutlinedIcon sx={{color: colors.blueAccent[500]}}/>*/}
-
-          <Button component={Link} to="/FDA/patient" style= {{width:"450px", height:"250px"}} variant="contained"  sx={{borderRadius: 15, backgroundColor: colors.dashboardColor[100], color: "white", mt: 0}}>
-            <SupervisorAccountIcon sx={{color: colors.blueAccent[0]}} style={{width:"80px", height:"120px"}}/>
-            <Typography variant='h4' p={1}>
-               Patients 
-            </Typography>
-          </Button>  
-
-          <Button component={Link} to="/FDA/Studies" style= {{width:"450px", height:"250px"}} variant="contained"  sx={{borderRadius: 15, backgroundColor: colors.dashboardColor[100], color: "white", mt: 0}}>
-          <MailOutlineOutlinedIcon sx={{color: colors.blueAccent[0]}} style={{width:"45px", height:"80px"}}/>
-            <Typography variant='h4' p={1}>
-            STUDIES
-            </Typography>
-          </Button>
-          </Box> 
-
-           {/*Row 2 */}
-           {/* Assign Drugs Box */}
-           <Box
-              gridColumn="span 10"
-              gridRow="span 1"
-              backgroundColor={colors.dashboardColor[200]}
-              display="flex"
-              justifyContent="center"
-              alignItems="center"
-              flexDirection="column"
-              borderRadius={5}
-              marginTop={1}
-              paddingTop={6}
-              paddingBottom={6}
-            >
-
-              <Button onClick={() => setButtonAssign(true)} variant="contained" sx={{padding: "10px", width: 180, borderRadius: 5, backgroundColor: colors.dashboardColor[300]}}>          
-                <Typography variant="h6">
-                  Assign Drugs
-                </Typography>
-              </Button>
-              <Assign trigger={buttonAssign} setTrigger={setButtonAssign}>
-              </Assign> 
-              
-              <Typography variant='h6' p={1}>
-                Note: Only once all eligible patients have received 5 doses you can send the results.
-              </Typography>
-            </Box>
-
-            <Box
-              gridColumn="span 10"
-              gridRow="span 1"
-              backgroundColor={colors.dashboardColor[200]}
-              display="flex"
-              justifyContent="center"
-              alignItems="center"
-              flexDirection="column"
-              borderRadius={5}
-              marginTop={1}
-              paddingTop={6}
-              paddingBottom={6}
-
-          >
-            {/*<MailOutlineOutlinedIcon sx={{color: colors.blueAccent[500]}}/>*/}
-
-          <Button onClick={() => setButtonSend(true)} variant="contained" sx={{padding: "10px", width: 180, borderRadius: 5, backgroundColor: colors.dashboardColor[300], color: "white", mt: 1}}>
-             <Typography variant="h6">
-              Send Results
-             </Typography>
-          </Button >
-          <Send trigger={buttonSend} setTrigger={setButtonSend}>
-          </Send>
-
-          <Typography variant='h6' p={1}>
-              Note: Only once all eligible patients have received 5 doses you can you can send the results.
-          </Typography> 
-               
-          </Box>  
-          
-        </Box> 
-        
-    </Box>
+  return(
+    <MenuItem 
+      active={selected === title} 
+      style={{color: colors.sidebarColor[100]}} 
+      onClick={() => setSelected(title)} 
+      icon={icon}
+    >
+      <Typography>{title}</Typography>
+      <Link to={to}/>
+    </MenuItem>
   )
 }
 
-export default FDADashboard;
+const FDASidebar = () => {
+
+  const theme = useTheme();
+  const colors = tokens(theme.palette.mode);
+  const [isCollapsed, setIsCollapsed] = useState(false);
+  const [selected, setSelected] = useState("Dashboard");
+
+  return (
+    <Box
+      sx={{
+        "& .pro-sidebar-inner":{
+          background: `${colors.sidebarColor[200]} !important`
+        },
+        "& .pro-icon-wrapper":{
+          backgroundColor: "transparent !important"
+        },
+        "& .pro-inner-item":{
+          padding: "5px 35px 5px 20px !important",
+          
+        },
+        "& .pro-inner-item:hover":{
+          color: "#009099 !important"
+        },
+        "& .pro-menu-item.active":{
+          color: "#009099 !important"
+        },
+      }}
+    >
+      <ProSidebar collapsed={isCollapsed}>
+        <Menu iconShape="square">
+          <MenuItem
+            onClick={() => setIsCollapsed(!isCollapsed)}
+            icon={isCollapsed ? <MenuOutlinedIcon/> : undefined}
+            sytle={{
+              margin: "10px 0 20px 0",
+              color: colors.sidebarColor[400],
+            }}
+          >
+            {!isCollapsed && (
+              <Box
+                display="flex"
+                justifyContent="space-between"
+                alignItems="center"
+                ml="35px"
+              >
+              <Typography variant="h5" color={colors.sidebarColor[300]}>
+                  Food & Drug
+                </Typography>
+                <IconButton onClick={() => setIsCollapsed(!isCollapsed)}>
+                  <MenuOutlinedIcon/>
+                </IconButton>
+              </Box>
+            )}
+          </MenuItem>
+
+          {!isCollapsed && (
+            <Box mb="25px">
+              <Box display="flex" justifyContent="center" alignItems="center">
+                <img
+                  width="220px"
+                  height="120px"
+                  src={avatar}
+                  style={{cursor: "pointer", borderRadius: "0%"}}                                 
+                />
+                
+              </Box>
+              <Box textAlign="center">
+                <Typography
+                  variant="h4"
+                  color={colors.sidebarColor[300]}
+                  fontWeight="bold"
+                  sx={{m: "10px 0 0 0"}}
+                >
+                  Big Boss FDA Man
+                </Typography>
+                <Typography variant="h5" color={colors.sidebarColor[400]}>
+                  FDA
+                </Typography>
+              </Box>
+            </Box>
+          )}
+
+          <Box paddingLeft={isCollapsed ? undefined : "10px"}>
+            <Item
+              title="Dashboard"
+              to="/fda"
+              icon={<HomeOutlinedIcon/>}
+              selected={selected}
+              setSelected={setSelected}
+            />
+
+            <Typography
+              variant="h6"
+              color={colors.sidebarColor[100]}
+              sx={{m: "15px 0 5px 20px"}}
+            >
+              Data
+            </Typography>
+
+            <Item
+              title="Patients"
+              to="/fda/patient"
+              icon={<PeopleOutlinedIcon/>}
+              selected={selected}
+              setSelected={setSelected}
+            />
+            
+            <Item
+              title="Assign Drugs"
+              to="/fda/drugs"
+              icon={<AssignmentReturnedIcon/>}
+              selected={selected}
+              setSelected={setSelected}
+            />
+
+            <Item
+              title="Studies"
+              to="/fda/studies"
+              icon={<ReceiptOutlinedIcon/>}
+              selected={selected}
+              setSelected={setSelected}
+            />
+
+            <Typography
+              variant="h6"
+              color={colors.sidebarColor[100]}
+              sx={{m: "15px 0 5px 20px"}}
+            >
+              Pages
+            </Typography>
+
+            <Item
+              title="Jane Hopkins"
+              to="/JaneHopkins"
+              icon={<LocalHospitalIcon/>}
+              selected={selected}
+              setSelected={setSelected}
+            />
+
+            <Item
+              title="Bavaria"
+              to="/bavaria"
+              icon={<VaccinesIcon/>}
+              selected={selected}
+              setSelected={setSelected}
+            />
+
+            <Item
+              title="Logout"
+              to="/"
+              icon={<PersonOutlinedIcon/>}
+              selected={selected}
+              setSelected={setSelected}
+            />
+
+          </Box>
+          
+        </Menu>
+      </ProSidebar>
+
+    </Box>
+  );
+}
+
+export default FDASidebar;
