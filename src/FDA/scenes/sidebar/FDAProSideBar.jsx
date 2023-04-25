@@ -1,9 +1,11 @@
-import { useState } from "react";
-import { ProSidebar, Menu, MenuItem } from "react-pro-sidebar";
-import 'react-pro-sidebar/dist/css/styles.css';
-import { Box,IconButton, Typography, useTheme } from '@mui/material';
-import {Link} from 'react-router-dom';
+import { useState} from "react";
+
+import { Menu, Sidebar, MenuItem } from "react-pro-sidebar";
+import { useProSidebar } from "react-pro-sidebar";
+
+import { Link } from 'react-router-dom';
 import { tokens } from "../../theme";
+import { Box,IconButton, Typography, useTheme} from '@mui/material';
 import HomeOutlinedIcon from "@mui/icons-material/HomeOutlined";
 import PeopleOutlinedIcon from "@mui/icons-material/PeopleOutlined";
 import VaccinesIcon from '@mui/icons-material/Vaccines';
@@ -13,6 +15,7 @@ import CalendarTodayOutlinedIcon from "@mui/icons-material/CalendarTodayOutlined
 import LocalHospitalIcon from '@mui/icons-material/LocalHospital';
 import AssignmentReturnedIcon from '@mui/icons-material/AssignmentReturned';
 import MenuOutlinedIcon from "@mui/icons-material/MenuOutlined";
+
 import avatar from "../../pictures/fdaLogo.jpeg"
 
 
@@ -25,79 +28,112 @@ const Item =({title, to, icon, selected, setSelected}) => {
       style={{color: colors.sidebarColor[100]}} 
       onClick={() => setSelected(title)} 
       icon={icon}
+      routerLink={<Link to={to} />}
     >
       <Typography>{title}</Typography>
-      <Link to={to}/>
+      
     </MenuItem>
-  )
-}
+  );
+};
 
-const FDASidebar = () => {
+const FDAProSideBar = () => {
 
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
-  const [isCollapsed, setIsCollapsed] = useState(true);
   const [selected, setSelected] = useState("Dashboard");
+  const { collapseSidebar, toggleSidebar, collapsed, broken } = useProSidebar();
+
 
   return (
     <Box
       sx={{
-        "& .pro-sidebar-inner":{
-          background: `${colors.sidebarColor[200]} !important`
+        position: "sticky",
+        display: "flex",
+        height: "100vh",
+        top: 0,
+        bottom: 0,
+        zIndex: 10000,
+        "& .sidebar": {
+          border: "none",
         },
-        "& .pro-icon-wrapper":{
-          backgroundColor: "transparent !important"
+        "& .menu-icon": {
+          backgroundColor: "transparent !important",
         },
-        "& .pro-inner-item":{
-          padding: "5px 35px 5px 20px !important",
+        "& .menu-item": {
+          // padding: "5px 35px 5px 20px !important",
+          backgroundColor: "transparent !important",
+        },
+        "& .menu-anchor": {
+          color: "inherit !important",
+          backgroundColor: "transparent !important",
+        },
+        "& .menu-item:hover": {
           
+          backgroundColor: "transparent !important",
         },
-        "& .pro-inner-item:hover":{
-          color: "#009099 !important"
-        },
-        "& .pro-menu-item.active":{
-          color: "#009099 !important"
+        "& .menu-item.active": {
+          
+          backgroundColor: "transparent !important",
         },
       }}
     >
-      <ProSidebar collapsed={isCollapsed}>
-        <Menu iconShape="square">
+      <Sidebar
+        breakPoint="md"
+        
+        backgroundColor={colors.sidebarColor[400]}
+        
+      >
+        <Menu iconshape="square">
           <MenuItem
-            onClick={() => setIsCollapsed(!isCollapsed)}
-            icon={isCollapsed ? <MenuOutlinedIcon/> : undefined}
-            sytle={{
+            icon={
+              collapsed ? (
+                <MenuOutlinedIcon onClick={() => collapseSidebar()} />
+              ) : undefined
+            }
+            style={{
               margin: "10px 0 20px 0",
               color: colors.sidebarColor[400],
             }}
           >
-            {!isCollapsed && (
+            {!collapsed && (
               <Box
                 display="flex"
                 justifyContent="space-between"
                 alignItems="center"
-                ml="35px"
+                ml="15px"
               >
-              <Typography variant="h5" color={colors.sidebarColor[300]}>
+                <Typography variant="h5" color={colors.sidebarColor[300]}>
                   Food & Drug
                 </Typography>
-                <IconButton onClick={() => setIsCollapsed(!isCollapsed)}>
+                <IconButton
+                  onClick={
+                    broken ? () => toggleSidebar() : () => collapseSidebar()
+                  }
+                >
                   <MenuOutlinedIcon/>
                 </IconButton>
               </Box>
             )}
           </MenuItem>
 
-          {!isCollapsed && (
+          {!collapsed && (
             <Box mb="25px">
-              <Box display="flex" justifyContent="center" alignItems="center">
-                <img
-                  width="220px"
-                  height="120px"
-                  src={avatar}
-                  style={{cursor: "pointer", borderRadius: "0%"}}                                 
-                />
+              <Box 
+                display="flex" 
+                justifyContent="center" 
+                alignItems="center"
                 
+              >
+                <img
+                  className="avater-image"
+                  alt="profile-user"
+                  width="100px"
+                  height="100px"
+                  src={avatar}
+                  style={{cursor: "pointer", borderRadius: "50%"}}                                 
+                />
               </Box>
+
               <Box textAlign="center">
                 <Typography
                   variant="h4"
@@ -105,16 +141,15 @@ const FDASidebar = () => {
                   fontWeight="bold"
                   sx={{m: "10px 0 0 0"}}
                 >
-                  Big Boss FDA Man
+                    Admin
                 </Typography>
-                <Typography variant="h5" color={colors.sidebarColor[400]}>
-                  FDA
-                </Typography>
+                
               </Box>
+
             </Box>
           )}
 
-          <Box paddingLeft={isCollapsed ? undefined : "10px"}>
+          <Box paddingLeft={collapsed ? undefined : "10%"}>
             <Item
               title="Dashboard"
               to="/fda"
@@ -126,7 +161,7 @@ const FDASidebar = () => {
             <Typography
               variant="h6"
               color={colors.sidebarColor[100]}
-              sx={{m: "15px 0 5px 20px"}}
+              sx={{ m: "15px 20px 5px 20px" }}
             >
               Data
             </Typography>
@@ -154,7 +189,8 @@ const FDASidebar = () => {
               selected={selected}
               setSelected={setSelected}
             />
-
+            
+            
             <Typography
               variant="h6"
               color={colors.sidebarColor[100]}
@@ -193,14 +229,12 @@ const FDASidebar = () => {
               selected={selected}
               setSelected={setSelected}
             />
-
-          </Box>
-          
+           
+          </Box> 
         </Menu>
-      </ProSidebar>
-
+      </Sidebar>
     </Box>
   );
 }
 
-export default FDASidebar;
+export default FDAProSideBar;
