@@ -197,6 +197,13 @@ const MyProSideBar = () => {
               selected={selected}
               setSelected={setSelected}
             />
+            <Item
+              title="Track Dosage"
+              to="/JaneHopkins/trackdosage"
+              icon={<PeopleOutlinedIcon/>}
+              selected={selected}
+              setSelected={setSelected}
+            />
             
             <Typography
               variant="h6"
