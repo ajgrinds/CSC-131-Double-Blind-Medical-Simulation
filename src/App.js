@@ -9,9 +9,7 @@ import FDAPatient from "./FDA/scenes/patient"
 import FDADashboard from "./FDA/scenes/dashboard";
 import AddPatient from "./JaneHopkins/scenes/addpatient";
 import LoginPage from "./authentication/Index";
-import Report from "./Bavaria/scenes/report";
-import Send from "./Bavaria/scenes/send";
-import BavariaPatients from "./Bavaria/scenes/patients";
+import CreateDrug from "./Bavaria/scenes/createDrug";
 
 
 function App() {
@@ -44,12 +42,11 @@ function App() {
       </Route>
 
       {/*Routes for Bavaria page */}
-      <Route path="/bavaria" element={<Bavaria/>}>
+      <Route path="/bavaria/*" element={<Bavaria/>}>
         
-          <Route path="/bavaria/patients" element={<BavariaPatients/>} />
-          <Route path="/bavaria/send" element={<Send/>} />
-          <Route path="/bavaria/report" element={<Report/>} />
-          
+        <Route path="createDrug" element={<CreateDrug/>}/>
+        
+        
       </Route>
 
     </Routes>
