@@ -15,15 +15,30 @@ import AssignmentReturnedIcon from '@mui/icons-material/AssignmentReturned';
 import MenuOutlinedIcon from "@mui/icons-material/MenuOutlined";
 import avatar from "../../pictures/fdaLogo.jpeg"
 
+
+
 const Item =({title, to, icon, selected, setSelected}) => {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
+  const [isHovered, setIsHovered] = useState(false);
+  const handleMouseEnter = () => {
+    setIsHovered(true);
+  };
+
+  const handleMouseLeave = () => {
+    setIsHovered(false);
+  };
+
   return(
     <MenuItem 
       active={selected === title} 
-      style={{color: colors.sidebarColor[100]}} 
+      style={{color: colors.sidebarColor[100],
+        boxShadow: isHovered ? `inset 4px 0px 0px ${colors.sidebarColor[300]}` : "",
+      }} 
       onClick={() => setSelected(title)} 
       icon={icon}
+      onMouseEnter={handleMouseEnter}
+      onMouseLeave={handleMouseLeave}
     >
       <Typography>{title}</Typography>
       <Link to={to}/>
