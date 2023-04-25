@@ -1,20 +1,18 @@
-import React from "react" 
-import'./Assign.css'
-import { tokens } from "../../theme";
-import {Box, Typography, useTheme} from "@mui/material";
+import React from "react";
+import './Assign.css';
+import { useTheme } from "@mui/material/styles";
 
 function Assign(props) {
-    const theme = useTheme();
-    const colors = tokens(theme.palette.mode);
-    return (props.trigger) ? (
-        <div className="assign">
-            <div className="assign-inner">
-                <button className="close-btn" onClick={() => props.setTrigger(false)}>close</button>
+  const theme = useTheme();
 
-                { props.children }
-            </div>
-        </div>
-    ) : "";
+  return (
+    <div className={`assign ${props.trigger ? "active" : ""}`}>
+      <div className="assign-inner">
+        <button className="close-btn" onClick={() => props.setTrigger(false)}>close</button>
+        {props.children}
+      </div>
+    </div>
+  );
 }
 
-export default Assign
+export default Assign;
