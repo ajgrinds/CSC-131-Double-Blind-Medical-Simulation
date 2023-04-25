@@ -1,13 +1,17 @@
 import { useState } from "react";
-import {Box, Typography, useTheme} from "@mui/material";
+import {
+  Box, 
+  Typography, 
+  useTheme, 
+  useMediaQuery
+} from "@mui/material";
+
+import Grid from "@mui/material/Unstable_Grid2";
+
 import { tokens } from "../../theme";
 import Header from "../../components/Header";
 import PeopleOutlinedIcon from "@mui/icons-material/PeopleOutlined";
 import dayjs from 'dayjs';
-import { DemoContainer } from '@mui/x-date-pickers/internals/demo';
-import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
-import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
-import { MobileDateTimePicker } from '@mui/x-date-pickers/MobileDateTimePicker';
 import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
 import { styled } from '@mui/material/styles';
@@ -17,7 +21,7 @@ import { Link } from "react-router-dom";
 import VaccinesIcon from '@mui/icons-material/Vaccines';
 import PersonAddIcon from '@mui/icons-material/PersonAdd';
 
-//import StatBox from "../../components/StatBox";
+
 
 
 
@@ -25,6 +29,9 @@ const Dashboard = () => {
 
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
+  const smScreen = useMediaQuery(theme.breakpoints.up("sm"));
+
+
   const today = dayjs();
   const yesterday = dayjs().subtract(1, 'day');
   const todayStartOfTheDay = today.startOf('day');
@@ -41,165 +48,114 @@ const Dashboard = () => {
   return (
     <Box m="20px">
 
-        <Box display = "flex" justifyContent="space-between" alignItems="center">
+        <Box 
+          display={smScreen ? "flex" : "block"}
+          flexDirection={smScreen ? "row" : "column"}
+          justifyContent={smScreen ? "space-between" : "start"}
+          alignItems={smScreen ? "center" : "start"}
+          m="10px 0"
+        >
             <Header title="DASHBOARD" subtitle="Welcome to your dashboard" />
         </Box>
-        
-        <Box
-          display="grid"
-          gridTemplateColumns="repeat(12, 1fr)"
-          gridAutoRows="140px"
-          gap="20px"
-          justifyContent="center"
-        >
-          {/*Row 1 */}
 
-          <Box 
-            gridColumn="span 4" 
-            backgroundColor={colors.primary[400]} 
-            display="flex" 
-            alignItems="center"
-            justifyContent="center"
-          >
-             <VaccinesIcon sx={{display: "flex", fontSize: 70, color: colors.greenAccent[500]}}/>
-             <Link
-  
-                display="flex"
-                component="button"
-                variant="body2"
-                color={colors.greenAccent[500]}
-                style={{ textDecoration: "none"}}
-                to=""
-
+        <Grid container rowSpacing={1} columnSpacing={{ xs: 1, sm: 2, md: 3 }}> 
+          <Grid xs={12} sm={12} md={12} lg={4} xl={4}>
+            <Box
+              width="100%"
+              backgroundColor={colors.primary[400]}
+              display="flex"
+              alignItems="center"
+              justifyContent="center"
+              sx={{height: 150}}
             >
-              <Typography variant="h6" fontWeight="500" color={colors.greenAccent[500]}>
-                Track Dosage
-              </Typography>
-            </Link>
-            
-          </Box>
+              <VaccinesIcon sx={{display: "flex", fontSize: 70, color: colors.greenAccent[500]}}/>
+              <Link
+    
+                  display="flex"
+                  component="button"
+                  variant="body2"
+                  color={colors.greenAccent[500]}
+                  style={{ textDecoration: "none"}}
+                  to="/JaneHopkins/dose"
 
-          <Box 
-            gridColumn="span 4" 
-            backgroundColor={colors.primary[400]} 
-            display="flex" 
-            alignItems="center"
-            justifyContent="center"
-          >
-            <PeopleOutlinedIcon sx={{display: "flex", fontSize: 70, color: colors.greenAccent[500]}}/>
-            <Link
-  
-                display="flex"
-                component="button"
-                variant="body2"
-                color={colors.greenAccent[500]}
-                style={{ textDecoration: "none"}}
-                to="/JaneHopkins/patient"
-
-            >
-            <Typography variant="h6" fontWeight="500" color={colors.greenAccent[500]}>
-              View Patients
-            </Typography>
-            </Link>
-          
-          </Box>
-
-          <Box 
-            gridColumn="span 4" 
-            backgroundColor={colors.primary[400]} 
-            display="flex" 
-            alignItems="center"
-            justifyContent="center"
-          >
-            
-            <PersonAddIcon sx={{display: "flex", fontSize: 60, color: colors.greenAccent[500]}}/>
-            <Link
-  
-                display="flex"
-                component="button"
-                variant="body2"
-                color={colors.greenAccent[500]}
-                style={{ textDecoration: "none"}}
-                to="/JaneHopkins/addpatient"
-
-            >
-              <Typography variant="h6" fontWeight="500" color={colors.greenAccent[500]}>
-                Add New Patient
-              </Typography>
-            </Link>
-
-
-
-
-          </Box>
-
-            {/*Row 2 */}
-
-          <Box
-            gridColumn="span 8"
-            gridRow="span 2"
-            backgroundColor={colors.primary[400]}
-            display="flex"
-            justifyContent="center"
-            alignItems="center"
-            
-          >
-            
-            <AppointmentGrid/>
-
-          
-          </Box>
-
-          <Box
-            gridColumn="span 4"
-            gridRow="span 2"
-            backgroundColor={colors.primary[400]}
-            display="flex"
-            justifyContent="center"
-            alignItems="center"
-          >
-             <Box sx={{ml: "30px"}}>
-
-            <Typography ml="5px" mb="10px" variant="h6" fontWeight="700" color={colors.greenAccent[500]}>
-              Schedule Patient Appointment
-            </Typography>
-
-            <TextField 
-              id="outlined-basic" 
-              label="Name" 
-              variant="outlined" 
-              sx={{marginBottom: "20px"}}
-            />
-
-            <LocalizationProvider dateAdapter={AdapterDayjs}>
-              <DemoContainer components={['MobileDateTimePicker', 'MobileDateTimePicker']}>
-                <MobileDateTimePicker label={'"Date/Time"'} openTo="year" />
-                
-              </DemoContainer>
-            </LocalizationProvider>
-
-        
-            
-
-            <Box sx={{display: "flex", alignContent: "center"}} mt="20px" ml="50px">
-            
-              <ColorButton variant="contained" size='large'>Add Appointment</ColorButton>
-
+              >
+                <Typography variant="h6" fontWeight="500" color={colors.greenAccent[500]}>
+                  Track Dosage
+                </Typography>
+              </Link>
             </Box>
-
-            </Box>
-            
-          </Box>
           
+          </Grid>
+          <Grid xs={12} sm={12} md={12} lg={4} xl={4}>
+            <Box
+              width="100%"
+              backgroundColor={colors.primary[400]}
+              display="flex"
+              alignItems="center"
+              justifyContent="center"
+              sx={{height: 150}}
+            >
+              <PeopleOutlinedIcon sx={{display: "flex", fontSize: 70, color: colors.greenAccent[500]}}/>
+              <Link
+    
+                  display="flex"
+                  component="button"
+                  variant="body2"
+                  color={colors.greenAccent[500]}
+                  style={{ textDecoration: "none"}}
+                  to="/JaneHopkins/patient"
 
-        </Box>
-        
-        
-        
+              >
+              <Typography variant="h6" fontWeight="500" color={colors.greenAccent[500]}>
+                View Patients
+              </Typography>
+              </Link>
+          
+            </Box>
+          </Grid>
+          <Grid xs={12} sm={12} md={12} lg={4} xl={4}>
+            <Box
+              width="100%"
+              backgroundColor={colors.primary[400]}
+              display="flex"
+              alignItems="center"
+              justifyContent="center"
+              sx={{height: 150}}
+            >
+              <PersonAddIcon sx={{display: "flex", fontSize: 60, color: colors.greenAccent[500]}}/>
+              <Link
+    
+                  display="flex"
+                  component="button"
+                  variant="body2"
+                  color={colors.greenAccent[500]}
+                  style={{ textDecoration: "none"}}
+                  to="/JaneHopkins/addpatient"
 
-        
+              >
+                <Typography variant="h6" fontWeight="500" color={colors.greenAccent[500]}>
+                  Add New Patient
+                </Typography>
+              </Link>
+            </Box>
+          </Grid>
+         
+          <Grid xs={12} sm={12} md={12} lg={8} xl={8}>
+          <Box
+              marginTop='10px'
+              width="100%"
+              backgroundColor={colors.primary[400]}
+              display="flex"
+              alignItems="center"
+              justifyContent="center"
+              sx={{height: "100%"}}
+            >
+              <AppointmentGrid style={{ height: "100%" }}/>
+            </Box>
+          </Grid>
+        </Grid>
     </Box>
-  )
-}
+  );
+};
 
 export default Dashboard;
