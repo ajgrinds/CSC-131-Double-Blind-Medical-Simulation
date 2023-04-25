@@ -1,15 +1,18 @@
-import React from "react" 
-import'./Send.css'
+import React from "react";
+import './Send.css';
+import { useTheme } from "@mui/material/styles";
 
 function Send(props) {
-    return (props.trigger) ? (
-        <div className="send">
-            <div className="send-inner">
-                <button className="close-btn" onClick={() => props.setTrigger(false)}>close</button>
-                { props.children }
-            </div>
-        </div>
-    ) : "";
+  const theme = useTheme();
+
+  return (
+    <div className={`send ${props.trigger ? "active" : ""}`}>
+      <div className="send-inner">
+        <button className="close-btn" onClick={() => props.setTrigger(false)}>close</button>
+        {props.children}
+      </div>
+    </div>
+  );
 }
 
-export default Send
+export default Send;
