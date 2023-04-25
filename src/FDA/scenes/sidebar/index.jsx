@@ -16,15 +16,29 @@ import MenuOutlinedIcon from "@mui/icons-material/MenuOutlined";
 import avatar from "../../pictures/fdaLogo.jpeg"
 
 
+
 const Item =({title, to, icon, selected, setSelected}) => {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
+  const [isHovered, setIsHovered] = useState(false);
+  const handleMouseEnter = () => {
+    setIsHovered(true);
+  };
+
+  const handleMouseLeave = () => {
+    setIsHovered(false);
+  };
+
   return(
     <MenuItem 
       active={selected === title} 
-      style={{color: colors.sidebarColor[100]}} 
+      style={{color: colors.sidebarColor[100],
+        boxShadow: isHovered ? `inset 4px 0px 0px ${colors.sidebarColor[300]}` : "",
+      }} 
       onClick={() => setSelected(title)} 
       icon={icon}
+      onMouseEnter={handleMouseEnter}
+      onMouseLeave={handleMouseLeave}
     >
       <Typography>{title}</Typography>
       <Link to={to}/>
@@ -36,7 +50,7 @@ const FDASidebar = () => {
 
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
-  const [isCollapsed, setIsCollapsed] = useState(true);
+  const [isCollapsed, setIsCollapsed] = useState(false);
   const [selected, setSelected] = useState("Dashboard");
 
   return (
@@ -148,8 +162,8 @@ const FDASidebar = () => {
             />
 
             <Item
-              title="Progress Report"
-              to="/janehopkins/dashboard"
+              title="Studies"
+              to="/fda/studies"
               icon={<ReceiptOutlinedIcon/>}
               selected={selected}
               setSelected={setSelected}
@@ -165,7 +179,7 @@ const FDASidebar = () => {
 
             <Item
               title="Jane Hopkins"
-              to="/"
+              to="/JaneHopkins"
               icon={<LocalHospitalIcon/>}
               selected={selected}
               setSelected={setSelected}
@@ -180,16 +194,9 @@ const FDASidebar = () => {
             />
 
             <Item
-              title="Profile Form"
-              to="/fda/form"
+              title="Logout"
+              to="/"
               icon={<PersonOutlinedIcon/>}
-              selected={selected}
-              setSelected={setSelected}
-            />
-            <Item
-              title="Calendar"
-              to="/fda/calendar"
-              icon={<CalendarTodayOutlinedIcon/>}
               selected={selected}
               setSelected={setSelected}
             />
