@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged, signOut } from "firebase/auth";
 import { auth } from "./firebase-config";
 import Button from "@mui/material/Button";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import * as React from 'react';
 import Avatar from '@mui/material/Avatar';
 import CssBaseline from '@mui/material/CssBaseline';
@@ -15,6 +15,8 @@ import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
+import AccountCircleIcon from '@mui/icons-material/AccountCircle';
+import { Icon } from "@mui/material";
 
 const Login = () =>  {
 
@@ -22,6 +24,8 @@ const Login = () =>  {
     const[registerPassword, setRegisterPassword] = useState("");
     const[loginEmail, setLoginEmail] = useState("");
     const[loginPassword, setLoginPassword] = useState("");
+    const navigate = useNavigate();
+
 
     const[user, setUser] = useState({});
 
@@ -57,7 +61,17 @@ const Login = () =>  {
           console.log(error.message);
           alert("Unrecognized Email and/or Password");
         }
-    };
+        const email = auth.currentUser.email;
+        if(email.match("@bavaria.com")) {
+          navigate("/bavaria");
+        }
+        if(email.match("@fda.com")) {
+          navigate("/fda");
+        }
+        if(email.match(/@JaneHopkins.com/gi)) {
+          navigate("/JaneHopkins");
+        }
+    };  
     
     const logout = async () => {
         await signOut(auth);
@@ -86,7 +100,7 @@ return (
             Register New User
           </Typography>
 
-          <Box noValidate sx={{ mt: 3 }}>
+          <Box noValidate sx={{ display:'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap:1, mt: 3 }}>
                 <input
                     placeholder="Email..."
                     onChange={(event) => {
@@ -99,16 +113,16 @@ return (
                         setRegisterPassword(event.target.value); 
                     } } />
 
+            </Box>
             <Button
               type="submit"
               fullWidth
               variant="contained"
-              sx={{ mt: 3, mb: 2 }}
+              sx={{position:'center', mt: 3, mb: 2 }}
               onClick={register}
             >
               Create User
             </Button>
-            </Box>
 
           <Typography component="h1" variant="h5">
             Sign in
