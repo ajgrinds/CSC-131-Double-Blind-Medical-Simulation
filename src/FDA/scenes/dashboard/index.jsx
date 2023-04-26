@@ -137,100 +137,81 @@ const FDADashboard = () => {
           </Grid>
 
         </Grid>
-        
-        
-        <Box
-          display="gtid"
-          gridTemplateColumns="repeat(12, 1fr)"
-          gridAutoRows="140px"
-          gap="20px"
-          justifyContent="space-between"
+
+        <Grid
+          container
+          spacing={1}
+          mt="20px"
+          backgroundColor={colors.dashboardColor[200]}
+          borderRadius={5}
+          justifyContent="center"
+          alignItems="center"
         >
-          {/*Row 1 */}
-
-          {/*<Button style={{width:"500px", height:"300px"}} variant="contained"  sx={{borderRadius: 15, backgroundColor: colors.blueAccent[200], color: "white", mt: 0}}>
-            <MedicalServicesIcon sx={{color: colors.primary[500]}} style={{width:"45px", height:"80px"}}/>
-              <Typography variant='h4' p={1} color={colors.primary[500]}>
-                Drugs
-              </Typography>
-              </Button>*/}
-
-            <Box
-              gridColumn="span 10"
-              gridRow="span 1"
-              backgroundColor={colors.primary[0]}
-              display="flex"
-              justifyContent="space-evenly"
-              alignItems="flex-start"
-              flexDirection="row"
-              borderRadius={5}
-              paddingBottom={5}
-
-            >
-              {/*<AssignmentOutlinedIcon sx={{color: colors.blueAccent[500]}}/>*/}
-
-              
-            </Box> 
-
-           {/*Row 2 */}
-           {/* Assign Drugs Box */}
-           <Box
-              gridColumn="span 10"
-              gridRow="span 1"
-              backgroundColor={colors.dashboardColor[200]}
-              display="flex"
-              justifyContent="center"
-              alignItems="center"
-              flexDirection="column"
-              borderRadius={5}
-              marginTop={1}
-              paddingTop={6}
-              paddingBottom={6}
- 
-
-            >
-              {/*<AssignmentOutlinedIcon sx={{color: colors.blueAccent[500]}}/>*/}
-
-              <Button variant="contained" sx={{padding: "10px", width: 180, borderRadius: 40, backgroundColor: colors.dashboardColor[300], color: "white", mt: 1}}>
-              <Typography variant="h6">
-                Assign Drugs
-                </Typography>
+          <Grid item xs={12} md={12} lg={12}>
+            <Box display="flex" justifyContent="center">
+              <Button
+                variant="contained"
+                sx={{
+                  padding: "8px",
+                  width: { xs: "75%", sm:"75%", md: "75%", lg: "25%" },
+                  borderRadius: 40,
+                  backgroundColor: colors.dashboardColor[300],
+                  color: "white",
+                  mt: 1,
+                }}
+              >
+                <Typography variant="h6">Assign Drugs</Typography>
               </Button>
-              <Typography variant='h6' p={1}>
+            </Box>
+          </Grid>
+
+          <Grid item xs={12} md={12} lg={12}>
+            <Box display="flex" justifyContent="center">
+              <Typography variant="h6" p={1} sx={{ ml: { md: "30px" } }}>
                 Note: Assing drugs only to eligible patients
               </Typography>
-          </Box>  
+            </Box>
+          </Grid>
+        </Grid>
 
-          {/* Send Results Box */}
-          <Box
-            gridColumn="span 10"
-            gridRow="span 1"
-            backgroundColor={colors.dashboardColor[200]}
-            display="flex"
-            justifyContent="center"
-            alignItems="center"
-            flexDirection="column"
-            borderRadius={5}
-            marginTop={1}
-            paddingTop={6}
-            paddingBottom={6}
+        <Grid
+          container
+          spacing={1}
+          mt="20px"
+          backgroundColor={colors.dashboardColor[200]}
+          borderRadius={5}
+          justifyContent="center"
+          alignItems="center"
+        >
+          <Grid item xs={12} md={12} lg={12}>
+            <Box display="flex" justifyContent="center">
+              <Button
+                variant="contained"
+                sx={{
+                  padding: "8px",
+                  width: { xs: "75%", sm:"75%", md: "75%", lg: "25%" },
+                  borderRadius: 40,
+                  backgroundColor: colors.dashboardColor[300],
+                  color: "white",
+                  mt: 1,
+                }}
+              >
+                <Typography variant="h6">Send Results</Typography>
+              </Button>
+            </Box>
+          </Grid>
 
-          >
-            {/*<MailOutlineOutlinedIcon sx={{color: colors.blueAccent[500]}}/>*/}
-
-            <Button variant="contained" sx={{padding: "10px", width: 180, borderRadius: 40, backgroundColor: colors.dashboardColor[300], color: "white", mt: 1}}>
-             <Typography variant="h6" fontWeight={"10"}>
-              Send Results
+          <Grid item xs={12} md={12} lg={12}>
+            <Box display="flex" justifyContent="center">
+              <Typography variant="h6" p={1} sx={{ ml: { md: "30px" } }}>
+                Note: Only once all eligible patients have received 5 doses you can you can send the results.
               </Typography>
-          </Button >
-          <Typography variant='h6' p={1}>
-              Note: Only once all eligible patients have received 5 doses you can you can send the results.
-            </Typography> 
-            
-          </Box>
-          
-        </Box> 
-        
+            </Box>
+          </Grid>
+        </Grid>
+
+
+
     </Box>
   )
 }
