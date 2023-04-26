@@ -64,8 +64,7 @@ const TrackDosage = () => {
                     <Button 
 
                         variant="contained" 
-                        style={{ backgroundColor: colors.blueAccent[600]}} 
-                        
+                        style={{ backgroundColor: colors.blueAccent[600]}}                     
                     > 
                         Dosage
                     </Button>
