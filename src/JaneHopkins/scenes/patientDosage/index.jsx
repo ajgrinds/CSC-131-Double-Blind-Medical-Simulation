@@ -95,11 +95,13 @@ const PatientDosage = () => {
 
         }catch (error) {
             console.log(error);
-        } finally {
-            setIsLoading(false);
         }
 
+        await new Promise((resolve) => setTimeout(resolve, 1000));
 
+        setIsLoading(false);
+
+        window.location.href = "/JaneHopkins/trackdosage";
     };
     
     
