@@ -364,6 +364,31 @@ function AddPatient() {
             >
               <TextField
                 id="outlined-read-only-input"
+                label="Picture link"
+                color='secondary'
+                defaultValue=""
+                onChange={handleAddPatientPicture}
+                variant="filled"
+              /> 
+            </Grid>
+
+            <Grid
+              item
+              xs={12}
+              sm={6}
+              md={4}
+              component="form"
+              sx={{
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center',
+                '& .MuiTextField-root': { m: 1, width: '100%' },
+              }}
+              noValidate
+              autoComplete="off"
+            >
+              <TextField
+                id="outlined-read-only-input"
                 label="DOB"
                 color='secondary'
                 defaultValue=""
