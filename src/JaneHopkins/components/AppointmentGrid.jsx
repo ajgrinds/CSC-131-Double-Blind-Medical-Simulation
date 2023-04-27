@@ -53,15 +53,23 @@ const AppointmentGrid = () => {
   };
   
   useEffect(() => {
-    // Fetch data or do side effects here
+    
   }, []);
 
   useEffect(() => {
-    // Fetch data or do side effects here
+    
   }, [events]);
 
+  const styles = {
+    calendarText: {
+      color: "white"
+    }
+  }
+
   return (
+    
     <div style={{ height: "350pt", width: "100%" }}>
+     
        <Calendar
         localizer={localizer}
         events={events}
@@ -71,15 +79,43 @@ const AppointmentGrid = () => {
         onSelectSlot={handleSelect}
         onSelectEvent={handleEdit}
         onDoubleClickEvent={(event) => handleDelete(event.id)}
-        style={{ border: '1px solid white', color: 'white' }}
+        //style={{ border: '1px solid white', color: 'white', }}
+        
+       
+        toolbar={{
+          style: {
+            backgroundColor: 'grey',
+            color: 'white'
+          }
+        }}
+        
         eventPropGetter={() => ({
           style: {
-            backgroundColor: 'gray',
+            backgroundColor: 'grey',
             color: 'white',
             border: '1px solid white',
           },
         })}
-      />
+        dayPropGetter={() => ({
+          style: {
+            backgroundColor: 'transparent',
+            color: 'white',
+          }
+        })}
+        weekPropGetter={() => ({
+          style: {
+            backgroundColor: 'transparent',
+            color: 'white',
+          }
+        })}
+        monthPropGetter={() => ({
+          style: {
+            backgroundColor: 'transparent',
+            color: 'white',
+          }
+        })}
+        
+      /> 
     </div>
   );
 };
