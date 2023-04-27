@@ -49,9 +49,6 @@ function PatientDetails() {
     }
   };
   
-  
-  
-  
   const DeleteButton = ({ id }) => {
 
     console.log("ID from URL:", id);
@@ -124,7 +121,6 @@ function PatientDetails() {
 
           const response = await entities.patient.get(id);
           console.log(response);
-          
           setPatient(response);
           
           // set the values of each entitie to the current value of the patients
@@ -316,7 +312,7 @@ function PatientDetails() {
                     readOnly: true,
                   }}
                   variant="filled"
-                /> 
+              /> 
 
             </Grid>
 

@@ -12,6 +12,9 @@ import AddPatient from "./scenes/addpatient";
 import MyProSideBar from "./scenes/sidebar/MyProSideBar";
 
 import Admin from "./scenes/admin";
+import TrackDosage from "./scenes/trackDosage";
+import PatientDosage from "./scenes/patientDosage";
+
 
 const Doctor = () => {
 
@@ -34,6 +37,8 @@ const Doctor = () => {
                                 <Route path="/patient" element={<Patient/>}/>
                                 <Route path="/addpatient" element={<AddPatient/>} />
                                 <Route path="/patient/:id" element={<PatientDetails/>}/>
+                                <Route path="/trackdosage/" element={<TrackDosage/>} />
+                                <Route path="/trackdosage/:id" element={<PatientDosage/>} />
                                 
                             </Routes>
                         </main>

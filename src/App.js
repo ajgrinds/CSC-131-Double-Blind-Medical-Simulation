@@ -10,6 +10,8 @@ import FDADashboard from "./FDA/scenes/dashboard";
 import AddPatient from "./JaneHopkins/scenes/addpatient";
 import LoginPage from "./authentication/Index";
 import CreateDrug from "./Bavaria/scenes/createDrug";
+import TrackDosage from "./JaneHopkins/scenes/trackDosage";
+import PatientDosage from "./JaneHopkins/scenes/patientDosage";
 
 
 function App() {
@@ -30,6 +32,8 @@ function App() {
         <Route path="patient" element={<Patient/>}/>
         <Route path="addpatient" element={<AddPatient/>} />
         <Route path="patient/:id" element={<PatientDetails/>}/>
+        <Route path="trackdosage" element={<TrackDosage/>}/>
+        <Route path="trackdosage/:id" element={<PatientDosage/>} />
 
       </Route>
 

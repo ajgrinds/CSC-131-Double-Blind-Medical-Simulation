@@ -76,7 +76,7 @@ const Dashboard = () => {
                   variant="body2"
                   color={colors.greenAccent[500]}
                   style={{ textDecoration: "none"}}
-                  to="/JaneHopkins/dose"
+                  to="/JaneHopkins/trackdosage"
 
               >
                 <Typography variant="h6" fontWeight="500" color={colors.greenAccent[500]}>
