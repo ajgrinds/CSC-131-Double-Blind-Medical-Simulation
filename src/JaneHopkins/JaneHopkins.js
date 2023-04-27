@@ -11,6 +11,8 @@ import Patient from "./scenes/patient";
 import PatientDetails from "./scenes/patientdetails";
 import AddPatient from "./scenes/addpatient";
 import MyProSideBar from "./scenes/sidebar/MyProSideBar";
+import TrackDosage from "./scenes/trackDosage";
+import PatientDosage from "./scenes/patientDosage";
 
 import Admin from "./scenes/admin";
 import "./scenes/smooth.css";
@@ -39,8 +41,11 @@ const Doctor = () => {
                                         <Route path="/patient" element={<Patient/>}/>
                                         <Route path="/addpatient" element={<AddPatient/>} />
                                         <Route path="/patient/:id" element={<PatientDetails/>}/>
+                                        <Route path="trackdosage" element={<TrackDosage/>}/>
+                                        <Route path="trackdosage/:id" element={<PatientDosage/>} />
                                         
                                     </Routes>
+                                    
                                 </CSSTransition>
                             </TransitionGroup>
                         </main>

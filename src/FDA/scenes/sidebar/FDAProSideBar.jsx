@@ -80,7 +80,7 @@ const FDAProSideBar = () => {
       <Sidebar
         breakPoint="md"
         
-        backgroundColor={colors.sidebarColor[400]}
+        backgroundColor={colors.sidebarColor[200]}
         
       >
         <Menu iconshape="square">

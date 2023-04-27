@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react'
-import { Box, Button, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TextField, Typography, CircularProgress } from "@mui/material";
+import { Box, Button, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TextField, Typography, CircularProgress, Modal } from "@mui/material";
 import useBavaria from '../../../vendiaHooks/useBavaria';
+import PatientDetails from '../patientDetails';
 
 const TrialProgress = () => {
 
@@ -8,6 +9,13 @@ const TrialProgress = () => {
     const [patients, setPatients] = useState([]);
 
     const [isLoading, setIsLoading] = useState(false);
+    const [open, setOpen] = useState(false); 
+
+    const [id, setId] = useState(null);
+
+    
+
+    
 
     useEffect(() =>{
 
@@ -19,7 +27,7 @@ const TrialProgress = () => {
                 const response = await entities.patient.list();
                 console.log(response);
 
-                setPatients(response.items.filter( patient => patient.visits != null && patient.visits.length > 0))
+                setPatients(response.items.filter( patient => patient.visits != null && patient.visits.length > 0 ))
                 setIsLoading(false);
 
 
@@ -29,18 +37,29 @@ const TrialProgress = () => {
             }
 
         }
-
-        const timeoutId = setTimeout(() => {
-            setIsLoading(false); // Hide the spinner after 1 second
-        }, 3000);
-
         fetchPatients();
-
-        return () => {
-            clearTimeout(timeoutId); // Clear the timeout if the component unmounts before it fires
-        };
-
     }, [entities.patient]);
+
+
+
+    const getStatusColor = (status) => {
+        switch (status) {
+          case "Pending":
+            return "Red";
+          case "Active":
+            return "Orange";
+          case "Complete":
+            return "Green";
+          default:
+            return "inherit";
+        }
+      };
+
+      const handleView = (id) => { // <-- Add this function
+        
+        setId(id);
+        setOpen(true);
+    }
 
   return (
     
@@ -75,8 +94,8 @@ const TrialProgress = () => {
                     <TableCell>
                     {patient.uuid}
                     </TableCell>
-                    <TableCell>
-                    {patient.visits.length == 5 ? "Complete" : "Active"}
+                    <TableCell style={{ color: patient.visits.length === 5 ? 'green' : 'orange' }}>
+                    {patient.visits.length === 5 ? "Complete" : "Active"}
                         
                     
                     </TableCell>
@@ -86,8 +105,8 @@ const TrialProgress = () => {
                     </TableCell>
                     
                     <TableCell>
-                    <Button variant="outlined" color="primary">
-                        button
+                    <Button variant="outlined" color="primary" onClick={() => handleView(patient._id)}>
+                        View
                     </Button>
                     </TableCell>
                 </TableRow>
@@ -95,11 +114,25 @@ const TrialProgress = () => {
             </TableBody>
             </Table>
         </TableContainer>
-    
-
-
-
         )}
+
+        <Modal open={open} onClose={() => setOpen(false)}>
+            <Box 
+                sx={{
+                    position: 'absolute', 
+                    top: '50%', 
+                    left: '50%', 
+                    transform: 'translate(-50%, -50%)', 
+                    bgcolor: 'background.paper', 
+                    boxShadow: 24, p: 4
+                }}
+            >
+                <PatientDetails id={id}/>
+                
+            </Box>
+
+                            
+        </Modal>
 
         
     

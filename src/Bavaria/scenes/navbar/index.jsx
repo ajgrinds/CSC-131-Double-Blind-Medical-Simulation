@@ -13,6 +13,8 @@ import Tooltip from '@mui/material/Tooltip';
 import MenuItem from '@mui/material/MenuItem';
 import AdbIcon from '@mui/icons-material/Adb';
 import { Link } from 'react-router-dom';
+import { auth } from '../../../authentication/firebase-config'
+import { signOut } from 'firebase/auth';
 
 
 const pages = ['Add Study', 'View Study'];
@@ -36,6 +38,17 @@ function ResponsiveAppBar() {
   const handleCloseUserMenu = () => {
     setAnchorElUser(null);
   };
+
+  const handleSignOut = () => {
+    signOut(auth)
+      .then(()=>{
+        console.log('User signed out');
+        window.location.href = '/';
+      })
+      .catch((error) => {
+        console.log(error.message);
+      });
+  }
 
   return (
     <AppBar position="static">
@@ -192,11 +205,7 @@ function ResponsiveAppBar() {
               open={Boolean(anchorElUser)}
               onClose={handleCloseUserMenu}
             >
-              {settings.map((setting) => (
-                <MenuItem key={setting} onClick={handleCloseUserMenu}>
-                  <Typography textAlign="center">{setting}</Typography>
-                </MenuItem>
-              ))}
+              <Button onClick={handleSignOut}>Sign Out</Button>
             </Menu>
           </Box>
         </Toolbar>
