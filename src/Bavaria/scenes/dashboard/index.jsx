@@ -1,113 +1,84 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import useBavaria from "../../../vendiaHooks/useBavaria";
 import { Box, Button, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TextField, Typography } from "@mui/material";
 
 const BavariaDashboard = () => {
   
-  const [studies, setStudies] = useState([
-    {
-      id: 1,
-      name: "Study 1",
-      status: "Pending",
-      startDate: "",
-      endDate: "",
-      approvedByBavaria: false,
-      approvedByFDA: false,
-    },
-    {
-      id: 2,
-      name: "Study 2",
-      status: "Active",
-      startDate: "2023-01-01",
-      endDate: "",
-      approvedByBavaria: true,
-      approvedByFDA: false,
-    },
-    {
-      id: 3,
-      name: "Study 3",
-      status: "Complete",
-      startDate: "2022-01-01",
-      endDate: "2022-12-31",
-      approvedByBavaria: true,
-      approvedByFDA: true,
-    },
-  ]);
+  const [studies, setStudies] = useState([]);
+  const [studyList, setStudyList] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
 
+  const { entities } = useBavaria();
+  //console.log(entities.study);
+
+
+  useEffect(() => {
+
+    async function fetchStudy() {
+
+      try {
+        setIsLoading(true);
+        const response = await entities.study.list();
+        console.log(response);
+    
+       
+        setStudies(response.items.map((study, index) => ({
+          ...study, 
+          id: index + 1,
+        })));
+        
+      } catch(error) {
+        console.log(error);
+      }
+    }
+    fetchStudy();
+    setIsLoading(false);
+  }, [entities.study]);
  
 
-  const handleStatusChange = (id, value) => {
-    setStudies(prevStudies =>
-      prevStudies.map(study =>
-        study.id === id ? { ...study, status: value } : study
-      )
-    );
-  };
-
-  const handleStartDateChange = (id, value) => {
-    setStudies(prevStudies =>
-      prevStudies.map(study =>
-        study.id === id ? { ...study, startDate: value } : study
-      )
-    );
-  };
-
-  const handleEndDateChange = (id, value) => {
-    setStudies(prevStudies =>
-      prevStudies.map(study =>
-        study.id === id ? { ...study, endDate: value } : study
-      )
-    );
-  };
-
-  const handleApprovedByBavariaChange = (id, value) => {
-    setStudies(prevStudies =>
-      prevStudies.map(study =>
-        study.id === id ? { ...study, approvedByBavaria: value } : study
-      )
-    );
-  };
-
-  const handleApprovedByFDAChange = (id, value) => {
-    setStudies(prevStudies =>
-      prevStudies.map(study =>
-        study.id === id ? { ...study, approvedByFDA: value } : study
-      )
-    );
-  };
+  
 
   return (
+
+    
     <Box m={4}>
-      <Typography variant="h4" gutterBottom>
-        Drug Trial Progress
-      </Typography>
-      <Box display="flex" flexDirection="row" flexWrap="wrap" justifyContent="space-between" mb={4}>
-        <Box width="30%" p={2} boxShadow={1} borderRadius={2}>
-          <Typography variant="h6" gutterBottom>
-            Pending Studies
+
+      {isLoading ? (
+        <Typography>Loading...</Typography>
+      ) : (
+      
+        <Box>
+          <Typography variant="h4" gutterBottom>
+            Drug Trial Progress
           </Typography>
-          <Typography variant="h4">
-            {studies.filter(study => study.status === "Pending").length}
-          </Typography>
-        </Box>
-        <Box width="30%" p={2} boxShadow={1} borderRadius={2}>
-          <Typography variant="h6" gutterBottom>
-            Active Studies
-          </Typography>
-          <Typography variant="h4">
-            {studies.filter(study => study.status === "Active").length}
-          </Typography>
-        </Box>
-        <Box width="30%" p={2} boxShadow={1} borderRadius={2}>
-          <Typography variant="h6" gutterBottom>
-            Complete Studies
-          </Typography>
-          <Typography variant="h4">
-            {studies.filter(study => study.status === "Complete").length}
-          </Typography>
-        </Box>
-      </Box>
-      <Box width="100%" mt={4}>
+          <Box display="flex" flexDirection="row" flexWrap="wrap" justifyContent="space-between" mb={4}>
+            <Box width="30%" p={2} boxShadow={1} borderRadius={2}>
+              <Typography variant="h6" gutterBottom>
+                Pending Studies
+              </Typography>
+              <Typography variant="h4">
+                {studies.filter(study => study.status === "Pending").length}
+              </Typography>
+            </Box>
+            <Box width="30%" p={2} boxShadow={1} borderRadius={2}>
+              <Typography variant="h6" gutterBottom>
+                Active Studies
+              </Typography>
+              <Typography variant="h4">
+                {studies.filter(study => study.status === "Active").length}
+              </Typography>
+            </Box>
+            <Box width="30%" p={2} boxShadow={1} borderRadius={2}>
+              <Typography variant="h6" gutterBottom>
+                Complete Studies
+              </Typography>
+              <Typography variant="h4">
+                {studies.filter(study => study.status === "Complete").length}
+              </Typography>
+            </Box>
+          </Box>
+
+          <Box width="100%" mt={4}>
         <TableContainer component={Paper}>
           <Table>
             <TableHead>
@@ -123,63 +94,27 @@ const BavariaDashboard = () => {
             </TableHead>
             <TableBody>
               {studies.map(study => (
-                <TableRow key={study.id}>
-                  <TableCell>{study.name}</TableCell>
+                <TableRow key={study._id}>
+                  <TableCell>{study.studyName}</TableCell>
                   <TableCell>
-                    <TextField
-                      select
-                      value={study.status}
-                      onClick={event => handleStatusChange(study.id, event.target.value)}
-                      variant="outlined"
-                      sx={{cursor:"pointer"}}
-                      
-                    >
-                      <option value="Pending" style={{ cursor: 'pointer' }}>Pending</option>
-                      <option value="Active" style={{ cursor: 'pointer' }}>Active</option>
-                      <option value="Complete" style={{ cursor: 'pointer' }}>Complete</option>
-                    </TextField>
+                    {study.status}
+                    
                   </TableCell>
                   <TableCell>
-                    <TextField
-                      type="date"
-                      value={study.startDate}
-                      onChange={event => handleStartDateChange(study.id, event.target.value)}
-                      variant="outlined"
-                    />
+                    {study.startDate}
                   </TableCell>
                   <TableCell>
-                    <TextField
-                      type="date"
-                      value={study.endDate}
-                      onChange={event => handleEndDateChange(study.id, event.target.value)}
-                      variant="outlined"
-                    />
+                    {study.endDate}
                   </TableCell>
                   <TableCell>
-                    <TextField
-                      select
-                      value={study.approvedByBavaria}
-                      onChange={event => handleApprovedByBavariaChange(study.id, event.target.value)}
-                      variant="outlined"
-                    >
-                      <option value={false}>No</option>
-                      <option value={true}>Yes</option>
-                    </TextField>
+                    yes
                   </TableCell>
                   <TableCell>
-                    <TextField
-                      select
-                      value={study.approvedByFDA}
-                      onChange={event => handleApprovedByFDAChange(study.id, event.target.value)}
-                      variant="outlined"
-                    >
-                      <option value={false}>No</option>
-                      <option value={true}>Yes</option>
-                    </TextField>
+                    {study.fdaApproved === true ? "Yes" : "No"}
                   </TableCell>
                   <TableCell>
                     <Button variant="outlined" color="primary">
-                      Save
+                      View Report
                     </Button>
                   </TableCell>
                 </TableRow>
@@ -188,6 +123,15 @@ const BavariaDashboard = () => {
           </Table>
         </TableContainer>
       </Box>
+
+        </Box>
+        
+        
+
+      )}
+
+      
+      
     </Box>
   );
 };
