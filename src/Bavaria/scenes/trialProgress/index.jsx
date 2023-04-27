@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { Box, Button, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TextField, Typography } from "@mui/material";
+import { Box, Button, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TextField, Typography, CircularProgress } from "@mui/material";
 import useBavaria from '../../../vendiaHooks/useBavaria';
 
 const TrialProgress = () => {
@@ -7,8 +7,7 @@ const TrialProgress = () => {
     const { entities } = useBavaria();
     const [patients, setPatients] = useState([]);
 
-    const [uuid, setUuid] = useState();
-    const [visits, setVisits] = useState([]);
+    const [isLoading, setIsLoading] = useState(false);
 
     useEffect(() =>{
 
@@ -16,27 +15,50 @@ const TrialProgress = () => {
 
             try{
 
+                setIsLoading(true);
                 const response = await entities.patient.list();
                 console.log(response);
 
                 setPatients(response.items.filter( patient => patient.visits != null && patient.visits.length > 0))
-
+                setIsLoading(false);
 
 
             }catch(error){
                 console.log(error);
+                setIsLoading(false);
             }
 
         }
 
+        const timeoutId = setTimeout(() => {
+            setIsLoading(false); // Hide the spinner after 1 second
+        }, 3000);
+
         fetchPatients();
+
+        return () => {
+            clearTimeout(timeoutId); // Clear the timeout if the component unmounts before it fires
+        };
 
     }, [entities.patient]);
 
   return (
     
     <Box width="100%" mt={4}>
-        <TableContainer component={Paper}>
+
+        {isLoading ? (
+            <Box
+                display="flex"
+                alignItems="center"
+                justifyContent="center"
+                height="100vh"
+            >
+                <CircularProgress/>
+            </Box>
+
+        ) : (
+
+            <TableContainer component={Paper}>
             <Table>
             <TableHead>
                 <TableRow>
@@ -74,6 +96,12 @@ const TrialProgress = () => {
             </Table>
         </TableContainer>
     
+
+
+
+        )}
+
+        
     
     </Box>
   )
