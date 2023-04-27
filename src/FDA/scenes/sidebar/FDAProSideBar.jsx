@@ -80,7 +80,7 @@ const FDAProSideBar = () => {
       <Sidebar
         breakPoint="md"
         
-        backgroundColor={colors.sidebarColor[200]}
+        backgroundColor={colors.sidebarColor[400]}
         
       >
         <Menu iconshape="square">
@@ -183,8 +183,8 @@ const FDAProSideBar = () => {
             />
 
             <Item
-              title="Progress Report"
-              to="/janehopkins/dashboard"
+              title="Studies"
+              to="/fda/studies"
               icon={<ReceiptOutlinedIcon/>}
               selected={selected}
               setSelected={setSelected}
@@ -216,16 +216,9 @@ const FDAProSideBar = () => {
             />
 
             <Item
-              title="Profile Form"
-              to="/fda/form"
+              title="Logout"
+              to="/"
               icon={<PersonOutlinedIcon/>}
-              selected={selected}
-              setSelected={setSelected}
-            />
-            <Item
-              title="Calendar"
-              to="/fda/calendar"
-              icon={<CalendarTodayOutlinedIcon/>}
               selected={selected}
               setSelected={setSelected}
             />
