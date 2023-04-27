@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged, signOut } from "firebase/auth";
-import { auth } from "./firebase-config";
+import { auth } from "../../firebase-config";
 import Button from "@mui/material/Button";
 import { Link, useNavigate } from "react-router-dom";
 import * as React from 'react';
@@ -170,7 +170,13 @@ return (
             </Box>
 
         <Box>
-            <Link to = "/JaneHopkins"> Go to JaneHopkins </Link>
+            <Link to = "/JaneHopkins"> Continue as Guest </Link>
+        </Box>
+
+        <Box>
+            Dont have an account? Click 
+            <Link to = "/Register"> Here </Link>
+            to register
         </Box>
 
         </Box>
