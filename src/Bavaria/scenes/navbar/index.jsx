@@ -15,7 +15,7 @@ import AdbIcon from '@mui/icons-material/Adb';
 import { Link } from 'react-router-dom';
 
 
-const pages = ['Create Drug', 'View Study'];
+const pages = ['Add Study', 'View Study'];
 const settings = ['Profile', 'Account', 'Dashboard', 'Logout'];
 
 function ResponsiveAppBar() {
@@ -98,7 +98,7 @@ function ResponsiveAppBar() {
                   style={{ textDecoration: "none"}}
                   to="/Bavaria/createdrug"
                 >
-                  <Typography textAlign="center">Add New Drug</Typography>
+                  <Typography textAlign="center">Add Study</Typography>
                 </Link>
                 
               </MenuItem>
@@ -148,7 +148,7 @@ function ResponsiveAppBar() {
                 style={{ textDecoration: "none", color:"white"}}
                 to="/Bavaria/createdrug"
               >
-                <Typography textAlign="center">Add New Drug</Typography>
+                <Typography textAlign="center">Add Study</Typography>
               </Link>
 
             </Box>
