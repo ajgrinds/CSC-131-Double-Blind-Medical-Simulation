@@ -2,7 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { Link } from "react-router-dom";
 import { useParams } from 'react-router-dom';
 import useJaneHopkins from '../../../vendiaHooks/useJaneHopkins';
-import {Box, Typography, useTheme} from "@mui/material";
+import CircularProgress from '@mui/material/CircularProgress';
+import {Box, Typography, useTheme, Grid, useMediaQuery} from "@mui/material";
 import { tokens } from '../../theme';
 import Header from '../../components/Header';
 import TextField from '@mui/material/TextField';
@@ -18,6 +19,8 @@ function AddPatient() {
     const theme = useTheme();
     const colors = tokens(theme.palette.mode);
     const { entities } = useJaneHopkins();
+    const smScreen = useMediaQuery(theme.breakpoints.up("sm"));
+
     const [patient, setPatient] = useState(null);
 
     //patient entities
@@ -39,6 +42,7 @@ function AddPatient() {
     const [currentlyInsured, setCurrentlyInsured] = useState(""); 
     const [icdHealthCodes, setIcdHealthCodes] = useState([]); 
     const [allergies, setAllergies] = useState([]); 
+    
     const [visits, setVisits] = useState([]);
 
     const ColorButton = styled(Button)(({ theme }) => ({
@@ -50,6 +54,7 @@ function AddPatient() {
     }));
 
     const handleAddName = (event) => {
+        console.log(event.target.value);
         setName(event.target.value); 
     }
     const handleAddDob = (event) => {
@@ -83,6 +88,7 @@ function AddPatient() {
         setUuid(event.target.value); 
     }
     const handleAddAddress = (event) => {
+        console.log(event.target.value);
         setAddress(event.target.value); 
     }
     const handleAddCurrentlyEmployed = (event) => {
@@ -91,56 +97,242 @@ function AddPatient() {
     const handleAddCurrentlyInsured = (event) => {
         setCurrentlyInsured(event.target.value); 
     }
-
-
-    const handleAddPatient = () => {
-        const response = entities.patient.add({
-
-            name: name,
-            dob: dob, 
-            patientPicture: patientPicture,
-            insuranceNumber: insuranceNumber, 
-            height: height, 
-            weight: weight,
-            bloodType: bloodType, 
-            bloodPressure: bloodPressure,
-            temperature: temperature, 
-            oxygenSaturation: oxygenSaturation,
-            uuid: uuid, 
-            address: address, 
-            currentlyEmployed: currentlyEmployed, 
-            currentlyInsured: currentlyInsured, 
-
-           
-           
-        })
-        console.log(response); 
+    const handleFamilyHistory = (event) => {
+      setFamilyHistory(event.target.value);
     }
 
-  
+    
+    const handleAllergiesChange = (event) => {
+      const input = event.target.value;
+      const allergiesArray = input.split(",").map((allergy) => allergy.trim());
+
+      console.log("allergies array:", allergiesArray);
+      setAllergies(allergiesArray);
+    };
+
+    const handleIcdHealthCodeChange = (event) => {
+      const input = event.target.value;
+      const icdHealthCodeArray = input.split(",").map((icd) => icd.trim());
+
+      console.log("icd health code array:", icdHealthCodeArray);
+      setIcdHealthCodes(icdHealthCodeArray);
+    };
+
+    const handleCurrentMedicationChange = (event) => {
+      const input = event.target.value;
+      const medsArray = input.split(",").map((currMeds) => currMeds.trim());
+
+      setCurrentMedication(medsArray);
+    };
+    
+
+    
+    const [isLoading, setIsLoading] = useState(false);
+    const handleAddPatient = async () => {
+      setIsLoading(true);
+      const allergiesArray = allergies.map((allergy) => ({ allergy: allergy }));
+      const icdHealthCodeArray = icdHealthCodes.map((icd) => ({ code: icd }));
+      const medsArray = currentMedication.map((meds) => ({ medication: meds }));
+
+      const response = await entities.patient.add({
+        name: name,
+        dob: dob, 
+        patientPicture: patientPicture,
+        insuranceNumber: insuranceNumber, 
+        height: height, 
+        weight: weight,
+        bloodType: bloodType, 
+        bloodPressure: bloodPressure,
+        temperature: temperature, 
+        oxygenSaturation: oxygenSaturation,
+        allergies: allergiesArray,
+        uuid: uuid, 
+        address: address, 
+        familyHistory: familyHistory, 
+        icdHealthCodes: icdHealthCodeArray, 
+        currentMedications: medsArray,
+        currentlyEmployed: currentlyEmployed, 
+        currentlyInsured: currentlyInsured,
+       
+      },
+      {
+        aclInput:{
+          acl:[
+            {
+              principal: {
+                nodes:["Bavaria", "FDA"]
+              },
+              operations: ["READ"],
+              path: "dob"
+            },
+            {
+              principal: {
+                nodes:["Bavaria", "FDA"]
+              },
+              operations: ["READ"],
+              path: "weight"
+            },
+            {
+              principal: {
+                nodes:["Bavaria", "FDA"]
+              },
+              operations: ["READ"],
+              path: "height"
+            },
+            {
+              principal: {
+                nodes:["Bavaria", "FDA"]
+              },
+              operations: ["READ"],
+              path: "weight"
+            },
+            {
+              principal: {
+                nodes:["Bavaria", "FDA"]
+              },
+              operations: ["READ"],
+              path: "bloodPressure"
+            },
+            {
+              principal: {
+                nodes:["Bavaria", "FDA"]
+              },
+              operations: ["READ"],
+              path: "bloodType"
+            },
+            {
+              principal: {
+                nodes:["Bavaria", "FDA"]
+              },
+              operations: ["READ"],
+              path: "temperature"
+            },
+            {
+              principal: {
+                nodes:["Bavaria", "FDA"]
+              },
+              operations: ["READ"],
+              path: "oxygenSaturation"
+            },
+            {
+              principal: {
+                nodes:["Bavaria", "FDA"]
+              },
+              operations: ["READ"],
+              path: "uuid"
+            },
+            {
+              principal: {
+                nodes:["Bavaria", "FDA"]
+              },
+              operations: ["READ"],
+              path: "currentMedications"
+            },
+            {
+              principal: {
+                nodes:["Bavaria", "FDA"]
+              },
+              operations: ["READ"],
+              path: "familyHistory"
+            },
+            {
+              principal: {
+                nodes:["Bavaria", "FDA"]
+              },
+              operations: ["READ"],
+              path: "allergies"
+            },
+            {
+              principal: {
+                nodes:["Bavaria", "FDA"]
+              },
+              operations: ["READ"],
+              path: "currentlyEmployed"
+            },
+            {
+              principal: {
+                nodes:["Bavaria", "FDA"]
+              },
+              operations: ["READ"],
+              path: "currentlyInsured"
+            },
+            {
+              principal: {
+                nodes:["Bavaria", "FDA"]
+              },
+              operations: ["READ"],
+              path: "icdHealthCodes"
+            },
+            {
+              principal: {
+                nodes:["Bavaria", "FDA"]
+              },
+              operations: ["READ"],
+              path: "visits"
+            },
+          ]
+        }
+      }
+      
+    );
+    
+      console.log(response);
+    
+      // Wait for 1 second
+      await new Promise((resolve) => setTimeout(resolve, 1000));
+    
+      setIsLoading(false);
+      // Move to the link
+      window.location.href = "/JaneHopkins/patient";
+    }
+    
+
     return (
-  
+
       <Box m="20px">
-        <Box display = "flex" justifyContent="space-between" alignItems="center">
-          <Header title="PATIENT DETAILS" subtitle="Add Patient" />
+        <Box 
+          display={smScreen ? "flex" : "block"}
+          flexDirection={smScreen ? "row" : "column"}
+          justifyContent={smScreen ? "space-between" : "start"}
+          alignItems={smScreen ? "center" : "start"}
+          m="10px 0"
+        >
+            <Header title="Patient Details" subtitle="Add Patient"/>
         </Box>
 
-        <Box ml="225px" mr="200px">
+        <Box
+            width="100%"
+            display="flex"
+            justifyContent="space-around"  // Updated property
+            alignItems="center"
+          >
+            <Link to="/JaneHopkins/patient" style={{textDecoration: "none"}}>
+              <ColorButton variant="contained" size="large">View All Patients</ColorButton>
+            </Link>
 
-          <Box>
-            <Box mb="50px" sx={{display: "flex", justifyContent: "space-between"}}>
-
-              <Link to="/patient" style={{ textDecoration: "none"}}>
-                  <ColorButton variant="contained" size='large' sx={{marginLeft:"5px"}}>View All Patients</ColorButton>
-              </Link>
-          </Box>
-          
-          <Box sx={{ display: 'flex', flexWrap: 'wrap' }}></Box>
             
-            <Box
+            <ColorButton variant="contained" size="large" onClick={handleAddPatient}>Add Patient</ColorButton> 
+           
+        </Box>
+
+          <Grid
+            mt="20px"
+            container
+            rowSpacing={2}
+            columnSpacing={{xs: 1, sm: 2, md: 3, lg: 4}}
+            justifyContent="center"
+          >
+            <Grid
+              item
+              xs={12}
+              sm={6}
+              md={4}
               component="form"
               sx={{
-                '& .MuiTextField-root': { m: 1, width: '25ch' },
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center',
+                '& .MuiTextField-root': { m: 1, width: '100%' },
               }}
               noValidate
               autoComplete="off"
@@ -152,23 +344,74 @@ function AddPatient() {
                 defaultValue=""
                 onChange={handleAddName}
                 variant="filled"
+              />
+            </Grid>
+
+            <Grid
+              item
+              xs={12}
+              sm={6}
+              md={4}
+              component="form"
+              sx={{
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center',
+                '& .MuiTextField-root': { m: 1, width: '100%' },
+              }}
+              noValidate
+              autoComplete="off"
+            >
+              <TextField
+                id="outlined-read-only-input"
+                label="Picture link"
+                color='secondary'
+                defaultValue=""
+                onChange={handleAddPatientPicture}
+                variant="filled"
               /> 
-                <TextField
+            </Grid>
+
+            <Grid
+              item
+              xs={12}
+              sm={6}
+              md={4}
+              component="form"
+              sx={{
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center',
+                '& .MuiTextField-root': { m: 1, width: '100%' },
+              }}
+              noValidate
+              autoComplete="off"
+            >
+              <TextField
                 id="outlined-read-only-input"
                 label="DOB"
                 color='secondary'
                 defaultValue=""
                 onChange={handleAddDob}
                 variant="filled"
-              />  
-                <TextField
-                id="outlined-read-only-input"
-                label="Patient Picture"
-                color='secondary'
-                defaultValue=""
-                onChange={handleAddPatientPicture}
-                variant="filled"
               /> 
+            </Grid>
+
+            <Grid
+              item
+              xs={12}
+              sm={6}
+              md={4}
+              component="form"
+              sx={{
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center',
+                '& .MuiTextField-root': { m: 1, width: '100%' },
+              }}
+              noValidate
+              autoComplete="off"
+            >
               <TextField
                 id="outlined-read-only-input"
                 label="Insurance Number"
@@ -176,7 +419,24 @@ function AddPatient() {
                 defaultValue=""
                 onChange={handleInsuranceNumber}
                 variant="filled"
-              /> 
+              />
+            </Grid>
+
+            <Grid
+              item
+              xs={12}
+              sm={6}
+              md={4}
+              component="form"
+              sx={{
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center',
+                '& .MuiTextField-root': { m: 1, width: '100%' },
+              }}
+              noValidate
+              autoComplete="off"
+            >
               <TextField
                 id="outlined-read-only-input"
                 label="Height"
@@ -185,6 +445,23 @@ function AddPatient() {
                 onChange={handleAddHeight}
                 variant="filled"
               /> 
+
+            </Grid>
+            <Grid
+              item
+              xs={12}
+              sm={6}
+              md={4}
+              component="form"
+              sx={{
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center',
+                '& .MuiTextField-root': { m: 1, width: '100%' },
+              }}
+              noValidate
+              autoComplete="off"
+            >
               <TextField
                 id="outlined-read-only-input"
                 label="Weight"
@@ -193,6 +470,24 @@ function AddPatient() {
                 onChange={handleAddWeight}
                 variant="filled"
               />
+
+            </Grid>
+
+            <Grid
+              item
+              xs={12}
+              sm={6}
+              md={4}
+              component="form"
+              sx={{
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center',
+                '& .MuiTextField-root': { m: 1, width: '100%' },
+              }}
+              noValidate
+              autoComplete="off"
+            >
               <TextField
                 id="outlined-read-only-input"
                 label="Blood Pressure"
@@ -201,6 +496,23 @@ function AddPatient() {
                 onChange={handleAddBloodPressure}
                 variant="filled"
               /> 
+
+            </Grid>
+            <Grid
+              item
+              xs={12}
+              sm={6}
+              md={4}
+              component="form"
+              sx={{
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center',
+                '& .MuiTextField-root': { m: 1, width: '100%' },
+              }}
+              noValidate
+              autoComplete="off"
+            >
               <TextField
                 id="outlined-read-only-input"
                 label="Blood Type"
@@ -209,6 +521,24 @@ function AddPatient() {
                 onChange={handleAddBloodType}
                 variant="filled"
               />
+
+            </Grid>
+
+            <Grid
+              item
+              xs={12}
+              sm={6}
+              md={4}
+              component="form"
+              sx={{
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center',
+                '& .MuiTextField-root': { m: 1, width: '100%' },
+              }}
+              noValidate
+              autoComplete="off"
+            >
               <TextField
                 id="outlined-read-only-input"
                 label="Temperature"
@@ -217,6 +547,23 @@ function AddPatient() {
                 onChange={handleAddTemperature}
                 variant="filled"
               />
+
+            </Grid>
+            <Grid
+              item
+              xs={12}
+              sm={6}
+              md={4}
+              component="form"
+              sx={{
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center',
+                '& .MuiTextField-root': { m: 1, width: '100%' },
+              }}
+              noValidate
+              autoComplete="off"
+            >
               <TextField
                 id="outlined-read-only-input"
                 label="Oxygen Saturation"
@@ -225,6 +572,23 @@ function AddPatient() {
                 onChange={handleAddOxygenSaturation}
                 variant="filled"
               />
+
+            </Grid>
+            <Grid
+              item
+              xs={12}
+              sm={6}
+              md={4}
+              component="form"
+              sx={{
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center',
+                '& .MuiTextField-root': { m: 1, width: '100%' },
+              }}
+              noValidate
+              autoComplete="off"
+            >
               <TextField
                 id="outlined-read-only-input"
                 label="UUID"
@@ -233,6 +597,23 @@ function AddPatient() {
                 onChange={handleAddUuid}
                 variant="filled"
               />
+
+            </Grid>
+            <Grid
+              item
+              xs={12}
+              sm={6}
+              md={4}
+              component="form"
+              sx={{
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center',
+                '& .MuiTextField-root': { m: 1, width: '100%' },
+              }}
+              noValidate
+              autoComplete="off"
+            >
               <TextField
                 id="outlined-read-only-input"
                 label="Address"
@@ -241,28 +622,125 @@ function AddPatient() {
                 onChange={handleAddAddress}
                 variant="filled"
               />
+
+            </Grid>
+
+            <Grid
+              item
+              xs={12}
+              sm={6}
+              md={4}
+              component="form"
+              sx={{
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center',
+                '& .MuiTextField-root': { m: 1, width: '100%' },
+              }}
+              noValidate
+              autoComplete="off"
+            >
+              <TextField
+                id="outlined-read-only-input"
+                label="Family History"
+                color='secondary'
+                defaultValue=""
+                onChange={handleFamilyHistory}
+                variant="filled"
+              />
+
+            </Grid>
+            <Grid
+              item
+              xs={12}
+              sm={6}
+              md={4}
+              component="form"
+              sx={{
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center',
+                '& .MuiTextField-root': { m: 1, width: '100%' },
+              }}
+              noValidate
+              autoComplete="off"
+            >
               <TextField
                 id="outlined-read-only-input"
                 label="Allergies"
                 color='secondary'
                 defaultValue=""
                 variant="filled"
+                onChange={handleAllergiesChange}
               />
+
+            </Grid>
+            <Grid
+              item
+              xs={12}
+              sm={6}
+              md={4}
+              component="form"
+              sx={{
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center',
+                '& .MuiTextField-root': { m: 1, width: '100%' },
+              }}
+              noValidate
+              autoComplete="off"
+            >
               <TextField
                 id="outlined-read-only-input"
-                label="Current Medication"
+                label="Current Medications"
                 color='secondary'
                 defaultValue=""
                 variant="filled"
+                onChange={handleCurrentMedicationChange}
               />
+
+            </Grid>
+            <Grid
+              item
+              xs={12}
+              sm={6}
+              md={4}
+              component="form"
+              sx={{
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center',
+                '& .MuiTextField-root': { m: 1, width: '100%' },
+              }}
+              noValidate
+              autoComplete="off"
+            >
               <TextField
                 id="outlined-read-only-input"
                 label="ICD Health Code"
                 color='secondary'
                 defaultValue=""
+                onChange={handleIcdHealthCodeChange}
                 variant="filled"
               />
-                <TextField
+
+            </Grid>
+            <Grid
+              item
+              xs={12}
+              sm={6}
+              md={4}
+              component="form"
+              sx={{
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center',
+                '& .MuiTextField-root': { m: 1, width: '100%' },
+              }}
+              noValidate
+              autoComplete="off"
+            >
+              <TextField
                 id="outlined-read-only-input"
                 label="Currently Employed"
                 color='secondary'
@@ -270,7 +748,23 @@ function AddPatient() {
                 onChange={handleAddCurrentlyEmployed}
                 variant="filled"
               />
-                <TextField
+            </Grid>
+            <Grid
+              item
+              xs={12}
+              sm={6}
+              md={4}
+              component="form"
+              sx={{
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center',
+                '& .MuiTextField-root': { m: 1, width: '100%' },
+              }}
+              noValidate
+              autoComplete="off"
+            >
+              <TextField
                 id="outlined-read-only-input"
                 label="Currently Insured"
                 color='secondary'
@@ -278,7 +772,24 @@ function AddPatient() {
                 onChange={handleAddCurrentlyInsured}
                 variant="filled"
               />
-                <TextField
+
+            </Grid>
+            <Grid
+              item
+              xs={12}
+              sm={6}
+              md={4}
+              component="form"
+              sx={{
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center',
+                '& .MuiTextField-root': { m: 1, width: '100%' },
+              }}
+              noValidate
+              autoComplete="off"
+            >
+              <TextField
                 id="filled-number"
                 label="Doctor Visits"
                 type="number"
@@ -289,18 +800,8 @@ function AddPatient() {
                 }}
                 variant="filled"
               />
-                
-
-            </Box>
-          
-            <Box textAlign="center" mt='50px'> 
-              <ColorButton size='large' variant="contained" onClick={handleAddPatient}>Save Patient Info</ColorButton>
-            </Box>
-
-          </Box>
-        </Box>  
-       
-
+            </Grid>            
+          </Grid>
       </Box>
 
        

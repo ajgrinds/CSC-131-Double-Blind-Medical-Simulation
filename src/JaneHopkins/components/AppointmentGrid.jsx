@@ -1,68 +1,123 @@
-import React from 'react'
-import { DataGrid } from "@mui/x-data-grid";
-import { Box } from '@mui/material';
+import React, { useState, useEffect } from 'react';
+import { Calendar, momentLocalizer } from 'react-big-calendar';
+import moment from 'moment';
+import 'react-big-calendar/lib/css/react-big-calendar.css';
 
-
-const columns = [
-    { field: "name", headerName: "Name", width: 180, editable: true },
-    {
-      field: "time",
-      headerName: "Date/Time",
-      type: "dateTime",
-      width: 220,
-      editable: true
-    },
-    { 
-      field: "notes", 
-      headerName: "Notes", 
-      width: 560, 
-      editable: true 
-    },
-    
-  ];
-  
-  const rows = [
-    {
-      id: 1,
-      name: "Amber French",
-      time: "5/12/2023, 10:00am",
-      notes:"Smoker"
-    },
-    {
-      id: 2,
-      name: "Sion Waye",
-      time: "3/17/2023, 8:30am",
-      notes:"Covid Exposure"
-    },
-    {
-      id: 3,
-      name: "Gerald Diaz",
-      time: "4/10/2023, 10:15am",
-      notes:"Doesn't sleep"
-    },
-    {
-      id: 4,
-      name: "Jonty Hartyley",
-      time: "4/11/2023, 9:20am",
-      notes:"Sleep Walker"
-    },
-    {
-      id: 5,
-      name: "Hashim Ford",
-      time: "3/11/2023, 11:45am",
-      notes:"Tired all the time"
-    }
-  ];
+const localizer = momentLocalizer(moment);
 
 const AppointmentGrid = () => {
-  return (
-    <Box sx={{ display: "flex", height: 300, width: "100%", justifyContent: "center",alignItems: "center" }}>
-        <DataGrid rows={rows} columns={columns} />
-    </Box>
-  )
-}
+  const [events, setEvents] = useState(() => {
+    const storedEvents = localStorage.getItem('events');
+    return storedEvents ? JSON.parse(storedEvents) : [];
+  });
 
+  useEffect(() => {
+    localStorage.setItem('events', JSON.stringify(events));
+  }, [events]);
 
+  const handleSelect = ({ start, end }) => {
+    const title = window.prompt("Enter a title for your appointment:");
+    if (title) {
+      const newEvent = {
+        id: events.length + 1,
+        start,
+        end,
+        title
+      };
+      setEvents([...events, newEvent]);
+    }
+  };
+
+  const handleEdit = ({ event }) => {
+    if (event && event.title) {
+      const title = window.prompt("Edit appointment title:", event.title);
+      if (title) {
+        const updatedEvents = events.map((e) => {
+          if (e.id === event.id) {
+            return { ...e, title };
+          }
+          return e;
+        });
+        setEvents(updatedEvents);
+      }
+    }
+  };
   
+
+  const handleDelete = (id) => {
+    const confirmed = window.confirm("Are you sure you want to delete this appointment?");
+    if (confirmed) {
+      const updatedEvents = events.filter((e) => e.id !== id);
+      setEvents(updatedEvents);
+    }
+  };
+  
+  useEffect(() => {
+    
+  }, []);
+
+  useEffect(() => {
+    
+  }, [events]);
+
+  const styles = {
+    calendarText: {
+      color: "white"
+    }
+  }
+
+  return (
+    
+    <div style={{ height: "350pt", width: "100%" }}>
+     
+       <Calendar
+        localizer={localizer}
+        events={events}
+        startAccessor={(event) => moment(event.start).toDate()}
+        endAccessor={(event) => moment(event.end).toDate()}
+        selectable
+        onSelectSlot={handleSelect}
+        onSelectEvent={handleEdit}
+        onDoubleClickEvent={(event) => handleDelete(event.id)}
+        //style={{ border: '1px solid white', color: 'white', }}
+        
+       
+        toolbar={{
+          style: {
+            backgroundColor: 'grey',
+            color: 'white'
+          }
+        }}
+        
+        eventPropGetter={() => ({
+          style: {
+            backgroundColor: 'grey',
+            color: 'white',
+            border: '1px solid white',
+          },
+        })}
+        dayPropGetter={() => ({
+          style: {
+            backgroundColor: 'transparent',
+            color: 'white',
+          }
+        })}
+        weekPropGetter={() => ({
+          style: {
+            backgroundColor: 'transparent',
+            color: 'white',
+          }
+        })}
+        monthPropGetter={() => ({
+          style: {
+            backgroundColor: 'transparent',
+            color: 'white',
+          }
+        })}
+        
+      /> 
+    </div>
+  );
+};
 
 export default AppointmentGrid;
