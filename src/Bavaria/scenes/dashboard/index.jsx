@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import useBavaria from "../../../vendiaHooks/useBavaria";
 import { Box, Button, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TextField, Typography } from "@mui/material";
+import TrialProgress from "../trialProgress";
 
 const BavariaDashboard = () => {
   
@@ -48,6 +49,7 @@ const BavariaDashboard = () => {
       ) : (
       
         <Box>
+
           <Typography variant="h4" gutterBottom>
             Drug Trial Progress
           </Typography>
@@ -79,50 +81,65 @@ const BavariaDashboard = () => {
           </Box>
 
           <Box width="100%" mt={4}>
-        <TableContainer component={Paper}>
-          <Table>
-            <TableHead>
-              <TableRow>
-                <TableCell>Study Name</TableCell>
-                <TableCell>Status</TableCell>
-                <TableCell>Start Date</TableCell>
-                <TableCell>End Date</TableCell>
-                <TableCell>Approved by Bavaria</TableCell>
-                <TableCell>Approved by FDA</TableCell>
-                <TableCell></TableCell>
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              {studies.map(study => (
-                <TableRow key={study._id}>
-                  <TableCell>{study.studyName}</TableCell>
-                  <TableCell>
-                    {study.status}
-                    
-                  </TableCell>
-                  <TableCell>
-                    {study.startDate}
-                  </TableCell>
-                  <TableCell>
-                    {study.endDate}
-                  </TableCell>
-                  <TableCell>
-                    yes
-                  </TableCell>
-                  <TableCell>
-                    {study.fdaApproved === true ? "Yes" : "No"}
-                  </TableCell>
-                  <TableCell>
-                    <Button variant="outlined" color="primary">
-                      View Report
-                    </Button>
-                  </TableCell>
-                </TableRow>
-              ))}
-            </TableBody>
-          </Table>
-        </TableContainer>
-      </Box>
+            <TableContainer component={Paper}>
+              <Table>
+                <TableHead>
+                  <TableRow>
+                    <TableCell style={{fontWeight: 'bold'}}>Study Name</TableCell>
+                    <TableCell style={{fontWeight: 'bold'}}>Status</TableCell>
+                    <TableCell style={{fontWeight: 'bold'}}>Start Date</TableCell>
+                    <TableCell style={{fontWeight: 'bold'}}>End Date</TableCell>
+                    <TableCell style={{fontWeight: 'bold'}}>Approved by Bavaria</TableCell>
+                    <TableCell style={{fontWeight: 'bold'}}>Approved by FDA</TableCell>
+                    <TableCell style={{fontWeight: 'bold'}}></TableCell>
+                  </TableRow>
+                </TableHead>
+                <TableBody>
+                  {studies.map(study => (
+                    <TableRow key={study._id}>
+                      <TableCell>{study.studyName}</TableCell>
+                      <TableCell>
+                        {study.status}
+                        
+                      </TableCell>
+                      <TableCell>
+                        {study.startDate}
+                      </TableCell>
+                      <TableCell>
+                        {study.endDate}
+                      </TableCell>
+                      <TableCell>
+                        yes
+                      </TableCell>
+                      <TableCell>
+                        {study.fdaApproved === true ? "Yes" : "No"}
+                      </TableCell>
+                      <TableCell>
+                        <Button variant="outlined" color="primary">
+                          View Report
+                        </Button>
+                      </TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            </TableContainer>
+
+          </Box>
+          
+          <Box mt='50px'>
+
+            <Typography variant="h4" gutterBottom>
+              Clinical Trails Progress 
+            </Typography>
+
+            {studies.some(study => study.fdaApproved === true) ? "No current trials, awaiting FDA approval..." :  <TrialProgress />}
+          </Box>
+            
+
+          
+
+          
 
         </Box>
         
