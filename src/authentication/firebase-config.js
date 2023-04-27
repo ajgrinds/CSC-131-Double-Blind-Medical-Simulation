@@ -3,14 +3,14 @@ import { getAuth } from "firebase/auth";
 
 // Your web app's Firebase configuration
 const firebaseConfig = {
-    apiKey: "AIzaSyBJBUErKt56fAf0FRTScnBo-maCwCtvYfg",
-    authDomain: "pharmastudy-auth.firebaseapp.com",
-    projectId: "pharmastudy-auth",
-    storageBucket: "pharmastudy-auth.appspot.com",
-    messagingSenderId: "897204747548",
-    appId: "1:897204747548:web:5f72bcc733f6d85eb64ed9",
-    measurementId: "G-64TR4JNTFZ"
-  };
+  apiKey: "AIzaSyBNBwEbptYEO3AGqhrLuH9IyCohbp_evfQ",
+  authDomain: "pharmastudy-auth-5df81.firebaseapp.com",
+  projectId: "pharmastudy-auth-5df81",
+  storageBucket: "pharmastudy-auth-5df81.appspot.com",
+  messagingSenderId: "509017548513",
+  appId: "1:509017548513:web:ed157ec768a54376fbf9a0",
+  measurementId: "G-K80M4T79N2"
+};
 
   const app = initializeApp(firebaseConfig);
 

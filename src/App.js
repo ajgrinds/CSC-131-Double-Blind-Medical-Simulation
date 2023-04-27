@@ -8,7 +8,11 @@ import FDA from "./FDA/FDA";
 import FDAPatient from "./FDA/scenes/patient"
 import FDADashboard from "./FDA/scenes/dashboard";
 import AddPatient from "./JaneHopkins/scenes/addpatient";
-import LoginPage from "./authentication/Index";
+import LoginPage from "./authentication/scenes/login/Index";
+import RegisterPage from "./authentication/scenes/register/Index"
+//import Report from "./Bavaria/scenes/report";
+//import Send from "./Bavaria/scenes/send";
+//import BavariaPatients from "./Bavaria/scenes/patients";
 import CreateDrug from "./Bavaria/scenes/createDrug";
 import TrackDosage from "./JaneHopkins/scenes/trackDosage";
 import PatientDosage from "./JaneHopkins/scenes/patientDosage";
@@ -23,6 +27,10 @@ function App() {
       { /* Login Page */}
 
       <Route exact path="/" element={<LoginPage/>}/>
+
+      { /* Register Page */}
+
+      <Route exact path="/Register" element={<RegisterPage/>}/>
 
       
 
