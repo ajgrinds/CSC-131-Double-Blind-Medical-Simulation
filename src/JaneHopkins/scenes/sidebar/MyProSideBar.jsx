@@ -103,7 +103,7 @@ const MyProSideBar = () => {
                 ml="15px"
               >
                 <Typography variant="h5" color={colors.grey[100]}>
-                  Hopkins
+                  Jane Hopkins
                 </Typography>
                 <IconButton
                   onClick={
@@ -128,15 +128,34 @@ const MyProSideBar = () => {
                   },
                 }}
               >
-                <img
-                  className="avater-image"
-                  alt="profile-user"
-                  width="100px"
-                  height="100px"
-                  src={avatar}
-                  style={{cursor: "pointer", borderRadius: "50%"}}                                 
-                />
+                {window.location.pathname === '/JaneHopkins/Admin'? (
+                  <Typography variant="h4">ADMIN</Typography>
+                  
+                ) : (
+
+                  
+                  <img
+                    className="avater-image"
+                    alt="profile-user"
+                    width="100px"
+                    height="100px"
+                    src={avatar}
+                    style={{cursor: "pointer", borderRadius: "50%"}}                                 
+                  />
+
+                )}
+                
               </Box>
+
+             {window.location.pathname === '/JaneHopkins/Admin' ? (
+              <Box textAlign="center">
+                <Typography variant="h5" color={colors.greenAccent[500]}>
+                Administration
+              </Typography>
+
+              </Box>
+              
+             ) : (
 
               <Box textAlign="center">
                 <Typography
@@ -147,13 +166,15 @@ const MyProSideBar = () => {
                 >
                   Austin M.D.
                 </Typography>
-                {/*
+                
                 <Typography variant="h5" color={colors.greenAccent[500]}>
                   Doctor
                 </Typography>
-                */
-                }
+                
               </Box>
+             )}
+
+              
 
             </Box>
           )}
