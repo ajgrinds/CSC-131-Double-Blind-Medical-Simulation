@@ -1,5 +1,5 @@
-import {Box, IconButton, useTheme} from '@mui/material';
-import { useContext } from 'react';
+import { Box, IconButton, Menu, MenuItem, Typography, useTheme } from '@mui/material';
+import { useContext, useState } from 'react';
 import { ColorModeContext, tokens } from '../../theme';
 import InputBase from '@mui/material/InputBase';
 import LightModeOutlinedIcon from "@mui/icons-material/LightModeOutlined";
@@ -9,7 +9,7 @@ import SettingsOutlinedIcon from "@mui/icons-material/SettingsOutlined"
 import PersonOutlinedIcon from "@mui/icons-material/PersonOutlined"
 import SearchIcon from "@mui/icons-material/Search"
 import MenuOutlinedIcon from "@mui/icons-material/MenuOutlined"
-
+import { Link } from 'react-router-dom';
 
 import { useProSidebar } from 'react-pro-sidebar';
 
@@ -19,10 +19,20 @@ const TopBar = () => {
     const colors = tokens(theme.palette.mode);
     const colorMode = useContext(ColorModeContext);
     const { toggleSidebar, broken, rtl } = useProSidebar();
+    const [anchorEl, setAnchorEl] = useState(null);
 
   const handleMenuButtonClick = () => {
     toggleSidebar();
   };
+
+  const handleClick = (event) => {
+    setAnchorEl(event.currentTarget);
+};
+
+const handleClose = () => {
+    setAnchorEl(null);
+};
+
 
   return (
     <Box display="flex" justifyContent="space-between" p={2}>
@@ -63,9 +73,22 @@ const TopBar = () => {
         <IconButton>
           <SettingsOutlinedIcon />
         </IconButton>
-        <IconButton>
-          <PersonOutlinedIcon />
-        </IconButton>
+        <IconButton
+                    onClick={handleClick}
+                >
+                    <PersonOutlinedIcon/>
+                </IconButton>
+                <Menu
+                    anchorEl={anchorEl}
+                    open={Boolean(anchorEl)}
+                    onClose={handleClose}
+                >
+                    <MenuItem onClick={handleClose}>
+                        <Link to="/" style={{ textDecoration: 'none', color: 'inherit' }}>
+                            <Typography variant="body1">Logout</Typography>
+                        </Link>
+                    </MenuItem>
+                </Menu>
       </Box>
     </Box>
   );
