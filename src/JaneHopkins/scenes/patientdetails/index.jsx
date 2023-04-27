@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Link } from "react-router-dom";
 import { useParams } from 'react-router-dom';
 import useJaneHopkins from '../../../vendiaHooks/useJaneHopkins';
-import {Box, Typography, useTheme, Grid} from "@mui/material";
+import {Box, Typography, useTheme, Grid, CircularProgress} from "@mui/material";
 import { tokens } from '../../theme';
 import Header from '../../components/Header';
 import TextField from '@mui/material/TextField';
@@ -27,31 +27,27 @@ function PatientDetails() {
   const { entities } = useJaneHopkins();
   const [patient, setPatient] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
-  console.log(id);
+  
 
   //const navigate = useNavigate();
   const handleDelete = async (id) => {
     
-    console.log("ID from parameter:", id);
     try {
       const resp = entities.patient.remove(id);
       
       console.log(resp);
-      if (resp.ok) {
-        console.log(`Patient ${id} deleted successfully`);
-        
-        //navigate('JaneHopkins/patient/');
-      } else {
-        console.log(`Unable to delete patient ${id}`);
-      }
     } catch (error) {
       console.log(error);
     }
+
+    await new Promise((resolve) => setTimeout(resolve, 1000));
+
+    window.location.href = "/JaneHopkins/patient/"
   };
   
   const DeleteButton = ({ id }) => {
 
-    console.log("ID from URL:", id);
+    
     const [open, setOpen] = useState(false);
   
     const handleClickOpen = () => {
@@ -122,6 +118,7 @@ function PatientDetails() {
           const response = await entities.patient.get(id);
           console.log(response);
           setPatient(response);
+          setIsLoading(true);
           
           // set the values of each entitie to the current value of the patients
           setNewWeight(response.weight);
@@ -132,11 +129,21 @@ function PatientDetails() {
           setNewAddress(response.address);
           setNewCurrentlyInsured(response.insuranceNumber === "" ? "No" : "Yes");
           setNewCurrentlyEmployed(response.currentlyEmployed);
-          setNewAllergies(response.allergies);
-          setNewCurrentMedication(response.currentMedications);
-          setNewIcdHealthCode(response.icdHealthCodes);
           setNewFamilyHistory(response.familyHistory);
+
+          if(response.allergies){
+            setNewAllergies(response.allergies);
+          }
           
+          if(response.currentMedications){
+            setNewCurrentMedication(response.currentMedications);
+          }
+          
+          if(response.icdHealthCodes){
+            setNewIcdHealthCode(response.icdHealthCodes);
+          }
+          
+          //console.log(newAllergies);
       }
       catch(error){
           console.log(error);
@@ -146,6 +153,7 @@ function PatientDetails() {
       }
     }
     fetchPatient();
+    setIsLoading(false);
   
   }, [entities.patient, id]);
 
@@ -177,7 +185,7 @@ function PatientDetails() {
   
   const handleAllergyChange = (event) => {
     setNewAllergies([...newAllergies, event.target.value])
-    
+    console.log(newAllergies);
   }
   
   const handleMedicationChange = (event) => {
@@ -208,6 +216,8 @@ function PatientDetails() {
   // this function will update the patients information that is linked the the update button
   const handleUpdate = async () => {
     
+    
+
     const response = await entities.patient.update({
 
         _id: id,
@@ -219,14 +229,15 @@ function PatientDetails() {
         address: newAddress,
         currentlyInsured: newCurrentlyInsured,
         currentlyEmployed: newCurrentlyEmployed,
-        currentMedication: newCurrentMedication,
-        allergies: newAllergies,
-        icdHealthCodes: newIcdHealthCode, 
         familyHistory: newFamilyHistory, 
         
 
     })
     console.log(response);
+
+    await new Promise((resolve) => setTimeout(resolve, 1000));
+
+    window.location.reload();
 
   }
  
@@ -758,16 +769,8 @@ function PatientDetails() {
                 />
             </Grid>
             
-            
-
-              
-
-
           </Grid>
-          
-
           <Box ml="225px" mr="200px">
-
 
             <Box mr="100px" sx={{display: 'flex', justifyContent: 'center' }} mb='20px'>
 
@@ -793,7 +796,9 @@ function PatientDetails() {
   </Box>
   
       ) : (
-        <p>Loading</p>
+
+        <p>Loading...</p>
+        
       )}
     </div>
   );
