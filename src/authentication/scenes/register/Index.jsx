@@ -17,6 +17,7 @@ import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import { Icon } from "@mui/material";
+import PersonAddIcon from '@mui/icons-material/PersonAdd';
 
 const Register = () =>  {
 
@@ -69,7 +70,7 @@ return (
         <CssBaseline />
         <Box
           sx={{
-            marginTop: 8,
+            marginTop: 10,
             display: 'flex',
             flexDirection: 'column',
             alignItems: 'center',
@@ -79,8 +80,10 @@ return (
             borderColor:'black'
           }}
         >
+
+          <PersonAddIcon sx = {{fontSize: 100, mt: 3 }}/>
         
-          <Typography component="h1" variant="h5">
+          <Typography component="h1" variant="h5" marginTop={2} fontFamily={"Inter"} fontWeight={900} fontSize={36}>
             Register New User
           </Typography>
 
@@ -98,41 +101,32 @@ return (
                     } } />
 
             </Box>
-            <Button
+            
+            <Box sx ={{alignContent: 'center'}}>
+              <Button
               type="submit"
               fullWidth
               variant="contained"
               sx={{position:'center', mt: 3, mb: 2 }}
               onClick={register}
             >
-              Create User
-            </Button>
-
-        <Typography component="h1" variant="h5">
-            Currently logged in as:
-            {user?.email}
-          </Typography>
-
-          <Box noValidate sx={{ mt: 1 }}>
-            <Button
-              type="submit"
-              fullWidth
-              variant="contained"
-              sx={{ mt: 3, mb: 2 }}
-              onClick={logout}
-            >
-              Sign Out
+              Register New User
             </Button>
             </Box>
 
         <Box>
-            <Link to = "/JaneHopkins"> Continue as Guest </Link>
+          <Typography fontFamily={"Inter"} fontWeight={400} fontSize={16} marginTop={1}>
+              <Link to = "/JaneHopkins"> Continue as Guest </Link>
+          </Typography>
         </Box>
 
         <Box>
-            Already have an account? Click 
-            <Link to = "/"> Here </Link>
-            to log in
+            
+            <Typography fontFamily={"Inter"} fontWeight={400} fontSize={16} marginTop={1}>
+              Already have an account? Click 
+              <Link to = "/"> Here </Link>
+              to log in
+          </Typography>
         </Box>
 
         </Box>

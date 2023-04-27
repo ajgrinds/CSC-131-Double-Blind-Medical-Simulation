@@ -16,7 +16,6 @@ import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
-import { Icon } from "@mui/material";
 
 const Login = () =>  {
 
@@ -85,7 +84,7 @@ return (
         <CssBaseline />
         <Box
           sx={{
-            marginTop: 8,
+            marginTop: 10,
             display: 'flex',
             flexDirection: 'column',
             alignItems: 'center',
@@ -95,40 +94,13 @@ return (
             borderColor:'black'
           }}
         >
-        
-          <Typography component="h1" variant="h5">
-            Register New User
-          </Typography>
+          <AccountCircleIcon sx = {{fontSize: 100, mt: 3 }}/>
 
-          <Box noValidate sx={{ display:'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap:1, mt: 3 }}>
-                <input
-                    placeholder="Email..."
-                    onChange={(event) => {
-                        setRegisterEmail(event.target.value);
-                    } } />
-
-                <input
-                    placeholder="Password..."
-                    onChange={(event) => {
-                        setRegisterPassword(event.target.value); 
-                    } } />
-
-            </Box>
-            <Button
-              type="submit"
-              fullWidth
-              variant="contained"
-              sx={{position:'center', mt: 3, mb: 2 }}
-              onClick={register}
-            >
-              Create User
-            </Button>
-
-          <Typography component="h1" variant="h5">
+          <Typography component="h1" variant="h5" marginTop={2} fontFamily={"Inter"} fontWeight={900} fontSize={36}>
             Sign in
           </Typography>
 
-          <Box noValidate sx={{ mt: 3 }}>
+          <Box sx={{ display:'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap:1, mt: 2 }}>
                 <input
                     placeholder="Email..."
                     onChange={(event) => {
@@ -140,18 +112,23 @@ return (
                     onChange={(event) => {
                         setLoginPassword(event.target.value);
                     } } />
+           
+            
+            </Box>
 
-            <Button
+            <Box sx ={{alignContent: 'center'}}>
+              <Button
               type="submit"
               fullWidth
               variant="contained"
-              sx={{ mt: 3, mb: 2 }}
+              sx={{position:'center', mt: 3, mb: 2 }}
               onClick={login}
             >
               Sign In
             </Button>
             </Box>
 
+        {/* logout functionality
         <Typography component="h1" variant="h5">
             Currently logged in as:
             {user?.email}
@@ -168,15 +145,20 @@ return (
               Sign Out
             </Button>
             </Box>
+                  */ }
 
         <Box>
+          <Typography fontFamily={"Inter"} fontWeight={400} fontSize={16} marginTop={1}>
             <Link to = "/JaneHopkins"> Continue as Guest </Link>
+          </Typography>
         </Box>
 
         <Box>
+          <Typography fontFamily={"Inter"} fontWeight={400} fontSize={16} marginTop={1}>
             Dont have an account? Click 
             <Link to = "/Register"> Here </Link>
             to register
+          </Typography>
         </Box>
 
         </Box>
