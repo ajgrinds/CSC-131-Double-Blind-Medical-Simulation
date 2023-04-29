@@ -10,7 +10,11 @@ import DialogTitle from '@mui/material/DialogTitle';
 import DialogContent from '@mui/material/DialogContent';
 import DialogActions from '@mui/material/DialogActions';
 import TextField from '@mui/material/TextField';
-
+import { useStudies } from './StudiesData';
+import { useState } from "react";
+import IconButton from '@mui/material/IconButton';
+import DeleteIcon from '@mui/icons-material/Delete';
+import { useNavigate } from 'react-router-dom';
 
 const StyledBox = styled(Box)(({ theme }) => ({
   height: 500,
@@ -27,24 +31,36 @@ const StyledBox = styled(Box)(({ theme }) => ({
     color: theme.palette.error.main,
   },
   '& .MuiDataGrid-cell': {
-    fontSize: '1.1rem',
+    fontSize: '1.0rem',
   },
   '& .MuiDataGrid-columnHeaderTitle': {
-    fontSize: '1.1rem',
+    fontSize: '1.0rem',
   },
 }));
 
 const rows = [];
 
 export default function ConditionalValidationGrid() {
+
+  /* */
+  const [notApprovedDialogOpen, setNotApprovedDialogOpen] = useState(false);
+  const handleNotApprovedDialogOpen = () => {
+    setNotApprovedDialogOpen(true);
+  };
   
+  const navigate = useNavigate();
+
   const isSmallScreen = useMediaQuery(theme => theme.breakpoints.down('sm'));
 
-  const [gridRows, setGridRows] = React.useState(rows);
+  const { studies: gridRows, setStudies: setGridRows } = useStudies();
+  const storedRows = JSON.parse(localStorage.getItem("studies")) || [];
 
+  /*Button Actions*/
+  
+  /*Approve Study button*/
   const handleApproveClick = (event, cellValues, rowId) => {
     event.stopPropagation();
-  
+
     const rowIndex = gridRows.findIndex((row) => row.id === rowId);
     if (rowIndex !== -1) {
       const updatedRows = [...gridRows];
@@ -53,9 +69,11 @@ export default function ConditionalValidationGrid() {
       setGridRows(updatedRows);
     }
   };
+
+  /*Decline Study button*/
   const handleDeclineClick = (event, cellValues, rowId) => {
     event.stopPropagation();
-  
+
     const rowIndex = gridRows.findIndex((row) => row.id === rowId);
     if (rowIndex !== -1) {
       const updatedRows = [...gridRows];
@@ -64,6 +82,8 @@ export default function ConditionalValidationGrid() {
       setGridRows(updatedRows);
     }
   };
+
+  /*Delete Study button*/
   const handleDeleteClick = (event, rowId) => {
     event.stopPropagation();
   
@@ -71,8 +91,41 @@ export default function ConditionalValidationGrid() {
     if (rowIndex !== -1) {
       const updatedRows = gridRows.filter((row) => row.id !== rowId);
       setGridRows(updatedRows);
+      setUpdateStorage(true);
     }
   };
+
+  /*View button for sending result button*/
+  const [viewStudyOpen, setViewStudyOpen] = useState(false);
+  const [selectedStudy, setSelectedStudy] = useState(null);
+  const handleViewStudyClick = (event, study) => {
+    setSelectedStudy(study);
+    setViewStudyOpen(true);
+  };
+  const handleViewStudyCancel = () => {
+    setViewStudyOpen(false);
+  };
+  const handleViewStudySend = () => {
+
+  };
+
+  /*Store data*/
+  const [updateStorage, setUpdateStorage] = React.useState(false);
+
+  React.useEffect(() => {
+    if (gridRows.length === 0 && storedRows.length > 0) {
+      setGridRows(storedRows);
+    }
+  
+    if (updateStorage) {
+      localStorage.setItem("studies", JSON.stringify(gridRows));
+      setUpdateStorage(false);
+    }
+  
+    return () => {
+      localStorage.setItem("studies", JSON.stringify(gridRows));
+    };
+  }, [gridRows, storedRows, updateStorage]);
 
   // Create Study
   const [dialogOpen, setDialogOpen] = React.useState(false);
@@ -114,25 +167,47 @@ export default function ConditionalValidationGrid() {
   const approvedCount = gridRows.filter(row => row.active === "Complete").length;
   const declinedCount = gridRows.filter(row => row.active === "Rejected").length;
 
+  const handleSendButtonClick = () => {
+    if (!selectedStudy) {
+      return;
+    }
+  
+    if (selectedStudy.status === 'Declined') {
+      setDialogOpen('declined');
+    } else if (selectedStudy.status === 'Approved') {
+      setDialogOpen('approved');
+    } else {
+      setDialogOpen('pending');
+    }
+  };
+
   
   const columns = [
     {
       field: 'study',
       headerName: 'Study',
       width: isSmallScreen ? 100 : 160,
-      editable: true,
+      editable: false,
     },
     {
       field: 'startAt',
       headerName: 'Start Date',
       type: 'date',
       width: isSmallScreen ? 100 : 120,
+      valueFormatter: (params) => {
+        const date = new Date(params.value);
+        return date.toLocaleDateString();
+      },
     },
     {
       field: 'endsAt',
       headerName: 'End Date',
       type: 'date',
       width: isSmallScreen ? 100 : 120,
+      valueFormatter: (params) => {
+        const date = new Date(params.value);
+        return date.toLocaleDateString();
+      },
     },
     {
       field: 'active',
@@ -145,13 +220,14 @@ export default function ConditionalValidationGrid() {
       field: 'bavariaApr',
       headerName: 'Bavaria Approval',
       width: isSmallScreen ? 100 : 160,
-      editable: true,
+      editable: false,
       preProcessEditCellProps: (params) => {
         const activeProps = params.otherFieldsProps.active;
         const hasError = activeProps.value && !params.props.value;
         return { ...params.props, error: hasError };
       },
     },
+    /*Approve/decline study button and column*/
     {
     field: "Approve Study",
     width: isSmallScreen ? 240 : 300, 
@@ -206,29 +282,45 @@ export default function ConditionalValidationGrid() {
         </>
       );
     },
-  },
+    },
+    /*Details/View Study column*/
     {
-      field: "Delete Study",
-      width: isSmallScreen ? 120 : 150,
+      field: 'details',
+      headerName: 'Details',
+      width: isSmallScreen ? 100 : 120,
       renderCell: (cellValues) => {
         return (
           <Button
             variant="contained"
             sx={{
-              backgroundColor: "#1E2D51",
-              "&:hover": {
-                backgroundColor: "#d32f2f",
+              backgroundColor: '#3f51b5',
+              '&:hover': {
+                backgroundColor: '#303f9f',
               },
             }}
-            onClick={(event) => {
-              handleDeleteClick(event, cellValues.row.id);
-            }}
+            onClick={(event) => handleViewStudyClick(event, cellValues.row)}
           >
-            Delete
+            View Study
           </Button>
         );
-      }
+      },
     },
+    /*Delete study button and column*/
+    {
+      field: 'action',
+      headerName: 'Delete',
+      width: isSmallScreen ? 100 : 120,
+      renderCell: (cellValues) => {
+        return (
+          <IconButton
+            sx={{ color: "grey" }}
+            onClick={(event) => handleDeleteClick(event, cellValues.row.id)}
+          >
+            <DeleteIcon />
+          </IconButton>
+        );
+      },
+    }
   ];
 
   return (
@@ -249,14 +341,14 @@ export default function ConditionalValidationGrid() {
       }
     />
     <TextField
-  margin="dense"
-  id="startAt"
-  label="Start Date"
-  type="date"
-  fullWidth
-  InputLabelProps={{
-    shrink: true,
-  }}
+      margin="dense"
+      id="startAt"
+      label="Start Date"
+      type="date"
+      fullWidth
+      InputLabelProps={{
+      shrink: true,
+    }}
   InputProps={{
     inputProps: {
       min: '1900-01-01',
@@ -268,34 +360,34 @@ export default function ConditionalValidationGrid() {
   onChange={(e) =>
     setNewStudyData({ ...newStudyData, startAt: e.target.value })
   }
-/>
-<TextField
-  margin="dense"
-  id="endsAt"
-  label="End Date"
-  type="date"
-  fullWidth
-  InputLabelProps={{
-    shrink: true,
-  }}
-  InputProps={{
-    inputProps: {
-      min: '1900-01-01',
-      max: '2099-12-31',
-      pattern: '\\d{2}/\\d{2}/\\d{4}',
-    },
-  }}
-  value={newStudyData.endsAt}
-  onChange={(e) =>
-    setNewStudyData({ ...newStudyData, endsAt: e.target.value })
-  }
+  />
+    <TextField
+      margin="dense"
+      id="endsAt"
+      label="End Date"
+      type="date"
+      fullWidth
+      InputLabelProps={{
+        shrink: true,
+      }}
+      InputProps={{
+        inputProps: {
+          min: '1900-01-01',
+          max: '2099-12-31',
+          pattern: '\\d{2}/\\d{2}/\\d{4}',
+        },
+      }}
+      value={newStudyData.endsAt}
+      onChange={(e) =>
+        setNewStudyData({ ...newStudyData, endsAt: e.target.value })
+      }
 />
   </DialogContent>
   <DialogActions>
     <Button onClick={handleDialogClose}>Cancel</Button>
     <Button onClick={handleDialogSubmit}>Create</Button>
   </DialogActions>
-</Dialog>
+</Dialog> 
       <Box
         display="flex"
         justifyContent="space-around"
@@ -364,6 +456,58 @@ export default function ConditionalValidationGrid() {
           }}
         />
       </StyledBox>
+
+      <Dialog open={viewStudyOpen} onClose={handleViewStudyCancel} maxWidth="md" fullWidth>
+        <DialogTitle>
+          <Typography variant="h6" gutterBottom>
+            Study name: {selectedStudy && selectedStudy.study}
+          </Typography>
+          <Typography variant="subtitle1" gutterBottom>
+            Status:{" "}
+            <span
+              style={{
+                color:
+                  selectedStudy && selectedStudy.active === "Complete"
+                    ? "green"
+                    : selectedStudy && selectedStudy.active === "Rejected"
+                    ? "red"
+                    : undefined,
+              }}
+            >
+              {selectedStudy &&
+                (selectedStudy.active === "Complete"
+                  ? "Study was approved"
+                  : selectedStudy.active === "Rejected"
+                  ? "Study was not approved"
+                  : "Waiting for study approval...")}
+            </span>
+          </Typography>
+        </DialogTitle>
+        <DialogContent>
+          <Typography paragraph>
+          This Study status will be changed to Completed, and as such! a Report will be generated and shared with both Bavaria and Hopkins!
+          </Typography>
+
+            {/* Add more details here */}
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleViewStudyCancel} color="primary">
+            Cancel
+          </Button>
+          <Button onClick={handleViewStudySend} color="primary">
+            Send
+          </Button>
+          <Button
+            onClick={() => {
+              handleViewStudyCancel();
+              navigate("./scenes/AssignDrugs");
+            }}
+            color="primary"
+          >
+            Assign drugs to eligible patients
+          </Button>
+        </DialogActions>
+      </Dialog>
 
       {/* Dialog */}
       {/* ... Dialog components */}
