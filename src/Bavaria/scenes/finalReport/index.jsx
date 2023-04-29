@@ -1,25 +1,25 @@
 import React, { useState, useEffect } from 'react'
-import { Box, Button, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TextField, Typography, CircularProgress } from "@mui/material";
+import { Box, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, CircularProgress } from "@mui/material";
 import useBavaria from '../../../vendiaHooks/useBavaria';
 
-const TrialProgress = () => {
+const FinalReport = () => {
 
     const { entities } = useBavaria();
-    const [patients, setPatients] = useState([]);
+    const [studies, setStudies] = useState([]);
 
     const [isLoading, setIsLoading] = useState(false);
 
     useEffect(() =>{
 
-        async function fetchPatients(){
+        async function fetchStudies(){
 
             try{
 
                 setIsLoading(true);
-                const response = await entities.patient.list();
+                const response = await entities.study.list();
                 console.log(response);
 
-                setPatients(response.items.filter( patient => patient.visits != null && patient.visits.length > 0))
+                setStudies(response.items.filter( study => study.studyName != null))
                 setIsLoading(false);
 
 
@@ -34,13 +34,13 @@ const TrialProgress = () => {
             setIsLoading(false); // Hide the spinner after 1 second
         }, 3000);
 
-        fetchPatients();
+        fetchStudies();
 
         return () => {
             clearTimeout(timeoutId); // Clear the timeout if the component unmounts before it fires
         };
 
-    }, [entities.patient]);
+    }, [entities.study]);
 
   return (
     
@@ -59,43 +59,52 @@ const TrialProgress = () => {
         ) : (
 
             <TableContainer component={Paper}>
-            <Table>    
+            <Table>
             <TableHead>
                 <TableRow>
-                <TableCell style={{fontWeight: 'bold'}}>Patient UUID</TableCell>
+                <TableCell style={{fontWeight: 'bold'}}>Study Name</TableCell>
                 <TableCell style={{fontWeight: 'bold'}}>Status</TableCell>
-                <TableCell style={{fontWeight: 'bold'}}>Total Shots</TableCell>
+                <TableCell style={{fontWeight: 'bold'}}>Start</TableCell>
+                <TableCell style={{fontWeight: 'bold'}}>End</TableCell>
+                <TableCell style={{fontWeight: 'bold'}}>Approved</TableCell>
+                <TableCell style={{fontWeight: 'bold'}}>Drug ID</TableCell>
+                <TableCell style={{fontWeight: 'bold'}}>Placebo ID</TableCell>
+                <TableCell style={{fontWeight: 'bold'}}>Complete</TableCell>
+
                 
                 <TableCell></TableCell>
                 </TableRow>
             </TableHead>
             <TableBody>
-                {patients.map(patient => (
-                <TableRow key={patient._id}>
+                {studies.map(study => (
+                <TableRow key={study.studyName}>
                     <TableCell>
-                    {patient.uuid}
+                    {study.status}
                     </TableCell>
                     <TableCell>
-                    {patient.visits.length == 5 ? "Complete" : "Active"}
-                        
-                    
+                    {study.startDate}
                     </TableCell>
                     <TableCell>
-                    {patient.visits.length}
-                    
+                    {study.endDate}
                     </TableCell>
-                    
                     <TableCell>
-                    <Button variant="outlined" color="primary">
-                        button
-                    </Button>
+                    {study.fdaApproved}
+                    </TableCell>
+                    <TableCell>
+                    {study.drugId}
+                    </TableCell>
+                    <TableCell>
+                    {study.placeboId}
+                    </TableCell>
+                    <TableCell>
+                    {study.studyComplete}
                     </TableCell>
                 </TableRow>
                 ))}
             </TableBody>
             </Table>
         </TableContainer>
-    
+
 
 
 
@@ -107,4 +116,4 @@ const TrialProgress = () => {
   )
 }
 
-export default TrialProgress;
+export default FinalReport;

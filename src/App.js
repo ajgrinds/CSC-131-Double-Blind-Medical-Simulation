@@ -16,6 +16,8 @@ import RegisterPage from "./authentication/scenes/register/Index"
 import CreateDrug from "./Bavaria/scenes/createDrug";
 import TrackDosage from "./JaneHopkins/scenes/trackDosage";
 import PatientDosage from "./JaneHopkins/scenes/patientDosage";
+import TrialProgress from "./Bavaria/scenes/trialProgress";
+import FinalReport from "./Bavaria/scenes/finalReport";
 
 
 function App() {
@@ -57,8 +59,8 @@ function App() {
       <Route path="/bavaria/*" element={<Bavaria/>}>
         
         <Route path="createDrug" element={<CreateDrug/>}/>
-        
-        
+        <Route path="study" element={<TrialProgress/>}/>
+        <Route path="report" element={<FinalReport />} />
       </Route>
 
     </Routes>
