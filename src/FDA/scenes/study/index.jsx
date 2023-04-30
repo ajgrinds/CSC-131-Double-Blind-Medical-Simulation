@@ -19,6 +19,74 @@ const FDAStudy = () => {
   const [selectedStudy, setSelectedStudy] = useState(null);
   const navigate = useNavigate();
 
+  const [patientList, setPatientList] = useState([]);
+  const [drugList, setDrugList] = useState([]);
+
+  
+   function assignDrugs() {
+      async function fetchData() {
+        try {
+          const response = await entities.patient.list();
+          console.log(response);
+          setPatientList(
+            response.items.map((patient, index) => ({
+              id: index + 1,
+              _id: patient._id,
+              uuid: patient.uuid,
+              eligible: patient.icdHealthCodes == null,
+              drug: patient.drug
+            }))
+          );
+          const drug_response = await entities.drug.list();
+          console.log(drug_response);
+          setDrugList(
+            drug_response.items.map((drug, index) => ({
+              id: index + 1,
+              _id: drug._id,
+              placebo: drug.placebo,
+              batchNumber: drug.batchNumber,
+              drug: drug.id
+            }))
+          );
+        } catch (error) {
+          console.log(error);
+        } finally {
+          
+        }
+      }
+
+      fetchData();
+    console.log(drugList)
+    for (var i=0; i < patientList.length; i++) {
+      if (patientList[i].eligible ) {
+        // Retrieving an item, changing a field, and saving the updated item
+        const drug_id = Math.floor(Math.random() * 100000000000000000).toString();
+        var found = false;
+        for (var j=0; j < drugList.length; j++) {
+          if (drugList[j].drug == null) {
+            const updateDrugResponse = entities.drug.update({
+            _id: drugList[j]._id,
+            id: drug_id,
+            });
+            drugList[j].drug = drug_id;
+            found = true;
+            break;
+          }
+        }
+        if (!found) 
+        {
+          console.log("No drugs to assign")
+          break;
+        }
+        const updatePatientResponse = entities.patient.update({
+            _id: patientList[i]._id,
+            drug: drug_id,
+            });
+        console.log(updatePatientResponse)
+      }
+    }
+  }
+
   useEffect(() => {
     async function fetchData() {
       try {
@@ -42,52 +110,6 @@ const FDAStudy = () => {
     fetchData();
   }, [entities.study]);
   
-
-  /*Approve and disapprove studies*/
-  const handleApprove = async (row) => {
-    const updatedRows = studyList.map((study) => {
-      if (study.id === row.id) {
-        return { ...study, status: "Approved", fdaApproved: true };
-      }
-      return study;
-    });
-    setStudyList(updatedRows);
-  
-    await entities.study.update({
-      status: "Approved",
-      fdaApproved: true,
-      studyName: row.studyName,
-      startDate: row.startDate,
-      endDate: row.endDate,
-      drugId: row.drugId,
-      placeboId: row.placeboId,
-      studyComplete: row.studyComplete,
-      id: row.originalId,
-    });
-  };
-  
-  const handleDecline = async (row) => {
-    const updatedRows = studyList.map((study) => {
-      if (study.id === row.id) {
-        return { ...study, status: "Declined", fdaApproved: false };
-      }
-      return study;
-    });
-    setStudyList(updatedRows);
-  
-    await entities.study.update({
-      status: "Declined",
-      fdaApproved: false,
-      studyName: row.studyName,
-      startDate: row.startDate,
-      endDate: row.endDate,
-      drugId: row.drugId,
-      placeboId: row.placeboId,
-      studyComplete: row.studyComplete,
-      id: row.originalId,
-    });
-  };
-   
 
 
   /*View Study button*/
@@ -124,11 +146,11 @@ const FDAStudy = () => {
       flex: 1,
       cellClassName: (params) => {
         if (params.value === "Approved") {
-          return "approved";
+          return  <span style={{ color: "green" }}>Approved</span>;
         } else if (params.value === "Declined") {
-          return "declined";
+          return  <span style={{ color: "red" }}>Declined</span>;
         } else if (params.value === "Pending") {
-          return "pending";
+          return  <span style={{ color: "primary" }}>Pending</span>;
         }
         return "";
       },
@@ -156,34 +178,17 @@ const FDAStudy = () => {
       headerName: "Approve / Decline",
       flex: 1,
       renderCell: (cellValues) => {
-        if (cellValues.row.status === "Approved") {
-          return (
-            <Button variant="contained" color="primary" disabled>
-              Approved
-            </Button>
-          );
-        } else if (cellValues.row.status === "Declined") {
-          return (
-            <Button variant="contained" color="secondary" disabled>
-              Declined
-            </Button>
-          );
+        if (cellValues.row.status === "assigned") {
+          return <span style={{ color: "primary" }}>Drugs Assigned</span>;
         } else {
           return (
             <div style={{ display: "flex", gap: "10px" }}>
               <Button
                 variant="contained"
                 color="primary"
-                onClick={() => handleApprove(cellValues.row)}
+                onClick={() => assignDrugs(cellValues.row)}
               >
-                Approve
-              </Button>
-              <Button
-                variant="contained"
-                style={{ backgroundColor: "red" }}
-                onClick={() => handleDecline(cellValues.row)}
-              >
-                <CloseIcon />
+                Assign Drugs
               </Button>
             </div>
           );
@@ -197,7 +202,7 @@ const FDAStudy = () => {
   
   return (
     <Container maxWidth="xl">
-      <Header title="FDA STUDY" subtitle="Managing FDA Studies" />
+      <Header subtitle="Managing FDA Studies" />
       <Grid container spacing={3}>
         <Grid item xs={12}>
           <Box m="30px 0 0 0" flexGrow={1} height="75vh">
@@ -228,7 +233,7 @@ const FDAStudy = () => {
               ) : selectedStudy.status === "Declined" ? (
                 <span style={{ color: "red" }}>Declined</span>
               ) : (
-                <span style={{ color: "black" }}>Pending</span>
+                <span style={{ color: "secondary" }}>Pending</span>
               )}
             </DialogContentText>
 

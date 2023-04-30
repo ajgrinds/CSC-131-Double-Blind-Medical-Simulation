@@ -11,6 +11,7 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogActions from '@mui/material/DialogActions';
 import TextField from '@mui/material/TextField';
 import { useStudies } from './studiesData';
+import useFDA from "../../../vendiaHooks/useFDA";
 import { useState } from "react";
 import IconButton from '@mui/material/IconButton';
 import DeleteIcon from '@mui/icons-material/Delete';
@@ -53,9 +54,78 @@ export default function ConditionalValidationGrid() {
   const isSmallScreen = useMediaQuery(theme => theme.breakpoints.down('sm'));
 
   const { studies: gridRows, setStudies: setGridRows } = useStudies();
+
+  const entities = useFDA();
+  const [patientList, setPatientList] = useState([]);
+  const [drugList, setDrugList] = useState([]);
+
   const storedRows = JSON.parse(localStorage.getItem("studies")) || [];
 
-  /*Button Actions*/
+  
+   function assignDrugs() {
+      async function fetchData() {
+        try {
+          const response = await entities.patient.list();
+          console.log(response);
+          setPatientList(
+            response.items.map((patient, index) => ({
+              id: index + 1,
+              _id: patient._id,
+              uuid: patient.uuid,
+              eligible: patient.icdHealthCodes == null,
+              drug: patient.drug
+            }))
+          );
+          const drug_response = await entities.drug.list();
+          console.log("Drug list");
+          console.log(drug_response);
+          setDrugList(
+            drug_response.items.map((drug, index) => ({
+              id: index + 1,
+              _id: drug._id,
+              placebo: drug.placebo,
+              batchNumber: drug.batchNumber,
+              drug: drug.id
+            }))
+          );
+        } catch (error) {
+          console.log(error);
+        } finally {
+          
+        }
+      }
+
+      fetchData();
+    console.log(drugList)
+    for (var i=0; i < patientList.length; i++) {
+      if (patientList[i].eligible ) {
+        // Retrieving an item, changing a field, and saving the updated item
+        const drug_id = Math.floor(Math.random() * 100000000000000000).toString();
+        var found = false;
+        for (var j=0; j < drugList.length; j++) {
+          if (drugList[j].drug == null) {
+            const updateDrugResponse = entities.drug.update({
+            _id: drugList[j]._id,
+            id: drug_id,
+            });
+            drugList[j].drug = drug_id;
+            found = true;
+            break;
+          }
+        }
+        if (!found) 
+        {
+          console.log("No drugs to assign")
+          break;
+        }
+        const updatePatientResponse = entities.patient.update({
+            _id: patientList[i]._id,
+            drug: drug_id,
+            });
+        console.log(updatePatientResponse)
+      }
+    }
+  }
   
   /*Approve Study button*/
   const handleApproveClick = (event, cellValues, rowId) => {

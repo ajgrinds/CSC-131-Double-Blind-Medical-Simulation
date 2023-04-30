@@ -5,8 +5,6 @@ import PatientDetails from "./JaneHopkins/scenes/patientdetails"
 import Doctor from "./JaneHopkins/JaneHopkins";
 import Bavaria from "./Bavaria/Bavaria";
 import FDA from "./FDA/FDA";
-import FDAPatient from "./FDA/scenes/patient"
-import FDADashboard from "./FDA/scenes/dashboard";
 import AddPatient from "./JaneHopkins/scenes/addpatient";
 import LoginPage from "./authentication/scenes/login/Index";
 import RegisterPage from "./authentication/scenes/register/Index"
@@ -48,8 +46,6 @@ function App() {
       {/*Routes for FDA page */}
       
       <Route exact path="/fda/*" element={<FDA/>}>
-
-        <Route path="patient" element={<FDAPatient/>} />
         
       </Route>
 

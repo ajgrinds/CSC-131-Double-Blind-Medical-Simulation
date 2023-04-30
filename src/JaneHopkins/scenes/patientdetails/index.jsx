@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Link } from "react-router-dom";
 import { useParams } from 'react-router-dom';
 import useJaneHopkins from '../../../vendiaHooks/useJaneHopkins';
-import {Box, Typography, useTheme, Grid, CircularProgress} from "@mui/material";
+import {Box, useTheme, Grid, CircularProgress} from "@mui/material";
 import { tokens } from '../../theme';
 import Header from '../../components/Header';
 import TextField from '@mui/material/TextField';
@@ -120,7 +120,7 @@ function PatientDetails() {
           setPatient(response);
           setIsLoading(true);
           
-          // set the values of each entitie to the current value of the patients
+          // set the values of each entity to the current value of the patients
           setNewWeight(response.weight);
           setNewInsuranceNumber(response.insuranceNumber);
           setNewBloodPressure(response.bloodPressure);
