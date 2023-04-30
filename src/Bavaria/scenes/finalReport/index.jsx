@@ -77,7 +77,10 @@ const FinalReport = () => {
             </TableHead>
             <TableBody>
                 {studies.map(study => (
-                <TableRow key={study.studyName}>
+                <TableRow key={study._id}>
+                    <TableCell>
+                    {study.studyName}
+                    </TableCell>
                     <TableCell>
                     {study.status}
                     </TableCell>
