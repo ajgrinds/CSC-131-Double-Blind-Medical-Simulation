@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import {
   Box,
-  IconButton,
+  Icon,
   useTheme,
   Dialog,
   DialogActions,
@@ -9,22 +9,29 @@ import {
   DialogContentText,
   DialogTitle,
   Button,
+  Typography
 } from "@mui/material";
+import CheckIcon from '@mui/icons-material/Check';
+import CloseIcon from '@mui/icons-material/Close';
 import { DataGrid } from "@mui/x-data-grid";
 import { tokens } from "../../../theme";
 import Header from "../../components/Header";
 import useFDA from "../../../vendiaHooks/useFDA";
-import CloseIcon from "@mui/icons-material/Close";
 import { Grid, Container } from "@mui/material";
 import useMediaQuery from "@mui/material/useMediaQuery";
+
+
 
 const FDAPatient = () => {
 
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
 
+  const [isCompleted, setIsCompleted] = useState(false);
+
   const { entities } = useFDA();
   const [patientList, setPatientList] = useState([]);
+  const [drugList, setDrugList] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const isSmallScreen = useMediaQuery(theme.breakpoints.down("sm"));
 
@@ -49,6 +56,22 @@ const FDAPatient = () => {
     handleCloseDeleteDialog();
   };
 
+  function assignDrugs() {
+    for (var i=0; i < patientList.length; i++) {
+      if (patientList[i].eligible && patientList[i].drug == null) {
+        // Retrieving an item, changing a field, and saving the updated item
+        const drug_id = Math.floor(Math.random() * Number.MAX_VALUE).toString();
+        const updatePatientResponse = entities.patient.update({
+            _id: patientList[i]._id,
+            drug: "12345",
+            });
+        console.log(updatePatientResponse)
+
+      }
+    } 
+    setIsCompleted(!isCompleted);
+  }
+
   useEffect(() => {
     async function fetchData() {
       try {
@@ -57,7 +80,20 @@ const FDAPatient = () => {
         setPatientList(
           response.items.map((patient, index) => ({
             id: index + 1,
+            _id: patient._id,
             uuid: patient.uuid,
+            eligible: patient.icdHealthCodes == null,
+            drug: patient.drug
+          }))
+        );
+        const drug_response = await entities.drug.list();
+        console.log("Drug list");
+        console.log(drug_response);
+        setDrugList(
+          drug_response.items.map((drug, index) => ({
+            id: index + 1,
+            placebo: drug.placebo,
+            batchNumber: drug.batchNumber,
           }))
         );
       } catch (error) {
@@ -68,26 +104,9 @@ const FDAPatient = () => {
     }
 
     fetchData();
-  }, [entities.patient]);
+  }, [entities.patient, isCompleted]);
 
   const columns = [
-    {
-      field: "delete",
-      headerName: "Remove ID",
-      width: 100,
-      headerAlign: "center",
-      align: "center",
-      headerClassName: "header--cell",
-      renderCell: (params) => (
-        <IconButton
-          edge="end"
-          color="error"
-          onClick={() => handleOpenDeleteDialog(params.row.id)}
-        >
-          <CloseIcon />
-        </IconButton>
-      ),
-    },
     {
       field: "uuid",
       headerName: "UUID",
@@ -97,11 +116,56 @@ const FDAPatient = () => {
       headerClassName: "header--cell",
       cellClassName: "uuid--cell",
     },
+    {
+      field: "eligible",
+      headerName: "Eligibility",
+      width: 100,
+      headerAlign: "center",
+      align: "center",
+      headerClassName: "header--cell",
+      cellClassName: "eligibility--cell",
+      renderCell: (params) => (
+        <>
+          {params.row.eligible ? (
+             <>
+          <CheckIcon
+            edge="end"
+            color="success"
+          >
+          </CheckIcon>
+        </>
+          ) : (
+             <>
+          <CloseIcon
+            edge="end"
+            color="error"
+          >
+          </CloseIcon>
+        </>
+          )}
+        </>
+      ),
+    },
+    {
+      field: "drug",
+      headerName: "Drug ID",
+      flex: 1,
+      headerAlign: "center",
+      align: "center",
+      headerClassName: "header--cell",
+      cellClassName: "drug-id--cell",
+    },
   ];
 
   return (
     <Container maxWidth="lg">
       <Header title="FDA PATIENTS" subtitle="Managing FDA Patients" />
+      <Button
+              onClick={() => assignDrugs()}
+              variant="contained"
+            >
+              <Typography variant="h6">Assign Drugs</Typography>
+        </Button>   
       <Grid container spacing={3}>
         <Grid item xs={12}>
           <Box
@@ -140,6 +204,11 @@ const FDAPatient = () => {
                 className="custom-data-grid"
                 rowHeight={50}
                 headerHeight={50}
+                initialState={{
+                sorting: {
+                  sortModel: [{ field: 'eligible', sort: 'desc' }],
+                },
+              }}
               />
             )}
           </Box>
