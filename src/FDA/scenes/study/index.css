@@ -1,0 +1,14 @@
+.approved {
+    background-color: #4caf50 !important;
+    color: #ffffff;
+  }
+  
+  .declined {
+    background-color: #f44336 !important;
+    color: #ffffff;
+  }
+  
+  .pending {
+    color: black;
+  }
+  
