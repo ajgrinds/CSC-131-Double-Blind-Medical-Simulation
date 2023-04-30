@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Box, Link, Grid, Container, Dialog, DialogTitle, DialogContent, DialogContentText, DialogActions } from "@mui/material";
-import { DataGrid } from "@mui/x-data-grid";
+import { GridColDef, DataGrid, GridComparatorFn } from "@mui/x-data-grid";
 import Header from "../../components/Header";
 import useFDA from "../../../vendiaHooks/useFDA";
 import "./index.css";
@@ -96,6 +96,10 @@ const FDAStudy = () => {
     setReload(!reload);
   }   
 
+
+  const statuses = ["Cancelled", "Complete", "Created", "Approved", "Full", "In Progress", "Awaiting Results"];
+  const statusComparator: GridComparatorFn<Status> = (v1, v2) =>
+        statuses.indexOf(v1) - statuses.indexOf(v2);
   
   const columns = [
     {
@@ -120,16 +124,7 @@ const FDAStudy = () => {
         field: "status",
         headerName: "Status",
         flex: 1,
-        cellClassName: (params) => {
-          if (params.value === "Approved") {
-            return  <span style={{ color: "green" }}>Approved</span>;
-          } else if (params.value === "Declined") {
-            return  <span style={{ color: "red" }}>Declined</span>;
-          } else if (params.value === "Pending") {
-            return  <span style={{ color: "primary" }}>Pending</span>;
-          }
-          return "";
-        },
+        sortComparator: statusComparator
       },
       { field: "startDate", headerName: "Start Date", flex: 1 },
       { field: "endDate", headerName: "End Date", flex: 1 },
@@ -226,7 +221,6 @@ const FDAStudy = () => {
     }
   ];
   
-  
   return (
     <Container maxWidth="xl">
       <Header subtitle="Managing FDA Studies" />
@@ -241,6 +235,11 @@ const FDAStudy = () => {
                 columns={columns}
                 rowHeight={50}
                 headerHeight={50}
+                initialState={{
+                sorting: {
+                  sortModel: [{ field: 'status', sort: 'asc' }],
+                },
+              }}
               />
             )}
           </Box>
