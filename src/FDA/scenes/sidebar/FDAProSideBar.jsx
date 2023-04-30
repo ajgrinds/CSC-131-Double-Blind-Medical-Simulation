@@ -167,21 +167,13 @@ const FDAProSideBar = () => {
             </Typography>
 
             <Item
-              title="Patients"
-              to="/fda/patient"
-              icon={<PeopleOutlinedIcon/>}
-              selected={selected}
-              setSelected={setSelected}
-            />
-            
-            <Item
               title="Assign Drugs"
-              to="/fda/drugs"
+              to="/fda/patient"
               icon={<AssignmentReturnedIcon/>}
               selected={selected}
               setSelected={setSelected}
             />
-
+            
             <Item
               title="Studies"
               to="/fda/studies"
