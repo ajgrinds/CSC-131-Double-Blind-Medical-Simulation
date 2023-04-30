@@ -57,16 +57,33 @@ const FDAPatient = () => {
   };
 
   function assignDrugs() {
+    console.log(drugList)
     for (var i=0; i < patientList.length; i++) {
-      if (patientList[i].eligible && patientList[i].drug == null) {
+      if (patientList[i].eligible ) {
         // Retrieving an item, changing a field, and saving the updated item
-        const drug_id = Math.floor(Math.random() * Number.MAX_VALUE).toString();
+        const drug_id = Math.floor(Math.random() * 100000000000000000).toString();
+        var found = false;
+        for (var j=0; j < drugList.length; j++) {
+          if (drugList[j].drug == null) {
+            const updateDrugResponse = entities.drug.update({
+            _id: drugList[j]._id,
+            id: drug_id,
+            });
+            drugList[j].drug = drug_id;
+            found = true;
+            break;
+          }
+        }
+        if (!found) 
+        {
+          console.log("No drugs to assign")
+          break;
+        }
         const updatePatientResponse = entities.patient.update({
             _id: patientList[i]._id,
-            drug: "12345",
+            drug: drug_id,
             });
         console.log(updatePatientResponse)
-
       }
     } 
     setIsCompleted(!isCompleted);
@@ -92,8 +109,10 @@ const FDAPatient = () => {
         setDrugList(
           drug_response.items.map((drug, index) => ({
             id: index + 1,
+            _id: drug._id,
             placebo: drug.placebo,
             batchNumber: drug.batchNumber,
+            drug: drug.id
           }))
         );
       } catch (error) {
