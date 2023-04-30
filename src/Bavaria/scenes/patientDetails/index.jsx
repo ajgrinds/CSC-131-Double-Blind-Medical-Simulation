@@ -43,7 +43,10 @@ const PatientDetails = ({id}) => {
     <Box>
         {patient ? (
             <Box m="20px">
-                <Typography variant='h4'> Patient Details </Typography>
+                <Box justifyContent="center" alignItems="center">
+                    <Typography variant='h4'> Patient Details </Typography>
+                </Box>
+                
                 <Grid
                     mt="20px"
                     container

@@ -14,9 +14,6 @@ const TrialProgress = () => {
     const [id, setId] = useState(null);
 
     
-
-    
-
     useEffect(() =>{
 
         async function fetchPatients(){
@@ -92,15 +89,15 @@ const TrialProgress = () => {
                 {patients.map(patient => (
                 <TableRow key={patient._id}>
                     <TableCell>
-                    {patient.uuid}
+                        {patient.uuid}
                     </TableCell>
                     <TableCell style={{ color: patient.visits.length === 5 ? 'green' : 'orange' }}>
-                    {patient.visits.length === 5 ? "Complete" : "Active"}
+                        {patient.visits.length === 5 ? "Complete" : "Active"}
                         
                     
                     </TableCell>
                     <TableCell>
-                    {patient.visits.length}
+                        {patient.visits.length}
                     
                     </TableCell>
                     
@@ -125,7 +122,9 @@ const TrialProgress = () => {
                     transform: 'translate(-50%, -50%)', 
                     bgcolor: 'background.paper', 
                     boxShadow: 24, p: 4
+                
                 }}
+                
             >
                 <PatientDetails id={id}/>
                 

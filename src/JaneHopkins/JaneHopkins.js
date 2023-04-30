@@ -16,6 +16,7 @@ import PatientDosage from "./scenes/patientDosage";
 
 import Admin from "./scenes/admin";
 import "./scenes/smooth.css";
+import StudyContent from "./scenes/studyContent";
 
 const Doctor = () => {
 
@@ -31,23 +32,22 @@ const Doctor = () => {
                     <div style={{height: "100%", width: "100%"}}>
                         <TopBar/>
                         <main>
-                            <TransitionGroup>
-                                <CSSTransition key={location.key} classNames="smooth" timeout={300}>
+                            
 
-                                    <Routes>
+                            <Routes>
+                            
+                                <Route path="/" element={<Dashboard/>}/>
+                                <Route path="/admin" element={<Admin/>}/>
+                                <Route path="/patient" element={<Patient/>}/>
+                                <Route path="/addpatient" element={<AddPatient/>} />
+                                <Route path="/patient/:id" element={<PatientDetails/>}/>
+                                <Route path="trackdosage" element={<TrackDosage/>}/>
+                                <Route path="trackdosage/:id" element={<PatientDosage/>} />
+                                <Route path="studycontent" element={<StudyContent/>} />
+                                
+                            </Routes>
                                     
-                                        <Route path="/" element={<Dashboard/>}/>
-                                        <Route path="/admin" element={<Admin/>}/>
-                                        <Route path="/patient" element={<Patient/>}/>
-                                        <Route path="/addpatient" element={<AddPatient/>} />
-                                        <Route path="/patient/:id" element={<PatientDetails/>}/>
-                                        <Route path="trackdosage" element={<TrackDosage/>}/>
-                                        <Route path="trackdosage/:id" element={<PatientDosage/>} />
-                                        
-                                    </Routes>
-                                    
-                                </CSSTransition>
-                            </TransitionGroup>
+                                
                         </main>
                     </div>
 
