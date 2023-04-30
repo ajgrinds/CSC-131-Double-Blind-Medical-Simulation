@@ -23,79 +23,47 @@ const FDAStudy = () => {
   const [drugList, setDrugList] = useState([]);
 
   
-   const assignDrugs = async (row) => {
-      async function fetchData() {
-        try {
-          const response = await entities.patient.list();
-          console.log(response);
-          setPatientList(
-            response.items.map((patient, index) => ({
-              id: index + 1,
-              _id: patient._id,
-              uuid: patient.uuid,
-              eligible: patient.icdHealthCodes == null,
-              drug: patient.drug
-            }))
-          );
-          const drug_response = await entities.drug.list();
-          console.log(drug_response);
-          setDrugList(
-            drug_response.items.map((drug, index) => ({
-              id: index + 1,
-              _id: drug._id,
-              placebo: drug.placebo,
-              batchNumber: drug.batchNumber,
-              drug: drug.id
-            }))
-          );
-        } catch (error) {
-          console.log(error);
-        } finally {
-          
-        }
-      }
-
-      fetchData();
-    console.log(drugList)
+  const assignDrugs = async (row) => {
+    const response = await entities.patient.list({
+            filter: {
+                study: {
+                  eq: row.id,
+                }
+          }
+        });
+        setPatientList(
+          response.items.map((patient, index) => ({
+            id: index + 1,
+            _id: patient._id,
+            eligible: patient.icdHealthCodes == null,
+            drug: patient.drug
+          }))
+        );
     for (var i=0; i < patientList.length; i++) {
       if (patientList[i].eligible ) {
         // Retrieving an item, changing a field, and saving the updated item
-        const drug_id = Math.floor(Math.random() * 100000000000000000).toString();
-        var found = false;
-        for (var j=0; j < drugList.length; j++) {
-          if (drugList[j].drug == null) {
-            const updateDrugResponse = entities.drug.update({
-            _id: drugList[j]._id,
-            id: drug_id,
-            });
-            drugList[j].drug = drug_id;
-            found = true;
-            break;
-          }
-        }
-        if (!found) 
-        {
-          console.log("No drugs to assign")
-          break;
-        }
+        const drug_id = Math.floor(Math.random() * 2).toString();
         const updatePatientResponse = entities.patient.update({
-            _id: patientList[i]._id,
-            drug: drug_id,
-            });
+          _id: patientList[i]._id,
+          drug: drug_id == 1 ? "placebo" : "real",
+        });
         console.log(updatePatientResponse)
       }
     }
 
     const updatedRows = studyList.map((study) => {
-        if (study.id === row.id) {
-          return { ...study, status: "In Progress"};
-        }
-        return study;
+      if (study.id === row.id) {
+        return { ...study, status: "In Progress"};
+      }
+      return study;
     });
     setStudyList(updatedRows);
     // Update the fetched data
     entities.study.update({ ...row, status: "In Progress"});
-  }
+  }   
+
+      
+
 
   useEffect(() => {
     async function fetchData() {
@@ -125,25 +93,25 @@ const FDAStudy = () => {
 const handleApprove = async (row) => {
   const updatedRows = studyList.map((study) => {
     if (study.id === row.id) {
-      return { ...study, status: "Approved", fdaApproved: true };
+      return { ...study, status: "Approved"};
     }
     return study;
   });
   setStudyList(updatedRows);
   // Update the fetched data
-  await entities.study.update({ ...row, status: "Approved", fdaApproved: true });
+  await entities.study.update({ ...row, status: "Approved"});
 };
 
 const handleDecline = async (row) => {
   const updatedRows = studyList.map((study) => {
     if (study.id === row.id) {
-      return { ...study, status: "Cancelled", fdaApproved: false };
+      return { ...study, status: "Cancelled"};
     }
     return study;
   });
   setStudyList(updatedRows);
   // Update the fetched data
-  await entities.study.update({ ...row, status: "Cancelled", fdaApproved: false });
+  await entities.study.update({ ...row, status: "Cancelled"});
 };
 
 const complete = async (row) => {
