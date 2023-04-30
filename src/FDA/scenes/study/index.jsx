@@ -23,7 +23,7 @@ const FDAStudy = () => {
   const [drugList, setDrugList] = useState([]);
 
   
-   function assignDrugs() {
+   const assignDrugs = async (row) => {
       async function fetchData() {
         try {
           const response = await entities.patient.list();
@@ -85,6 +85,16 @@ const FDAStudy = () => {
         console.log(updatePatientResponse)
       }
     }
+
+    const updatedRows = studyList.map((study) => {
+        if (study.id === row.id) {
+          return { ...study, status: "In Progress"};
+        }
+        return study;
+    });
+    setStudyList(updatedRows);
+    // Update the fetched data
+    entities.study.update({ ...row, status: "In Progress"});
   }
 
   useEffect(() => {
@@ -110,6 +120,46 @@ const FDAStudy = () => {
     fetchData();
   }, [entities.study]);
   
+
+
+const handleApprove = async (row) => {
+  const updatedRows = studyList.map((study) => {
+    if (study.id === row.id) {
+      return { ...study, status: "Approved", fdaApproved: true };
+    }
+    return study;
+  });
+  setStudyList(updatedRows);
+  // Update the fetched data
+  await entities.study.update({ ...row, status: "Approved", fdaApproved: true });
+};
+
+const handleDecline = async (row) => {
+  const updatedRows = studyList.map((study) => {
+    if (study.id === row.id) {
+      return { ...study, status: "Cancelled", fdaApproved: false };
+    }
+    return study;
+  });
+  setStudyList(updatedRows);
+  // Update the fetched data
+  await entities.study.update({ ...row, status: "Cancelled", fdaApproved: false });
+};
+
+const complete = async (row) => {
+  const updatedRows = studyList.map((study) => {
+    if (study.id === row.id) {
+      return { ...study, status: "Complete"};
+    }
+    return study;
+  });
+  setStudyList(updatedRows);
+  // Update the fetched data
+  await entities.study.update({ ...row, status: "Complete"});
+};
+  
+  
+
 
 
   /*View Study button*/
@@ -159,7 +209,7 @@ const FDAStudy = () => {
       headerName: "Study Complete",
       flex: 1,
       renderCell: (cellValues) => {
-        return cellValues.value ? (
+        return cellValues.row.status == "Complete" ? (
           <CheckCircleIcon style={{ color: "green" }} />
         ) : (
           <CancelIcon style={{ color: "red" }} />
@@ -169,12 +219,35 @@ const FDAStudy = () => {
     
     {
       field: "actions",
-      headerName: "Approve / Decline",
+      headerName: "Update",
       flex: 1,
       renderCell: (cellValues) => {
-        if (cellValues.row.status === "assigned") {
-          return <span style={{ color: "primary" }}>Drugs Assigned</span>;
-        } else {
+        if (cellValues.row.status === "Created") {
+          return (<div style={{ display: "flex", gap: "10px" }}>
+              <Button
+                variant="contained"
+                color="primary"
+                onClick={() => handleApprove(cellValues.row)}
+              >
+                Approve
+              </Button>
+              <Button
+                variant="contained"
+                style={{ backgroundColor: "red" }}
+                onClick={() => handleDecline(cellValues.row)}
+              >
+                Deny
+              </Button>
+         </div>
+         )}
+        else if (cellValues.row.status === "Approved")
+        {
+          return <span style={{ color: "primary" }}>Waiting on patients</span>
+        }
+        else if (cellValues.row.status === "Cancelled") {
+          return <span style={{ color: "red" }}>Cancelled</span>
+        }
+        else if (cellValues.row.status === "Full") {
           return (
             <div style={{ display: "flex", gap: "10px" }}>
               <Button
@@ -186,6 +259,30 @@ const FDAStudy = () => {
               </Button>
             </div>
           );
+        }
+        else if (cellValues.row.status === "In Progress")
+        {
+          return <span style={{ color: "primary" }}>In Progress</span>
+        }
+        else if (cellValues.row.status === "Awaiting Results")
+        {
+          return (<div style={{ display: "flex", gap: "10px" }}>
+              <Button
+                variant="contained"
+                color="primary"
+                onClick={() => complete(cellValues.row)}
+              >
+                Release Results
+              </Button>
+            </div>)
+        }
+        else if (cellValues.row.status === "Complete")
+        {
+          return <span style={{ color: "green" }}>Complete</span>
+        }
+        else
+        {
+          return <span style={{ color: "red" }}>INVALID STATUS</span>
         }
       },
     },
