@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Box, Grid, Container, Dialog, DialogTitle, DialogContent, DialogContentText, DialogActions } from "@mui/material";
+import { Box, Link, Grid, Container, Dialog, DialogTitle, DialogContent, DialogContentText, DialogActions } from "@mui/material";
 import { DataGrid } from "@mui/x-data-grid";
 import Header from "../../components/Header";
 import useFDA from "../../../vendiaHooks/useFDA";
@@ -113,13 +113,6 @@ const FDAStudy = () => {
 
 
   /*View Study button*/
-  const handleOpenDialog = (study) => {
-    setSelectedStudy(study);
-  };
-
-  const handleCloseDialog = () => {
-    setSelectedStudy(null);
-  };
   
   const columns = [
     {
@@ -127,14 +120,15 @@ const FDAStudy = () => {
       headerName: "View Study",
       flex: 1,
       renderCell: (cellValues) => {
+        console.log(cellValues)
         return (
-          <Button
-            variant="contained"
-            color="primary"
-            onClick={() => handleOpenDialog(cellValues.row)}
-          >
-            View Study
-          </Button>
+                    <Button
+                        variant="contained" 
+                        style={{ backgroundColor: "primary"}} 
+                        href={`/fda/details/${cellValues.row._id}`}
+                    > 
+                        View Study
+                    </Button>  
         );
       },
     },
@@ -221,42 +215,7 @@ const FDAStudy = () => {
       </Grid>
 
       {/*View Study popup and its functionalities*/}
-      {selectedStudy && (
-        <Dialog open={Boolean(selectedStudy)} onClose={handleCloseDialog} maxWidth="md" fullWidth={true}>
-          <DialogTitle>Study Details</DialogTitle>
-          <DialogContent>
-            <DialogContentText>ID: {selectedStudy.originalId}</DialogContentText>
-            <DialogContentText>
-              FDA Approval:{" "}
-              {selectedStudy.status === "Approved" ? (
-                <span style={{ color: "green" }}>Approved</span>
-              ) : selectedStudy.status === "Declined" ? (
-                <span style={{ color: "red" }}>Declined</span>
-              ) : (
-                <span style={{ color: "secondary" }}>Pending</span>
-              )}
-            </DialogContentText>
-
-            <DialogContentText>Drug ID: {selectedStudy.drugId}</DialogContentText>
-            <DialogContentText>Placebo ID: {selectedStudy.placeboId}</DialogContentText>
-
-          </DialogContent>
-          <DialogActions>
-          <Button
-                variant="contained"
-                color="secondary"
-                disabled={selectedStudy.status !== "Approved"}
-                onClick={() => navigate("../../fda/patient")}
-                style={{right:"62.5%", bottom:"5px" }}
-              >
-                Assign Drugs to Eligible Patients
-              </Button>
-            <Button onClick={handleCloseDialog} color="primary">
-              Close
-            </Button>
-          </DialogActions>
-        </Dialog>
-      )}
+      
 
     </Container>
   );

@@ -103,10 +103,32 @@ const FDADetails = () => {
 
 
   useEffect(() => {
+    async function getPatients(study) {
+      try {
+        const response = await entities.patient.list({
+            filter: {
+                study: {
+                  eq: study,
+                }
+          }
+        });
+        setPatientList(
+          response.items.map((patient, index) => ({
+            id: index + 1,
+            _id: patient._id,
+            uuid: patient.uuid,
+            eligible: patient.icdHealthCodes == null,
+            drug: patient.drug
+          }))
+        );
+      } catch (error) {
+        console.log(error);
+    }
+  }
+
     async function fetchData() {
       try {
           const response = await entities.study.get(studyID);
-          console.log(response);
           setStudy(response);
 
           setIsLoading(true);
@@ -119,6 +141,8 @@ const FDADetails = () => {
           setEndDate(response.endDate);
           setDrugID(response.drugId);
           setPlaceboID(response.placeboId);
+
+          getPatients(response._id);
       }
       catch(error){
           console.log(error);

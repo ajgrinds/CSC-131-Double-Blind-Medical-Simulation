@@ -277,6 +277,13 @@ function AddPatient() {
               operations: ["READ"],
               path: "visits"
             },
+            {
+              principal: {
+                nodes:["Bavaria", "FDA"]
+              },
+              operations: ["READ"],
+              path: "study"
+            }
           ]
         }
       }

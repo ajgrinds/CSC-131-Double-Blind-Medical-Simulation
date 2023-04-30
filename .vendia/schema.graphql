@@ -294,6 +294,7 @@ input Self_Patient_ConditionInput_ {
   name: Vendia_ModelStringInput_
   oxygenSaturation: Vendia_ModelStringInput_
   patientPicture: Vendia_ModelStringInput_
+  study: Vendia_ModelStringInput_
   temperature: Vendia_ModelStringInput_
   uuid: Vendia_ModelStringInput_
   _visitsItem: Self_Patient_visits_visitsItem_ConditionInput_
@@ -321,6 +322,7 @@ input Self_Patient_FilterInput_ {
   name: Vendia_ModelStringInput_
   oxygenSaturation: Vendia_ModelStringInput_
   patientPicture: Vendia_ModelStringInput_
+  study: Vendia_ModelStringInput_
   temperature: Vendia_ModelStringInput_
   uuid: Vendia_ModelStringInput_
   _visitsItem: Self_Patient_visits_visitsItem_FilterInput_
@@ -352,6 +354,7 @@ type Self_Patient {
   name: String
   oxygenSaturation: String
   patientPicture: String
+  study: String
   temperature: String
   uuid: String
   visits: [Self_Patient_visits_visitsItem]
@@ -378,6 +381,7 @@ type Self_Patient_Partial_ {
   name: String
   oxygenSaturation: String
   patientPicture: String
+  study: String
   temperature: String
   uuid: String
   visits: [Self_Patient_visits_visitsItem_Partial_]
@@ -424,6 +428,7 @@ input Self_Patient_Input_ {
   name: String
   oxygenSaturation: String
   patientPicture: String
+  study: String
   temperature: String
   uuid: String
   visits: [Self_Patient_visits_visitsItem_Input_]
@@ -447,6 +452,7 @@ input Self_Patient_UpdateInput_ {
   name: String
   oxygenSaturation: String
   patientPicture: String
+  study: String
   temperature: String
   uuid: String
   visits: [Self_Patient_visits_visitsItem_UpdateInput_]
@@ -470,6 +476,7 @@ input Self_Patient_PartialInput_ {
   name: String
   oxygenSaturation: String
   patientPicture: String
+  study: String
   temperature: String
   uuid: String
   visits: [Self_Patient_visits_visitsItem_PartialInput_]
