@@ -113,6 +113,12 @@
                 }
               }
             }
+          },
+          "drug": {
+            "type": "string"
+          },
+          "study": {
+            "type": "string"
           }
         }
       }
@@ -130,6 +136,38 @@
           },
           "id": {
             "type": "string"
+          }
+        }
+      }
+    },
+    "Study": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "studyName": {
+            "type": "string"
+          },
+          "status": {
+            "type": "string"
+          },
+          "startDate": {
+            "type": "string"
+          },
+          "endDate": {
+            "type": "string"
+          },
+          "fdaApproved": {
+            "type": "boolean"
+          },
+          "drugId": {
+            "type": "string"
+          },
+          "placeboId": {
+            "type": "string"
+          },
+          "studyComplete": {
+            "type": "boolean"
           }
         }
       }

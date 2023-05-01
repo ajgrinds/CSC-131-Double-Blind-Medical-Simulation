@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
 import { createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged, signOut } from "firebase/auth";
-import { auth } from "./firebase-config";
+import { auth } from "../../firebase-config";
 import Button from "@mui/material/Button";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import * as React from 'react';
 import Avatar from '@mui/material/Avatar';
 import CssBaseline from '@mui/material/CssBaseline';
@@ -15,13 +15,16 @@ import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
+import AccountCircleIcon from '@mui/icons-material/AccountCircle';
+import { Icon } from "@mui/material";
+import PersonAddIcon from '@mui/icons-material/PersonAdd';
 
-const Login = () =>  {
+const Register = () =>  {
 
     const[registerEmail, setRegisterEmail] = useState("");
     const[registerPassword, setRegisterPassword] = useState("");
-    const[loginEmail, setLoginEmail] = useState("");
-    const[loginPassword, setLoginPassword] = useState("");
+    const navigate = useNavigate();
+
 
     const[user, setUser] = useState({});
 
@@ -43,21 +46,17 @@ const Login = () =>  {
           console.log(error.message);
           alert("Invalid Email and/or Password");
         }
-    };    
-
-    const login = async () => {
-        try {
-          const user = await signInWithEmailAndPassword(
-            auth,
-            loginEmail,
-            loginPassword
-          );
-          console.log(user);
-        } catch (error) {
-          console.log(error.message);
-          alert("Unrecognized Email and/or Password");
+        const email = auth.currentUser.email;
+        if(email.match("@bavaria.com")) {
+          navigate("/bavaria");
         }
-    };
+        if(email.match("@fda.com")) {
+          navigate("/fda");
+        }
+        if(email.match(/@JaneHopkins.com/gi)) {
+          navigate("/JaneHopkins");
+        }
+    };    
     
     const logout = async () => {
         await signOut(auth);
@@ -71,7 +70,7 @@ return (
         <CssBaseline />
         <Box
           sx={{
-            marginTop: 8,
+            marginTop: 10,
             display: 'flex',
             flexDirection: 'column',
             alignItems: 'center',
@@ -81,12 +80,14 @@ return (
             borderColor:'black'
           }}
         >
+
+          <PersonAddIcon sx = {{fontSize: 100, mt: 3 }}/>
         
-          <Typography component="h1" variant="h5">
+          <Typography component="h1" variant="h5" marginTop={2} fontFamily={"Inter"} fontWeight={900} fontSize={36}>
             Register New User
           </Typography>
 
-          <Box noValidate sx={{ mt: 3 }}>
+          <Box noValidate sx={{ display:'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap:1, mt: 3 }}>
                 <input
                     placeholder="Email..."
                     onChange={(event) => {
@@ -99,64 +100,33 @@ return (
                         setRegisterPassword(event.target.value); 
                     } } />
 
-            <Button
+            </Box>
+            
+            <Box sx ={{alignContent: 'center'}}>
+              <Button
               type="submit"
               fullWidth
               variant="contained"
-              sx={{ mt: 3, mb: 2 }}
+              sx={{position:'center', mt: 3, mb: 2 }}
               onClick={register}
             >
-              Create User
-            </Button>
-            </Box>
-
-          <Typography component="h1" variant="h5">
-            Sign in
-          </Typography>
-
-          <Box noValidate sx={{ mt: 3 }}>
-                <input
-                    placeholder="Email..."
-                    onChange={(event) => {
-                        setLoginEmail(event.target.value);
-                    } } />
-
-                <input
-                    placeholder="Password..."
-                    onChange={(event) => {
-                        setLoginPassword(event.target.value);
-                    } } />
-
-            <Button
-              type="submit"
-              fullWidth
-              variant="contained"
-              sx={{ mt: 3, mb: 2 }}
-              onClick={login}
-            >
-              Sign In
-            </Button>
-            </Box>
-
-        <Typography component="h1" variant="h5">
-            Currently logged in as:
-            {user?.email}
-          </Typography>
-
-          <Box noValidate sx={{ mt: 1 }}>
-            <Button
-              type="submit"
-              fullWidth
-              variant="contained"
-              sx={{ mt: 3, mb: 2 }}
-              onClick={logout}
-            >
-              Sign Out
+              Register New User
             </Button>
             </Box>
 
         <Box>
-            <Link to = "/JaneHopkins"> Go to JaneHopkins </Link>
+          <Typography fontFamily={"Inter"} fontWeight={400} fontSize={16} marginTop={1}>
+              <Link to = "/JaneHopkins"> Continue as Guest </Link>
+          </Typography>
+        </Box>
+
+        <Box>
+            
+            <Typography fontFamily={"Inter"} fontWeight={400} fontSize={16} marginTop={1}>
+              Already have an account? Click 
+              <Link to = "/"> Here </Link>
+              to log in
+          </Typography>
         </Box>
 
         </Box>
@@ -164,4 +134,4 @@ return (
     </ThemeProvider>
   ); }
 
-export default Login;
+export default Register;

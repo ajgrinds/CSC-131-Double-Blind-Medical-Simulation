@@ -2,14 +2,23 @@ import React, { useState, useEffect } from 'react';
 import { Link } from "react-router-dom";
 import { useParams } from 'react-router-dom';
 import useJaneHopkins from '../../../vendiaHooks/useJaneHopkins';
-import {Box, Typography, useTheme} from "@mui/material";
+import {Box, useTheme, Grid, CircularProgress} from "@mui/material";
 import { tokens } from '../../theme';
 import Header from '../../components/Header';
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
 import { styled } from '@mui/material/styles';
 import { purple } from '@mui/material/colors';
+import Dialog from '@mui/material/Dialog';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import DialogContentText from '@mui/material/DialogContentText';
+import DialogTitle from '@mui/material/DialogTitle';
 //import avatar from "../../pictures/squiliem.jpeg"
+import FormControl from '@mui/material/FormControl';
+import Select, { SelectChangeEvent } from '@mui/material/Select';
+import InputLabel from '@mui/material/InputLabel';
+import MenuItem from '@mui/material/MenuItem';
 
 function PatientDetails() {
 
@@ -21,7 +30,67 @@ function PatientDetails() {
   const { id } = useParams();
   const { entities } = useJaneHopkins();
   const [patient, setPatient] = useState(null);
+  const [Studies, setStudies] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
+  
+
+  //const navigate = useNavigate();
+  const handleDelete = async (id) => {
+    
+    try {
+      const resp = entities.patient.remove(id);
+      
+      console.log(resp);
+    } catch (error) {
+      console.log(error);
+    }
+
+    await new Promise((resolve) => setTimeout(resolve, 1000));
+
+    window.location.href = "/JaneHopkins/patient/"
+  };
+  
+  const DeleteButton = ({ id }) => {
+
+    
+    const [open, setOpen] = useState(false);
+  
+    const handleClickOpen = () => {
+      setOpen(true);
+    };
+  
+    const handleClose = () => {
+      setOpen(false);
+    };
+  
+    const handleDeleteClick = () => {
+      handleDelete(id);
+      setOpen(false);
+    };
+  
+    return (
+      <>
+        <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
+          <ColorButton size='large' onClick={handleClickOpen}>Delete Patient</ColorButton>
+        </div>
+       
+        <Dialog open={open} onClose={handleClose}>
+          <DialogTitle>Confirm Deletion</DialogTitle>
+          <DialogContent>
+            <DialogContentText>
+              Are you sure you want to delete this patient?
+            </DialogContentText>
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={handleClose}>Cancel</Button>
+            <ColorButton onClick={handleDeleteClick} to={'/patient'}>Delete</ColorButton>
+          </DialogActions>
+        </Dialog>
+      </>
+    );
+  };
+  
+  
 
   // updating new patient info
   const [newWeight, setNewWeight] = useState(null);
@@ -31,11 +100,13 @@ function PatientDetails() {
   const [newOxygenSaturation, setNewOxygenSaturation] = useState(null);
   const [newAddress, setNewAddress] = useState(null);
   const [newAllergies, setNewAllergies] = useState([]);
-  //const [newMedication, setNewMedication] = useState([]);
-  //const [newIcdHealthCode, setNewIcdHealthCode] = useState([]);
+  const [newCurrentMedication, setNewCurrentMedication] = useState([]);
+  const [newIcdHealthCode, setNewIcdHealthCode] = useState([]);
+  const [newFamilyHistory, setNewFamilyHistory] = useState("");
   //const [newDoctorVisits, setNewDoctorVisits] = useState([]);
   const [newCurrentlyInsured, setNewCurrentlyInsured] = useState("");
   const [newCurrentlyEmployed, setNewCurrentlyEmployed] = useState("");
+  const [study, setStudy] = useState("");
 
   const ColorButton = styled(Button)(({ theme }) => ({
     color: theme.palette.getContrastText(purple[500]),
@@ -52,10 +123,10 @@ function PatientDetails() {
 
           const response = await entities.patient.get(id);
           console.log(response);
-          
           setPatient(response);
+          setIsLoading(true);
           
-          // set the values of each entitie to the current value of the patients
+          // set the values of each entity to the current value of the patients
           setNewWeight(response.weight);
           setNewInsuranceNumber(response.insuranceNumber);
           setNewBloodPressure(response.bloodPressure);
@@ -64,8 +135,25 @@ function PatientDetails() {
           setNewAddress(response.address);
           setNewCurrentlyInsured(response.insuranceNumber === "" ? "No" : "Yes");
           setNewCurrentlyEmployed(response.currentlyEmployed);
-          setNewAllergies(response.allergies)
+          setNewFamilyHistory(response.familyHistory);
+
+          if(response.allergies){
+            setNewAllergies(response.allergies);
+          }
           
+          if(response.currentMedications){
+            setNewCurrentMedication(response.currentMedications);
+          }
+          
+          if(response.icdHealthCodes){
+            setNewIcdHealthCode(response.icdHealthCodes);
+          }
+          
+          //console.log(newAllergies);
+          setStudy(response.study);
+
+
+          setStudies(await entities.study.list());
       }
       catch(error){
           console.log(error);
@@ -75,6 +163,7 @@ function PatientDetails() {
       }
     }
     fetchPatient();
+    setIsLoading(false);
   
   }, [entities.patient, id]);
 
@@ -105,17 +194,23 @@ function PatientDetails() {
 
   
   const handleAllergyChange = (event) => {
-    setNewAllergies(...newAllergies, event.target.value)
-    
-  }
-  /*
-  const handleMedicationChange = (event) => {
-    setNewMedication(event.target.value);
+    setNewAllergies([...newAllergies, event.target.value])
+    console.log(newAllergies);
   }
   
-  const handleNewICDHealthCodeChange = (event) => {
-    setNewIcdHealthCode(event.target.value);
+  const handleMedicationChange = (event) => {
+    setNewCurrentMedication([...newCurrentMedication, event.target.value])
   }
+  
+  const handleICDHealthCodeChange = (event) => {
+    setNewIcdHealthCode([...newIcdHealthCode, event.target.value]);
+  }
+
+  const handleFamilyHistoryChange = (event) => {
+    setNewFamilyHistory([event.target.value]);
+  }
+  /*
+ 
   const handleDoctorVisitsChange = (event) => {
     setNewDoctorVisits(event.target.value);
   }
@@ -128,9 +223,17 @@ function PatientDetails() {
     setNewCurrentlyEmployed(event.target.value);
   }
 
+  const handleStudyChange = (event) => {
+        const value = event.target.value;
+        setStudy(value);
+    };
+    
+
   // this function will update the patients information that is linked the the update button
   const handleUpdate = async () => {
     
+    
+
     const response = await entities.patient.update({
 
         _id: id,
@@ -142,11 +245,16 @@ function PatientDetails() {
         address: newAddress,
         currentlyInsured: newCurrentlyInsured,
         currentlyEmployed: newCurrentlyEmployed,
-        allergies: newAllergies,
+        familyHistory: newFamilyHistory, 
+        study: study,
         
 
     })
     console.log(response);
+
+    await new Promise((resolve) => setTimeout(resolve, 1000));
+
+    window.location.reload();
 
   }
  
@@ -160,18 +268,61 @@ function PatientDetails() {
             <Header title="PATIENT DETAILS" subtitle="Edit/Update Information" />
           </Box>
 
-          <Box mt='5px'> 
+          <Box 
+            width="100%"
+            display="flex"
+            justifyContent="space-between"
+            alignItems="center"
+          > 
             <Link to="/JaneHopkins/patient" style={{ textDecoration: "none"}}>
               <ColorButton size='large' variant="contained"> Back </ColorButton>
             </Link>
+            {Studies && Studies.items && ( <>
+             <FormControl style={{ width: 200}}>
+                <InputLabel style={{ color:"secondary" }}>{patient.study == null ? "Study" : patient.study}</InputLabel>
+              <Select
+                label="Study"
+                width="100"
+                onChange={handleStudyChange}
+              >  
+              <MenuItem value=""></MenuItem>
+                {Studies.items.map((study, index) => (
+                    <MenuItem key={study.studyName} value={study.studyName}>
+                        {study.studyName}
+                    </MenuItem>
+                ))}
+                </Select>
+                </FormControl> 
+                </>
+                )}         
+            <DeleteButton id={patient?._id} onDelete={handleDelete} />
             
           </Box>
 
-          <Box ml="225px" mr="200px">
-
-
-            <Box mr="100px" sx={{display: 'flex', justifyContent: 'center' }} mb='20px'>
-
+          <Grid
+            mt="20px"
+            container
+            rowSpacing={2}
+            columnSpacing={{xs: 1, sm: 2, md: 3, lg: 4}}
+            justifyContent="center"
+          >
+            <Grid
+              item
+              xs={12}
+              sm={12}
+              md={12}
+              lg={12}
+              xl={12}
+              component="form"
+              sx={{
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center',
+                '& .MuiTextField-root': { m: 1, width: '100%' },
+              }}
+              noValidate
+              autoComplete="off"
+            >
               <img
                 alt="profile-user"
                 width="100px"
@@ -179,6 +330,483 @@ function PatientDetails() {
                 src={patient.patientPicture}
                 style={{cursor: "pointer", borderRadius: "50%"}}                                 
               />
+
+            </Grid>
+
+            <Grid
+              item
+              xs={12}
+              sm={6}
+              md={4}
+              component="form"
+              sx={{
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center',
+                '& .MuiTextField-root': { m: 1, width: '100%' },
+              }}
+              noValidate
+              autoComplete="off"
+            >
+              <TextField
+                  id="outlined-read-only-input"
+                  label="Name"
+                  color='secondary'
+                  defaultValue={patient.name}
+                  InputProps={{
+                    readOnly: true,
+                  }}
+                  variant="filled"
+              /> 
+
+            </Grid>
+
+            <Grid
+              item
+              xs={12}
+              sm={6}
+              md={4}
+              component="form"
+              sx={{
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center',
+                '& .MuiTextField-root': { m: 1, width: '100%' },
+              }}
+              noValidate
+              autoComplete="off"
+            >
+              <TextField
+                  id="outlined-read-only-input"
+                  label="DOB"
+                  color='secondary'
+                  defaultValue={patient.dob}
+                  InputProps={{
+                    readOnly: true,
+                  }}
+                  variant="filled"
+                /> 
+
+            </Grid>
+            <Grid
+              item
+              xs={12}
+              sm={6}
+              md={4}
+              component="form"
+              sx={{
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center',
+                '& .MuiTextField-root': { m: 1, width: '100%' },
+              }}
+              noValidate
+              autoComplete="off"
+            >
+              <TextField
+                  id="outlined-read-only-input"
+                  label="Insurance Number"
+                  color='secondary'
+                  defaultValue={patient.insuranceNumber}
+                  onChange={handleInsuranceChange}
+                  variant="filled"
+                /> 
+            </Grid>
+
+            <Grid
+              item
+              xs={12}
+              sm={6}
+              md={4}
+              component="form"
+              sx={{
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center',
+                '& .MuiTextField-root': { m: 1, width: '100%' },
+              }}
+              noValidate
+              autoComplete="off"
+            >
+              <TextField
+                  id="outlined-read-only-input"
+                  label="Height"
+                  color='secondary'
+                  defaultValue={patient.height}
+                  InputProps={{
+                    readOnly: true,
+                  }}
+                  variant="filled"
+                /> 
+            </Grid>
+
+            <Grid
+              item
+              xs={12}
+              sm={6}
+              md={4}
+              component="form"
+              sx={{
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center',
+                '& .MuiTextField-root': { m: 1, width: '100%' },
+              }}
+              noValidate
+              autoComplete="off"
+            >
+              <TextField
+                  id="outlined-read-only-input"
+                  label="Weight"
+                  color="secondary"
+                  defaultValue={patient.weight}
+                  onChange={handleWeightChange}
+                  variant="filled"
+                />
+            </Grid>
+
+            <Grid
+              item
+              xs={12}
+              sm={6}
+              md={4}
+              component="form"
+              sx={{
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center',
+                '& .MuiTextField-root': { m: 1, width: '100%' },
+              }}
+              noValidate
+              autoComplete="off"
+            >
+              <TextField
+                  id="outlined-read-only-input"
+                  label="Blood Pressure"
+                  color='secondary'
+                  defaultValue={patient.bloodPressure}
+                  onChange={handleBloodPressureChange}
+                  variant="filled"
+                /> 
+
+            </Grid>
+
+            <Grid
+              item
+              xs={12}
+              sm={6}
+              md={4}
+              component="form"
+              sx={{
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center',
+                '& .MuiTextField-root': { m: 1, width: '100%' },
+              }}
+              noValidate
+              autoComplete="off"
+            >
+              <TextField
+                  id="outlined-read-only-input"
+                  label="Blood Type"
+                  color='secondary'
+                  defaultValue={patient.bloodType}
+                  InputProps={{
+                    readOnly: true,
+                  }}
+                  variant="filled"
+                />
+            </Grid>
+
+            <Grid
+              item
+              xs={12}
+              sm={6}
+              md={4}
+              component="form"
+              sx={{
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center',
+                '& .MuiTextField-root': { m: 1, width: '100%' },
+              }}
+              noValidate
+              autoComplete="off"
+            >
+              <TextField
+                  id="outlined-read-only-input"
+                  label="Temperature"
+                  color='secondary'
+                  defaultValue={patient.temperature}
+                  onChange={handleTemperatureChange}
+                  variant="filled"
+                
+                />
+            </Grid>
+
+            <Grid
+              item
+              xs={12}
+              sm={6}
+              md={4}
+              component="form"
+              sx={{
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center',
+                '& .MuiTextField-root': { m: 1, width: '100%' },
+              }}
+              noValidate
+              autoComplete="off"
+            >
+              <TextField
+                  id="outlined-read-only-input"
+                  label="Oxygen Saturation"
+                  color='secondary'
+                  defaultValue={patient.oxygenSaturation}
+                  onChange={handleOxygenSaturationChange}
+                  variant="filled"
+                />
+            </Grid>
+
+            <Grid
+              item
+              xs={12}
+              sm={6}
+              md={4}
+              component="form"
+              sx={{
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center',
+                '& .MuiTextField-root': { m: 1, width: '100%' },
+              }}
+              noValidate
+              autoComplete="off"
+            >
+              <TextField
+                  id="outlined-read-only-input"
+                  label="UUID"
+                  color='secondary'
+                  defaultValue={patient.uuid}
+                  InputProps={{
+                    readOnly: true,
+                  }}
+                  variant="filled"
+                />
+            </Grid>
+
+            <Grid
+              item
+              xs={12}
+              sm={6}
+              md={4}
+              component="form"
+              sx={{
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center',
+                '& .MuiTextField-root': { m: 1, width: '100%' },
+              }}
+              noValidate
+              autoComplete="off"
+            >
+              <TextField
+                  id="outlined-read-only-input"
+                  label="Address"
+                  color='secondary'
+                  defaultValue={patient.address}
+                  onChange={handleAddressChange}
+                  variant="filled"
+                />
+            </Grid>
+            <Grid
+              item
+              xs={12}
+              sm={6}
+              md={4}
+              component="form"
+              sx={{
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center',
+                '& .MuiTextField-root': { m: 1, width: '100%' },
+              }}
+              noValidate
+              autoComplete="off"
+            >
+              <TextField
+                  id="outlined-read-only-input"
+                  label="Family History"
+                  color='secondary'
+                  defaultValue={patient.familyHistory}
+                  onChange={handleFamilyHistoryChange}
+                  variant="filled"
+                />
+            </Grid>
+
+            <Grid
+              item
+              xs={12}
+              sm={6}
+              md={4}
+              component="form"
+              sx={{
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center',
+                '& .MuiTextField-root': { m: 1, width: '100%' },
+              }}
+              noValidate
+              autoComplete="off"
+            >
+              <TextField
+                  id="outlined-read-only-input"
+                  label="Allergies"
+                  color='secondary'
+                  defaultValue={patient.allergies && patient.allergies.map(allergy => JSON.stringify(allergy)).join(', ')}
+                  onChange={handleAllergyChange}
+                  variant="filled"
+                />
+            </Grid>
+
+            <Grid
+              item
+              xs={12}
+              sm={6}
+              md={4}
+              component="form"
+              sx={{
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center',
+                '& .MuiTextField-root': { m: 1, width: '100%' },
+              }}
+              noValidate
+              autoComplete="off"
+            >
+              <TextField
+                  id="outlined-read-only-input"
+                  label="Current Medication"
+                  color='secondary'
+                  defaultValue={patient.currentMedications && patient.currentMedications.map(meds => JSON.stringify(meds)).join(', ')}
+                  onChange={handleMedicationChange}
+                  variant="filled"
+                />
+            </Grid>
+
+            <Grid
+              item
+              xs={12}
+              sm={6}
+              md={4}
+              component="form"
+              sx={{
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center',
+                '& .MuiTextField-root': { m: 1, width: '100%' },
+              }}
+              noValidate
+              autoComplete="off"
+            >
+              <TextField
+                  id="outlined-read-only-input"
+                  label="ICD Health Code"
+                  color='secondary'
+                  defaultValue={patient.icdHealthCodes && patient.icdHealthCodes.map(codes => JSON.stringify(codes)).join(', ')}
+                  onChange={handleICDHealthCodeChange}
+                  variant="filled"
+                />
+            </Grid>
+            <Grid
+              item
+              xs={12}
+              sm={6}
+              md={4}
+              component="form"
+              sx={{
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center',
+                '& .MuiTextField-root': { m: 1, width: '100%' },
+              }}
+              noValidate
+              autoComplete="off"
+            >
+              <TextField
+                  id="filled-number"
+                  label="Doctor Visits"
+                  type="number"
+                  color='secondary'
+                  defaultValue=""
+                  InputLabelProps={{
+                    shrink: true,
+                  }}
+                  variant="filled"
+                />
+            </Grid>
+            
+            <Grid
+              item
+              xs={12}
+              sm={6}
+              md={4}
+              component="form"
+              sx={{
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center',
+                '& .MuiTextField-root': { m: 1, width: '100%' },
+              }}
+              noValidate
+              autoComplete="off"
+            >
+
+              <TextField
+                  id="outlined-read-only-input"
+                  label="Currently Insured"
+                  color='secondary'
+                  onChange={handleCurrentlyInsuredChange}
+                  InputProps={{
+                    readOnly: true,
+                  }}
+                  defaultValue={patient.currentlyInsured}
+                  variant="filled"
+                />
+            </Grid>
+            <Grid
+              item
+              xs={12}
+              sm={6}
+              md={4}
+              component="form"
+              sx={{
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center',
+                '& .MuiTextField-root': { m: 1, width: '100%' },
+              }}
+              noValidate
+              autoComplete="off"
+            >
+              <TextField
+                  id="outlined-read-only-input"
+                  label="Currently Employed"
+                  color='secondary'
+                  onChange={handleCurrentlyEmployedChange}
+                  InputProps={{
+                    readOnly: true,
+                  }}
+                  defaultValue={patient.currentlyEmployed}
+                  variant="filled"
+                />
+            </Grid>
+            
+          </Grid>
+          <Box ml="225px" mr="200px">
+
+            <Box mr="100px" sx={{display: 'flex', justifyContent: 'center' }} mb='20px'>
 
             </Box>
 
@@ -191,163 +819,7 @@ function PatientDetails() {
                 noValidate
                 autoComplete="off"
               >
-                <TextField
-                  id="outlined-read-only-input"
-                  label="Name"
-                  color='secondary'
-                  defaultValue={patient.name}
-                  InputProps={{
-                    readOnly: true,
-                  }}
-                  variant="filled"
-                /> 
-                <TextField
-                  id="outlined-read-only-input"
-                  label="DOB"
-                  color='secondary'
-                  defaultValue={patient.dob}
-                  InputProps={{
-                    readOnly: true,
-                  }}
-                  variant="filled"
-                /> 
-                <TextField
-                  id="outlined-read-only-input"
-                  label="Insurance Number"
-                  color='secondary'
-                  defaultValue={patient.insuranceNumber}
-                  onChange={handleInsuranceChange}
-                  variant="filled"
-                /> 
-                <TextField
-                  id="outlined-read-only-input"
-                  label="Height"
-                  color='secondary'
-                  defaultValue={patient.height}
-                  InputProps={{
-                    readOnly: true,
-                  }}
-                  variant="filled"
-                /> 
-
-                <TextField
-                  id="outlined-read-only-input"
-                  label="Weight"
-                  color="secondary"
-                  defaultValue={patient.weight}
-                  onChange={handleWeightChange}
-                  variant="filled"
-                />
-
-                <TextField
-                  id="outlined-read-only-input"
-                  label="Blood Pressure"
-                  color='secondary'
-                  defaultValue={patient.bloodPressure}
-                  onChange={handleBloodPressureChange}
-                  variant="filled"
-                /> 
-                <TextField
-                  id="outlined-read-only-input"
-                  label="Blood Type"
-                  color='secondary'
-                  defaultValue={patient.bloodType}
-                  InputProps={{
-                    readOnly: true,
-                  }}
-                  variant="filled"
-                />
-
-                <TextField
-                  id="outlined-read-only-input"
-                  label="Temperature"
-                  color='secondary'
-                  defaultValue={patient.temperature}
-                  onChange={handleTemperatureChange}
-                  variant="filled"
-                
-                />
-                <TextField
-                  id="outlined-read-only-input"
-                  label="Oxygen Saturation"
-                  color='secondary'
-                  defaultValue={patient.oxygenSaturation}
-                  onChange={handleOxygenSaturationChange}
-                  variant="filled"
-                />
-                <TextField
-                  id="outlined-read-only-input"
-                  label="UUID"
-                  color='secondary'
-                  defaultValue={patient.uuid}
-                  InputProps={{
-                    readOnly: true,
-                  }}
-                  variant="filled"
-                />
-                <TextField
-                  id="outlined-read-only-input"
-                  label="Address"
-                  color='secondary'
-                  defaultValue={patient.address}
-                  onChange={handleAddressChange}
-                  variant="filled"
-                />
-                <TextField
-                  id="outlined-read-only-input"
-                  label="Allergies"
-                  color='secondary'
-                  defaultValue=""
-                  variant="filled"
-                />
-                <TextField
-                  id="outlined-read-only-input"
-                  label="Current Medication"
-                  color='secondary'
-                  defaultValue=""
-                  variant="filled"
-                />
-                <TextField
-                  id="outlined-read-only-input"
-                  label="ICD Health Code"
-                  color='secondary'
-                  defaultValue=""
-                  variant="filled"
-                />
-                <TextField
-                  id="filled-number"
-                  label="Doctor Visits"
-                  type="number"
-                  color='secondary'
-                  defaultValue=""
-                  InputLabelProps={{
-                    shrink: true,
-                  }}
-                  variant="filled"
-                />
-                <TextField
-                  id="outlined-read-only-input"
-                  label="Currently Insured"
-                  color='secondary'
-                  onChange={handleCurrentlyInsuredChange}
-                  InputProps={{
-                    readOnly: true,
-                  }}
-                  defaultValue={patient.currentlyInsured}
-                  variant="filled"
-                />
-                <TextField
-                  id="outlined-read-only-input"
-                  label="Currently Employed"
-                  color='secondary'
-                  onChange={handleCurrentlyEmployedChange}
-                  InputProps={{
-                    readOnly: true,
-                  }}
-                  defaultValue={patient.currentlyEmployed}
-                  variant="filled"
-                />
-                
+               
               </Box>
           </Box>
           
@@ -358,7 +830,9 @@ function PatientDetails() {
   </Box>
   
       ) : (
-        <p>Loading</p>
+
+        <p>Loading...</p>
+        
       )}
     </div>
   );

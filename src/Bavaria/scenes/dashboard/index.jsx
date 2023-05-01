@@ -1,83 +1,183 @@
-import {Box, Typography, useTheme} from "@mui/material";
-import { tokens } from "../../theme";
+import { useState, useEffect } from "react";
+import useBavaria from "../../../vendiaHooks/useBavaria";
+import { Box, Button, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TextField, Typography, CircularProgress } from "@mui/material";
+import TrialProgress from "../trialProgress";
 
-import Header from "../../components/Header";
-import ContactsOutlinedIcon from "@mui/icons-material/ContactsOutlined";
-import VaccinesIcon from '@mui/icons-material/Vaccines';
-import ReceiptOutlinedIcon from "@mui/icons-material/ReceiptOutlined";
-import * as React from 'react';
-//import StatBox from "../../components/StatBox";
+
 
 const BavariaDashboard = () => {
+  
+  const [studies, setStudies] = useState([]);
+  const [studyList, setStudyList] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
 
-  const theme = useTheme();
-  const colors = tokens(theme.palette.mode);
+  const { entities } = useBavaria();
+  //console.log(entities.study);
 
+
+  useEffect(() => {
+
+    async function fetchStudy() {
+
+      try {
+        setIsLoading(true);
+        const response = await entities.study.list();
+        console.log(response);
+    
+       
+        setStudies(response.items.map((study, index) => ({
+          ...study, 
+          id: index + 1,
+        })));
+
+        setIsLoading(false);
+        
+      } catch(error) {
+        console.log(error);
+        setIsLoading(false);
+      }
+    }
+
+    const timeoutId = setTimeout(() => {
+      setIsLoading(false); // Hide the spinner after 1 second
+    }, 3000);
+
+    fetchStudy();
+
+    return () => {
+      clearTimeout(timeoutId); // Clear the timeout if the component unmounts before it fires
+    };
+
+
+   
+  }, [entities.study]);
+ 
+
+  
 
   return (
-    <Box m="20px">
 
-        <Box display = "flex" justifyContent="space-between" alignItems="center">
-            <Header title="DASHBOARD" subtitle="Welcome to your dashboard" />
+    
+    <Box m={4}>
+
+      {isLoading ? (
+        <Box
+          display="flex"
+          alignItems="center"
+          justifyContent="center"
+          height="100vh"
+        >
+          <CircularProgress/>
         </Box>
         
-        <Box
-          display="grid"
-          gridTemplateColumns="repeat(12, 1fr)"
-          gridAutoRows="140px"
-          gap="20px"
-          justifyContent="center"
-        >
-          {/*Row 1 */}
+      ) : (
+      
+        <Box>
 
-          <Box 
-            gridColumn="span 4" 
-            backgroundColor={colors.primary[400]} 
-            display="flex" 
-            alignItems="center"
-            justifyContent="center"
-            borderRadius={5}
-          >
-            <VaccinesIcon sx={{color: colors.blueAccent[500]}}/>
-            <Typography variant='h5' p={1}>
-              Send Batch of Drugs
-            </Typography>
-        
+          <Typography variant="h4" gutterBottom>
+            Drug Trial Progress
+          </Typography>
+          <Box display="flex" flexDirection="row" flexWrap="wrap" justifyContent="space-between" mb={4}>
+            <Box width="30%" p={2} boxShadow={1} borderRadius={2}>
+              <Typography variant="h6" gutterBottom>
+                Created Studies
+              </Typography>
+              <Typography variant="h4">
+                {studies.filter(study => study.status === "Created").length}
+              </Typography>
+            </Box>
+            <Box width="30%" p={2} boxShadow={1} borderRadius={2}>
+              <Typography variant="h6" gutterBottom>
+                Active Studies
+              </Typography>
+              <Typography variant="h4">
+                {studies.filter(study => study.status === "In Progress").length}
+              </Typography>
+            </Box>
+            <Box width="30%" p={2} boxShadow={1} borderRadius={2}>
+              <Typography variant="h6" gutterBottom>
+                Complete Studies
+              </Typography>
+              <Typography variant="h4">
+                {studies.filter(study => study.status === "Complete").length}
+              </Typography>
+            </Box>
           </Box>
 
-          <Box 
-            gridColumn="span 4" 
-            backgroundColor={colors.primary[400]} 
-            display="flex"  
-            alignItems="center"
-            justifyContent="center" 
-            borderRadius={5}
-          >
-            <ContactsOutlinedIcon sx={{color: colors.blueAccent[500]}}/>
-            <Typography variant='h5' p={1}>
-               Monitor Study Progress
-            </Typography>
+          <Box width="100%" mt={4}>
+            <TableContainer component={Paper}>
+              <Table>
+                <TableHead>
+                  <TableRow>
+                    <TableCell style={{fontWeight: 'bold'}}>Study Name</TableCell>
+                    <TableCell style={{fontWeight: 'bold'}}>Status</TableCell>
+                    <TableCell style={{fontWeight: 'bold'}}>Start Date</TableCell>
+                    <TableCell style={{fontWeight: 'bold'}}>End Date</TableCell>
+                    <TableCell style={{fontWeight: 'bold'}}>Approved by Bavaria</TableCell>
+                    <TableCell style={{fontWeight: 'bold'}}>Approved by FDA</TableCell>
+                    <TableCell style={{fontWeight: 'bold'}}></TableCell>
+                  </TableRow>
+                </TableHead>
+                <TableBody>
+                  {studies.map(study => (
+                    <TableRow key={study._id}>
+                      <TableCell>{study.studyName}</TableCell>
+                      <TableCell>
+                        {study.status}
+                        
+                      </TableCell>
+                      <TableCell>
+                        {study.startDate}
+                      </TableCell>
+                      <TableCell>
+                        {study.endDate}
+                      </TableCell>
+                      <TableCell>
+                        Yes
+                      </TableCell>
+                      <TableCell>
+                        {study.status !== "Created" && study.status !== "Cancelled" ? "Yes" : "No"}
+                      </TableCell>
+                      <TableCell>
+                        <Button variant="outlined" color="primary">
+                          View Report
+                        </Button>
+                      </TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            </TableContainer>
+
+          </Box>
           
-          </Box>
+          <Box mt='50px'>
 
-          <Box 
-            gridColumn="span 4" 
-            backgroundColor={colors.primary[400]} 
-            display="flex" 
-            alignItems="center"
-            justifyContent="center"
-            borderRadius={5}
-          >
-            <ReceiptOutlinedIcon sx={{color: colors.blueAccent[500]}}/>
-            <Typography variant='h5' p={1}>
-              Generate Post Trial Report
+            <Typography variant="h4" gutterBottom>
+              Clinical Trails Progress 
             </Typography>
 
+            {studies.some(study => study.fdaApproved === true) ? "No current trials, awaiting FDA approval..." :  <TrialProgress />}
           </Box>
-        </Box> 
+            
+
+          
+
+          
+
+        </Box>
         
+        
+
+      )}
+
+      
+      
     </Box>
-  )
-}
+  );
+};
 
 export default BavariaDashboard;
+
+
+
