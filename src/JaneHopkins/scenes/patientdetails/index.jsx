@@ -15,6 +15,10 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 //import avatar from "../../pictures/squiliem.jpeg"
+import FormControl from '@mui/material/FormControl';
+import Select, { SelectChangeEvent } from '@mui/material/Select';
+import InputLabel from '@mui/material/InputLabel';
+import MenuItem from '@mui/material/MenuItem';
 
 function PatientDetails() {
 
@@ -26,6 +30,7 @@ function PatientDetails() {
   const { id } = useParams();
   const { entities } = useJaneHopkins();
   const [patient, setPatient] = useState(null);
+  const [Studies, setStudies] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
   
 
@@ -101,6 +106,7 @@ function PatientDetails() {
   //const [newDoctorVisits, setNewDoctorVisits] = useState([]);
   const [newCurrentlyInsured, setNewCurrentlyInsured] = useState("");
   const [newCurrentlyEmployed, setNewCurrentlyEmployed] = useState("");
+  const [study, setStudy] = useState("");
 
   const ColorButton = styled(Button)(({ theme }) => ({
     color: theme.palette.getContrastText(purple[500]),
@@ -144,6 +150,10 @@ function PatientDetails() {
           }
           
           //console.log(newAllergies);
+          setStudy(response.study);
+
+
+          setStudies(await entities.study.list());
       }
       catch(error){
           console.log(error);
@@ -213,6 +223,12 @@ function PatientDetails() {
     setNewCurrentlyEmployed(event.target.value);
   }
 
+  const handleStudyChange = (event) => {
+        const value = event.target.value;
+        setStudy(value);
+    };
+    
+
   // this function will update the patients information that is linked the the update button
   const handleUpdate = async () => {
     
@@ -230,6 +246,7 @@ function PatientDetails() {
         currentlyInsured: newCurrentlyInsured,
         currentlyEmployed: newCurrentlyEmployed,
         familyHistory: newFamilyHistory, 
+        study: study,
         
 
     })
@@ -260,7 +277,24 @@ function PatientDetails() {
             <Link to="/JaneHopkins/patient" style={{ textDecoration: "none"}}>
               <ColorButton size='large' variant="contained"> Back </ColorButton>
             </Link>
-
+            {Studies && Studies.items && ( <>
+             <FormControl style={{ width: 200}}>
+                <InputLabel style={{ color:"secondary" }}>{patient.study == null ? "Study" : patient.study}</InputLabel>
+              <Select
+                label="Study"
+                width="100"
+                onChange={handleStudyChange}
+              >  
+              <MenuItem value=""></MenuItem>
+                {Studies.items.map((study, index) => (
+                    <MenuItem key={study.studyName} value={study.studyName}>
+                        {study.studyName}
+                    </MenuItem>
+                ))}
+                </Select>
+                </FormControl> 
+                </>
+                )}         
             <DeleteButton id={patient?._id} onDelete={handleDelete} />
             
           </Box>

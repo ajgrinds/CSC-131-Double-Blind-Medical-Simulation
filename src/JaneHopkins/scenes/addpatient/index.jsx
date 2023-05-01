@@ -153,7 +153,6 @@ function AddPatient() {
 
      const handleStudyChange = (event) => {
         const value = event.target.value;
-        
         setStudy(value);
     };
     
@@ -185,6 +184,7 @@ function AddPatient() {
         currentMedications: medsArray,
         currentlyEmployed: currentlyEmployed, 
         currentlyInsured: currentlyInsured,
+        study: study
        
       },
       {
