@@ -203,11 +203,11 @@ const FDAStudy = () => {
               </div>
             );
           }
+          //else if (cellValues.row.status === "In Progress")
+         // {
+         //   return <span style={{ color: "primary" }}>In Progress</span>
+         // }
           else if (cellValues.row.status === "In Progress")
-          {
-            return <span style={{ color: "primary" }}>In Progress</span>
-          }
-          else if (cellValues.row.status === "Awaiting Results")
           {
             return (<div style={{ display: "flex", gap: "10px" }}>
                 <Button
