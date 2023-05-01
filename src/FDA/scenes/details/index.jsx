@@ -111,7 +111,9 @@ const FDADetails = () => {
                   eq: study,
                 }
           }
+
         });
+        console.log(response)
         setPatientList(
           response.items.map((patient, index) => ({
             id: index + 1,
