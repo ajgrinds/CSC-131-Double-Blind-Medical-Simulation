@@ -21,6 +21,7 @@ const FDAStudy = () => {
   const navigate = useNavigate();
 
   const [patientList, setPatientList] = useState([]);
+  const [allPatients, setAllPatients] = useState([]);
 
   useEffect(() => {
     async function fetchData() {
@@ -33,7 +34,8 @@ const FDAStudy = () => {
             ...study,
           }))
         );
-  
+        setAllPatients(await entities.patient.list())
+        console.log(allPatients)
       } catch (error) {
         console.log(error);
       } finally {
@@ -125,6 +127,14 @@ const FDAStudy = () => {
         headerName: "Status",
         flex: 1,
         sortComparator: statusComparator
+      },
+      { 
+        field: "participants",
+        headerName: "Particiapnts",
+        flex: 1,
+        renderCell: (cellValues) => {
+          return <span>{allPatients.items.filter((item) => item.study == cellValues.row.studyName).length}</span>;
+        }
       },
       { field: "startDate", headerName: "Start Date", flex: 1 },
       { field: "endDate", headerName: "End Date", flex: 1 },

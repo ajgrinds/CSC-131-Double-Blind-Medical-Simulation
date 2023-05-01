@@ -45,7 +45,6 @@ const Patient = () =>{
                 setPatientList(response.items.map((patient, index) => ({
                     ...patient,
                     id: index + 1,
-
                 })));
                 setStudies(await entities.study.list());
             } catch(error){
