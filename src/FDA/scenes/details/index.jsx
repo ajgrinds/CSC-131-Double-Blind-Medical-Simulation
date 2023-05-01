@@ -142,7 +142,7 @@ const FDADetails = () => {
           setDrugID(response.drugId);
           setPlaceboID(response.placeboId);
 
-          getPatients(response._id);
+          getPatients(response.studyName);
       }
       catch(error){
           console.log(error);

@@ -62,7 +62,11 @@ const Patient = () =>{
     
 
     const columns = [
-
+        {   
+            field: "uuid", 
+            headerName: "UUID",
+            flex:1,           
+        }, 
         {
             field: "study", 
             headerName: "Study",
@@ -70,12 +74,13 @@ const Patient = () =>{
             renderCell: (params) => (
                 <FormControl fullWidth>
                   <Select
-                    defaultValue={params.row.study}
+                    defaultValue={params.row.study == null ? "" : params.row.study}
                     label="Study"
+                    value={params.row.study == null ? "" : params.row.study}
                     onChange={(event) => handleChange(event, params.row)}
                   >  
                     {Studies.items.map((study, index) => (
-                        <MenuItem key={study.studyName} value={study.studyName}>
+                        <MenuItem key={index+1} value={study.studyName}>
                             {study.studyName}
                         </MenuItem>
                     ))}
@@ -83,11 +88,6 @@ const Patient = () =>{
                 </FormControl>
             )
         },
-        {   
-            field: "uuid", 
-            headerName: "UUID",
-            flex:1,           
-        }, 
         {
             field: "name", 
             headerName: "Name", 
@@ -159,7 +159,11 @@ const Patient = () =>{
                 {isLoading ? (
                     <Box>Loading...</Box>
                 ) : (
-                    <DataGrid rows={patientList} columns={columns}/>
+                    <DataGrid rows={patientList} columns={columns} initialState={{
+                        sorting: {
+                          sortModel: [{ field: 'study', sort: 'desc' }],
+                        },
+                      }}/>
                 )}
                 
             </Box>
