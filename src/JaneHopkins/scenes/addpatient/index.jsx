@@ -11,6 +11,11 @@ import Button from '@mui/material/Button';
 import ButtonGroup from '@mui/material/ButtonGroup';
 import { styled } from '@mui/material/styles';
 import { purple } from '@mui/material/colors';
+import InputLabel from '@mui/material/InputLabel';
+import MenuItem from '@mui/material/MenuItem';
+
+import FormControl from '@mui/material/FormControl';
+import Select, { SelectChangeEvent } from '@mui/material/Select';
 
 
 function AddPatient() {
@@ -22,6 +27,25 @@ function AddPatient() {
     const smScreen = useMediaQuery(theme.breakpoints.up("sm"));
 
     const [patient, setPatient] = useState(null);
+    const [Studies, setStudies] = useState(null);
+
+
+    useEffect(() => {
+        async function fetchData() {
+
+            try{
+                setStudies(await entities.study.list());
+                console.log(Studies)
+            } catch(error){
+                console.log(error);
+            } finally{
+                setIsLoading(false);
+            }
+        }
+
+        fetchData();
+        
+    }, [entities.study]);
 
     //patient entities
     const [name, setName] = useState("");
@@ -42,6 +66,8 @@ function AddPatient() {
     const [currentlyInsured, setCurrentlyInsured] = useState(""); 
     const [icdHealthCodes, setIcdHealthCodes] = useState([]); 
     const [allergies, setAllergies] = useState([]); 
+    const [study, setStudy] = useState("");
+
     
     const [visits, setVisits] = useState([]);
 
@@ -123,6 +149,12 @@ function AddPatient() {
       const medsArray = input.split(",").map((currMeds) => currMeds.trim());
 
       setCurrentMedication(medsArray);
+    };
+
+     const handleStudyChange = (event) => {
+        const value = event.target.value;
+        
+        setStudy(value);
     };
     
 
@@ -324,7 +356,24 @@ function AddPatient() {
               <ColorButton variant="contained" size="large">View All Patients</ColorButton>
             </Link>
 
-            
+            {Studies && ( <>
+             <FormControl style={{ width: 200}}>
+                <InputLabel>Study</InputLabel>
+              <Select
+                label="Study"
+                width="100"
+                onChange={handleStudyChange}
+              >  
+              <MenuItem value=""></MenuItem>
+                {Studies.items.map((study, index) => (
+                    <MenuItem key={study.studyName} value={study.studyName}>
+                        {study.studyName}
+                    </MenuItem>
+                ))}
+                </Select>
+                </FormControl> 
+                </>
+                )}         
             <ColorButton variant="contained" size="large" onClick={handleAddPatient}>Add Patient</ColorButton> 
            
         </Box>
@@ -814,7 +863,8 @@ function AddPatient() {
                 }}
                 variant="filled"
               />
-            </Grid>            
+
+            </Grid>     
           </Grid>
       </Box>
 
