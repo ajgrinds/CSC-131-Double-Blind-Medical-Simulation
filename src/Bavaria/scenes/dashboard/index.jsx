@@ -93,10 +93,10 @@ const BavariaDashboard = () => {
           <Box display="flex" flexDirection="row" flexWrap="wrap" justifyContent="space-between" mb={4}>
             <Box width="30%" p={2} boxShadow={1} borderRadius={2}>
               <Typography variant="h6" gutterBottom>
-                Pending Studies
+                Created Studies
               </Typography>
               <Typography variant="h4">
-                {studies.filter(study => study.status === "Pending").length}
+                {studies.filter(study => study.status === "Created").length}
               </Typography>
             </Box>
             <Box width="30%" p={2} boxShadow={1} borderRadius={2}>
@@ -104,7 +104,7 @@ const BavariaDashboard = () => {
                 Active Studies
               </Typography>
               <Typography variant="h4">
-                {studies.filter(study => study.status === "Active").length}
+                {studies.filter(study => study.status === "In Progress").length}
               </Typography>
             </Box>
             <Box width="30%" p={2} boxShadow={1} borderRadius={2}>
@@ -148,8 +148,8 @@ const BavariaDashboard = () => {
                       <TableCell style={{color: "green"}}>
                         yes
                       </TableCell>
-                      <TableCell style={{ color: study.fdaApproved ? 'green' : 'red' }}>
-                        {study.fdaApproved === true ? "Yes" : "No"}
+                      <TableCell>
+                        {study.status !== "Created" && study.status !== "Cancelled" ? "Yes" : "No"}
                       </TableCell>
                       <TableCell>
                         <Button 

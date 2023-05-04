@@ -113,6 +113,12 @@
                 }
               }
             }
+          },
+          "drug": {
+            "type": "string"
+          },
+          "study": {
+            "type": "string"
           }
         }
       }
