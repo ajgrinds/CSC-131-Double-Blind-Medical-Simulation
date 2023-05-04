@@ -6,7 +6,8 @@ const FinalReport = () => {
 
     const { entities } = useBavaria();
     const [studies, setStudies] = useState([]);
-
+    const [drugs, setDrugs] = useState([]);
+    
     const [isLoading, setIsLoading] = useState(false);
 
     useEffect(() =>{
@@ -19,7 +20,7 @@ const FinalReport = () => {
                 const response = await entities.study.list();
                 console.log(response);
 
-                setStudies(response.items.filter( study => study.studyName != null))
+                setStudies(response.items.filter( study => study.studyName === 'testFDA'))
                 setIsLoading(false);
 
 
@@ -30,18 +31,46 @@ const FinalReport = () => {
 
         }
 
+        async function fetchDrugs(){
+            try{
+
+                setIsLoading(true);
+                const response = await entities.drug.list();
+                console.log(response);
+
+                setDrugs(response.items.filter( drug => drug.batchNumber != null))
+                setIsLoading(false);
+
+
+            }catch(error){
+                console.log(error);
+                setIsLoading(false);
+            }
+        }
+
         const timeoutId = setTimeout(() => {
             setIsLoading(false); // Hide the spinner after 1 second
         }, 3000);
 
         fetchStudies();
+        fetchDrugs();
 
         return () => {
             clearTimeout(timeoutId); // Clear the timeout if the component unmounts before it fires
         };
 
-    }, [entities.study]);
+    }, [entities.study, entities.drug]);
 
+    function countDrugsWithIds(drugId, placeboId, drugs) {
+        return drugs.filter(drug => drug.id === drugId || drug.id === placeboId).length;
+    }
+
+    function countPlacebosWithIds( placeboId, drugs) {
+        return drugs.filter(drug => drug.id === placeboId).length;
+    }
+
+    const numDrugs = countDrugsWithIds('123', '321', drugs)
+    const numPlacebo = countPlacebosWithIds('321', drugs)
   return (
     
     <Box width="100%" mt={4}>
@@ -66,10 +95,11 @@ const FinalReport = () => {
                 <TableCell style={{fontWeight: 'bold'}}>Status</TableCell>
                 <TableCell style={{fontWeight: 'bold'}}>Start</TableCell>
                 <TableCell style={{fontWeight: 'bold'}}>End</TableCell>
-                <TableCell style={{fontWeight: 'bold'}}>Approved</TableCell>
+                <TableCell style={{fontWeight: 'bold'}}>Success</TableCell>
                 <TableCell style={{fontWeight: 'bold'}}>Drug ID</TableCell>
                 <TableCell style={{fontWeight: 'bold'}}>Placebo ID</TableCell>
-                <TableCell style={{fontWeight: 'bold'}}>Complete</TableCell>
+                <TableCell style={{fontWeight: 'bold'}}>Total # of Drugs</TableCell>
+                <TableCell style={{fontWeight: 'bold'}}># of Placebos</TableCell>
 
                 
                 <TableCell></TableCell>
@@ -100,7 +130,10 @@ const FinalReport = () => {
                     {study.placeboId}
                     </TableCell>
                     <TableCell>
-                    {study.studyComplete}
+                    {numDrugs}
+                    </TableCell>
+                    <TableCell>
+                    {numPlacebo}
                     </TableCell>
                 </TableRow>
                 ))}
