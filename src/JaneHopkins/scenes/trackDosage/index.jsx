@@ -67,7 +67,7 @@ const TrackDosage = () => {
                         variant="contained" 
                         style={{ backgroundColor: colors.blueAccent[600]}}                     
                     > 
-                        Dosage
+                        View
                     </Button>
                 </Link>     
             ),

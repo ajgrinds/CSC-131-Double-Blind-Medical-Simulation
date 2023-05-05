@@ -7,6 +7,7 @@ import Header from "../../components/Header";
 import useJaneHopkins from "../../../vendiaHooks/useJaneHopkins";
 import { styled } from '@mui/material/styles';
 import { purple } from '@mui/material/colors';
+import CheckIcon from '@mui/icons-material/Check';
 
 const StudyContent = () => {
 
@@ -78,19 +79,17 @@ const StudyContent = () => {
 
     }, [entities.study]);
 
-    const checkComplete = () => {
-     
-        patientList.map((patient) => {
-            if(patient.visits.length === 5){
-                setComplete(true);
-            }
-            else{
-                setComplete(false);
-            }
-        })
-        
+    useEffect(() => {
+        const checkComplete = () => {
+          const isComplete = patientList.every(patient => patient.visits.length === 5);
+          setComplete(isComplete);
+        };
+      
+        checkComplete();
+      }, [patientList]);
+      
 
-    }
+    
 
     const columns = [
 
@@ -124,14 +123,7 @@ const StudyContent = () => {
             width: 150,
             renderCell: (params) => (
                 
-                <Button 
-
-                    variant="contained" 
-                    style={{ backgroundColor: colors.blueAccent[600]}} 
-                    
-                > 
-                    ELIGIBLE
-                </Button>
+                <CheckIcon/>
                      
             ),
         },

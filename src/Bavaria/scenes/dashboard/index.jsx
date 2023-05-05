@@ -148,7 +148,7 @@ const BavariaDashboard = () => {
                       <TableCell style={{color: "green"}}>
                         yes
                       </TableCell>
-                      <TableCell>
+                      <TableCell style={{color: study.status !== "Create" && study.status != "Cancelled" ? "green" : "red"}}>
                         {study.status !== "Created" && study.status !== "Cancelled" ? "Yes" : "No"}
                       </TableCell>
                       <TableCell>
