@@ -114,17 +114,6 @@ const Login = () => {
     return (
       <ThemeProvider theme={theme}>
         <CssBaseline />
-        <div
-          style={{
-            position: "fixed",
-            top: 0,
-            left: 0,
-            width: "100%",
-            height: "100%",
-            backgroundColor: "rgba(0, 20, 160, 0.6)",
-            zIndex: -1,
-          }}
-        ></div>
         <Container component="main" maxWidth="md">
           <Dialog open={true} maxWidth={"md"} fullWidth>
             <Fade in={true} timeout={1000}>
@@ -136,14 +125,41 @@ const Login = () => {
                 }}
               >
                 <Grid container height="100%">
-                  <Hidden xsDown>
-                    <Grid item sm={6} style={{ backgroundColor: "#f5f5f5" }}>
-                      <img
-                        src={SquiliemImage}
-                        alt="Your image"
-                        style={{ width: "100%", height: "100%" }}
-                      />
-                    </Grid>
+                <Hidden smDown>
+                <Grid item sm={6} style={{ backgroundColor: "#f5f5f5", position: "relative" }}>
+                  <img
+                    src={SquiliemImage}
+                    alt="Your image"
+                    style={{ width: "100%", height: "100%" }}
+                  />
+                  <Box
+                    sx={{
+                      position: "absolute",
+                      top: "10%",
+                      left: "36%",
+                      transform: "translate(-50%, -50%)",
+                    }}
+                  >
+                    <Typography
+                      variant="h3"
+                      color="#FFFFFF"
+                      align="center"
+                      fontWeight="bold"
+                      style={{ textShadow: "2px 2px 4px rgba(0, 0, 0, 0.5)" }}
+                    >
+                      Pharmastudy
+                    </Typography>
+                    <Typography
+                      variant="h6"
+                      color="#FFFFFF"
+                      align="flex-start"
+                      fontWeight="semi-bold"
+                      style={{ textShadow: "1px 1px 2px rgba(0, 0, 0, 0.5)" }}
+                    >
+                      Jane Hopkins - FDA - Bavaria
+                    </Typography>
+                  </Box>
+                </Grid>
                   </Hidden>
                   <Grid item xs={12} sm={6}>
                     <Box
@@ -151,7 +167,7 @@ const Login = () => {
                         display: "flex",
                         flexDirection: "column",
                         alignItems: "center",
-                        bgcolor: "#FFFFF",
+                        bgcolor: "#FFFFFF",
                         borderRadius: "0px",
                         border: 1,
                         borderColor: "white",
@@ -160,7 +176,7 @@ const Login = () => {
                         overflowY: "auto", // Make the content scrollable on mobile devices
                       }}
                     >
-                    <AccountCircleIcon sx={{ fontSize: 100, mt: 3, mb: 2 }} />
+                    <AccountCircleIcon sx={{ fontSize: 100, mt: 1 }} />
                     <Typography
                       component="h1"
                       variant="h5"
