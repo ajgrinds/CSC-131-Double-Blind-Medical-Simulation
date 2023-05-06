@@ -1,8 +1,8 @@
-import { useEffect, useState, useContext } from "react";
+import { useEffect, useState } from "react";
 import { createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged, signOut } from "firebase/auth";
-import { auth } from "../../firebase-config";
+import { auth } from "./firebase-config";
 import Button from "@mui/material/Button";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import * as React from 'react';
 import Avatar from '@mui/material/Avatar';
 import CssBaseline from '@mui/material/CssBaseline';
@@ -15,8 +15,6 @@ import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
-import AccountCircleIcon from '@mui/icons-material/AccountCircle';
-import { UseGiveAuth, UpdateAuthState, UseAuth, UseAuthType, useTakeauth, UseTakeAuth } from "../../context/AuthContext";
 
 const Login = () =>  {
 
@@ -24,21 +22,28 @@ const Login = () =>  {
     const[registerPassword, setRegisterPassword] = useState("");
     const[loginEmail, setLoginEmail] = useState("");
     const[loginPassword, setLoginPassword] = useState("");
-    const navigate = useNavigate();
-    const[user, setUser] = useState({});
 
-    const authorization = UseGiveAuth();
-    const setAuthType = UpdateAuthState();
-    const signOut = UseTakeAuth();
-    const authTest = UseAuth();
-    const typeTest = UseAuthType();
-    
+    const[user, setUser] = useState({});
 
     useEffect (() => {
         onAuthStateChanged(auth, (currentUser) => {
             setUser(currentUser);
           });
     });
+
+    const register = async () => {
+        try {
+          const user = await createUserWithEmailAndPassword(
+            auth,
+            registerEmail,
+            registerPassword
+          );
+          console.log(user);
+        } catch (error) {
+          console.log(error.message);
+          alert("Invalid Email and/or Password");
+        }
+    };    
 
     const login = async () => {
         try {
@@ -47,34 +52,15 @@ const Login = () =>  {
             loginEmail,
             loginPassword
           );
-          const email = auth.currentUser.email;
-            if(email.match("@bavaria.com")) {
-              navigate("/bavaria");
-              setAuthType('Bavaria');
-            }
-            if(email.match("@fda.com")) {
-              navigate("/fda");
-              setAuthType('FDA');
-            }
-            if(email.match(/@JaneHopkins.com/gi)) {
-              navigate("/JaneHopkins");
-              setAuthType('JaneHopkins');
-            }
-          authorization();
-          console.log(authTest);
-          console.log(typeTest);
+          console.log(user);
         } catch (error) {
           console.log(error.message);
-          navigate("/");
           alert("Unrecognized Email and/or Password");
         }
-        
-    };  
+    };
     
     const logout = async () => {
-        //await signOut(auth);
-        setAuthType("Guest");
-        signOut();
+        await signOut(auth);
     };
 
     const theme = createTheme();
@@ -85,7 +71,7 @@ return (
         <CssBaseline />
         <Box
           sx={{
-            marginTop: 10,
+            marginTop: 8,
             display: 'flex',
             flexDirection: 'column',
             alignItems: 'center',
@@ -95,13 +81,40 @@ return (
             borderColor:'black'
           }}
         >
-          <AccountCircleIcon sx = {{fontSize: 100, mt: 3 }}/>
+        
+          <Typography component="h1" variant="h5">
+            Register New User
+          </Typography>
 
-          <Typography component="h1" variant="h5" marginTop={2} fontFamily={"Inter"} fontWeight={900} fontSize={36}>
+          <Box noValidate sx={{ mt: 3 }}>
+                <input
+                    placeholder="Email..."
+                    onChange={(event) => {
+                        setRegisterEmail(event.target.value);
+                    } } />
+
+                <input
+                    placeholder="Password..."
+                    onChange={(event) => {
+                        setRegisterPassword(event.target.value); 
+                    } } />
+
+            <Button
+              type="submit"
+              fullWidth
+              variant="contained"
+              sx={{ mt: 3, mb: 2 }}
+              onClick={register}
+            >
+              Create User
+            </Button>
+            </Box>
+
+          <Typography component="h1" variant="h5">
             Sign in
           </Typography>
 
-          <Box sx={{ display:'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap:1, mt: 2 }}>
+          <Box noValidate sx={{ mt: 3 }}>
                 <input
                     placeholder="Email..."
                     onChange={(event) => {
@@ -113,24 +126,18 @@ return (
                     onChange={(event) => {
                         setLoginPassword(event.target.value);
                     } } />
-           
-            
-            </Box>
 
-            <Box sx ={{alignContent: 'center'}}>
-              <Button
+            <Button
               type="submit"
               fullWidth
               variant="contained"
-              sx={{position:'center', mt: 3, mb: 2 }}
+              sx={{ mt: 3, mb: 2 }}
               onClick={login}
             >
               Sign In
             </Button>
-            <Button onClick = {logout} > Logout </Button>
             </Box>
 
-        {/* logout functionality
         <Typography component="h1" variant="h5">
             Currently logged in as:
             {user?.email}
@@ -147,20 +154,9 @@ return (
               Sign Out
             </Button>
             </Box>
-                  */ }
 
         <Box>
-          <Typography fontFamily={"Inter"} fontWeight={400} fontSize={16} marginTop={1}>
-            <Link to = "/JaneHopkins"> Continue as Guest </Link>
-          </Typography>
-        </Box>
-
-        <Box>
-          <Typography fontFamily={"Inter"} fontWeight={400} fontSize={16} marginTop={1}>
-            Dont have an account? Click 
-            <Link to = "/Register"> Here </Link>
-            to register
-          </Typography>
+            <Link to = "/JaneHopkins"> Go to JaneHopkins </Link>
         </Box>
 
         </Box>
