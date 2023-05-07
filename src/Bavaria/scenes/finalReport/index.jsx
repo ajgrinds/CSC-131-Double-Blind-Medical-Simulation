@@ -10,6 +10,9 @@ const FinalReport = () => {
     const [drugs, setDrugs] = useState([]);
     const { id } = useParams();
     const [isLoading, setIsLoading] = useState(false);
+    const [currentStudy, setCurrentStudy] = useState(studies[0]);
+    const [numDrugs, setnumDrugs] = useState(0);
+    const [numPlacebo, setnumPlacebo] = useState(0);
 
     useEffect(() =>{
 
@@ -19,11 +22,10 @@ const FinalReport = () => {
 
                 setIsLoading(true);
                 const response = await entities.study.list();
-                console.log(response);
+                console.log("fetchingStudies\n"+response);
 
                 setStudies(response.items.filter( study => study._id === id))
                 setIsLoading(false);
-
 
             }catch(error){
                 console.log(error);
@@ -37,7 +39,7 @@ const FinalReport = () => {
 
                 setIsLoading(true);
                 const response = await entities.drug.list();
-                console.log(response);
+                console.log("fetchingdrugs \n"+response);
 
                 setDrugs(response.items.filter( drug => drug.batchNumber != null))
                 setIsLoading(false);
@@ -53,25 +55,57 @@ const FinalReport = () => {
             setIsLoading(false); // Hide the spinner after 1 second
         }, 3000);
 
+        console.log("firsteffect")
         fetchStudies();
         fetchDrugs();
+        
 
         return () => {
             clearTimeout(timeoutId); // Clear the timeout if the component unmounts before it fires
         };
 
-    }, [entities.study, entities.drug]);
 
-    function countDrugsWithIds(drugId, placeboId, drugs) {
-        return drugs.filter(drug => drug.id === drugId || drug.id === placeboId).length;
-    }
 
-    function countPlacebosWithIds( placeboId, drugs) {
-        return drugs.filter(drug => drug.id === placeboId).length;
-    }
+    }, [entities.study, entities.drug, id]);
 
-    const numDrugs = countDrugsWithIds('123', '321', drugs)
-    const numPlacebo = countPlacebosWithIds('321', drugs)
+    useEffect(() => {
+
+
+        function countDrugsWithIds(drugId, placeboId, drugs) {
+            console.log(drugs.filter(drug => drug.id === drugId || drug.id === placeboId))
+            return drugs.filter(drug => drug.id === drugId || drug.id === placeboId).length;
+        }
+    
+        function countPlacebosWithIds( placeboId, drugs) {
+    
+            return drugs.filter(drug => drug.id === placeboId).length;
+        }
+
+        function getNums(study){
+            setnumDrugs(countDrugsWithIds(study.drugId, study.placeboId, drugs));
+            setnumPlacebo(countPlacebosWithIds(study.placeboId, drugs));
+        }
+
+
+        const timeoutId1 = setTimeout(() => {
+            setIsLoading(false); // Hide the spinner after 1 second
+        }, 3000);
+
+        console.log('second effect')
+        if (studies.length > 0) {
+            setCurrentStudy(studies[0]);
+        }
+
+        if (currentStudy) {
+            getNums(currentStudy);
+          }
+
+        return () => {
+            clearTimeout(timeoutId1); // Clear the timeout if the component unmounts before it fires
+        };
+
+      }, [currentStudy, drugs, studies]);
+
   return (
     
     <Box width="100%" mt={4}>
