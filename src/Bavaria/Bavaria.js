@@ -17,7 +17,7 @@ function Bavaria() {
             <Route path="/" element={<BavariaDashboard />} />
             <Route path="/createDrug" element={<CreateDrug />} />
             <Route path="/study" element={<TrialProgress />} />
-            <Route path="/report" element={<FinalReport />} />
+            <Route path="/report/:id" element={<FinalReport />} />
           </Routes>
         </Grid>
       </Grid>

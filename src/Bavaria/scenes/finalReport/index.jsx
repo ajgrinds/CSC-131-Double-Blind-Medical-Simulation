@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react'
+import { useParams } from 'react-router-dom';
 import { Box, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, CircularProgress } from "@mui/material";
 import useBavaria from '../../../vendiaHooks/useBavaria';
 
@@ -7,7 +8,7 @@ const FinalReport = () => {
     const { entities } = useBavaria();
     const [studies, setStudies] = useState([]);
     const [drugs, setDrugs] = useState([]);
-    
+    const { id } = useParams();
     const [isLoading, setIsLoading] = useState(false);
 
     useEffect(() =>{
@@ -20,7 +21,7 @@ const FinalReport = () => {
                 const response = await entities.study.list();
                 console.log(response);
 
-                setStudies(response.items.filter( study => study.studyName === 'testFDA'))
+                setStudies(response.items.filter( study => study._id === id))
                 setIsLoading(false);
 
 

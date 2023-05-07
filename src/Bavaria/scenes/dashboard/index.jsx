@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import useBavaria from "../../../vendiaHooks/useBavaria";
 import { Box, Button, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TextField, Typography, CircularProgress } from "@mui/material";
 import TrialProgress from "../trialProgress";
+import { Link } from "react-router-dom";
 
 
 
@@ -139,9 +140,11 @@ const BavariaDashboard = () => {
                         {study.fdaApproved === true ? "Yes" : "No"}
                       </TableCell>
                       <TableCell>
+                        <Link to={`/Bavaria/report/${study._id}`}>
                         <Button variant="outlined" color="primary">
                           View Report
                         </Button>
+                        </Link>
                       </TableCell>
                     </TableRow>
                   ))}
