@@ -11,6 +11,9 @@ import AddPatient from './scenes/addpatient';
 import MyProSideBar from './scenes/sidebar/MyProSideBar';
 import Admin from './scenes/admin';
 import SmoothTransition from './scenes/smooth.js';
+import TrackDosage from './scenes/trackDosage';
+import StudyContent from './scenes/studyContent';
+import PatientDosage from './scenes/patientDosage';
 
 const Doctor = () => {
   const [theme, colorMode] = useMode();
@@ -31,6 +34,10 @@ const Doctor = () => {
                   <Route path="/patient" element={<Patient />} />
                   <Route path="/addpatient" element={<AddPatient />} />
                   <Route path="/patient/:id" element={<PatientDetails />} />
+                  <Route path="/trackdosage" element={<TrackDosage/>} />
+                  <Route path="/trackdosage/:id" element={<PatientDosage/>}/>
+                  <Route path="/studycontent" element={<StudyContent/>}/>
+                  
                 </Routes>
               </SmoothTransition>
             </main>

@@ -33,6 +33,7 @@
     "react-pro-sidebar": "^1.0.0-alpha.7",
     "react-router-dom": "^6.8.1",
     "react-scripts": "5.0.1",
+    "react-spring": "^9.7.1",
     "styled-components": "^5.3.8",
     "web-vitals": "^2.1.4",
     "yup": "^1.0.0"

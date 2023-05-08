@@ -53,6 +53,19 @@ const BavariaDashboard = () => {
   }, [entities.study]);
  
 
+  const getStatusColor = (status) => {
+    switch (status) {
+      case "Pending":
+        return "Red";
+      case "Active":
+        return "Orange";
+      case "Complete":
+        return "Green";
+      default:
+        return "inherit";
+    }
+  };
+
   
 
   return (
@@ -122,7 +135,7 @@ const BavariaDashboard = () => {
                   {studies.map(study => (
                     <TableRow key={study._id}>
                       <TableCell>{study.studyName}</TableCell>
-                      <TableCell>
+                      <TableCell style={{ color: getStatusColor(study.status) }}>
                         {study.status}
                         
                       </TableCell>
@@ -132,15 +145,36 @@ const BavariaDashboard = () => {
                       <TableCell>
                         {study.endDate}
                       </TableCell>
-                      <TableCell>
-                        Yes
+                      <TableCell style={{color: "green"}}>
+                        yes
                       </TableCell>
-                      <TableCell>
+                      <TableCell style={{color: study.status !== "Create" && study.status != "Cancelled" ? "green" : "red"}}>
                         {study.status !== "Created" && study.status !== "Cancelled" ? "Yes" : "No"}
                       </TableCell>
                       <TableCell>
-                        <Button variant="outlined" color="primary">
+                        <Button 
+                          variant="outlined" 
+                          color="primary" 
+                          disabled={study.status !== "Complete"}
+                          sx={{
+                            borderColor: study.status !== "Complete" ? "grey" : "",
+                            color: study.status !== "Complete" ? "grey" : "primary",
+                          }}
+                        >
                           View Report
+                        </Button>
+                      </TableCell>
+                      <TableCell>
+                        <Button 
+                          variant="outlined" 
+                          color="primary" 
+                          disabled={study.status !== "Complete"}
+                          sx={{
+                            borderColor: study.status !== "Complete" ? "grey" : "",
+                            color: study.status !== "Complete" ? "grey" : "primary",
+                          }}
+                        >
+                          Send Drugs
                         </Button>
                       </TableCell>
                     </TableRow>
@@ -154,7 +188,7 @@ const BavariaDashboard = () => {
           <Box mt='50px'>
 
             <Typography variant="h4" gutterBottom>
-              Clinical Trails Progress 
+              Clinical Trials Progress 
             </Typography>
 
             {studies.some(study => study.fdaApproved === true) ? "No current trials, awaiting FDA approval..." :  <TrialProgress />}

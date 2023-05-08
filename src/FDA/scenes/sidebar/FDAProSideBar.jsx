@@ -3,20 +3,20 @@ import { useState} from "react";
 import { Menu, Sidebar, MenuItem } from "react-pro-sidebar";
 import { useProSidebar } from "react-pro-sidebar";
 
-import { useSidebarContext } from "./sideBarContext";
-
-
 import { Link } from 'react-router-dom';
 import { tokens } from "../../theme";
 import { Box,IconButton, Typography, useTheme} from '@mui/material';
 import HomeOutlinedIcon from "@mui/icons-material/HomeOutlined";
 import PeopleOutlinedIcon from "@mui/icons-material/PeopleOutlined";
-
+import VaccinesIcon from '@mui/icons-material/Vaccines';
+import ReceiptOutlinedIcon from "@mui/icons-material/ReceiptOutlined";
 import PersonOutlinedIcon from "@mui/icons-material/PersonOutlined";
 import CalendarTodayOutlinedIcon from "@mui/icons-material/CalendarTodayOutlined";
+import LocalHospitalIcon from '@mui/icons-material/LocalHospital';
+import AssignmentReturnedIcon from '@mui/icons-material/AssignmentReturned';
 import MenuOutlinedIcon from "@mui/icons-material/MenuOutlined";
 
-import avatar from './squiliem.jpeg';
+import avatar from "../../pictures/fdaLogo.jpeg"
 
 
 const Item =({title, to, icon, selected, setSelected}) => {
@@ -25,7 +25,7 @@ const Item =({title, to, icon, selected, setSelected}) => {
   return(
     <MenuItem 
       active={selected === title} 
-      style={{color: colors.grey[100]}} 
+      style={{color: colors.sidebarColor[100]}} 
       onClick={() => setSelected(title)} 
       icon={icon}
       routerLink={<Link to={to} />}
@@ -36,7 +36,7 @@ const Item =({title, to, icon, selected, setSelected}) => {
   );
 };
 
-const MyProSideBar = () => {
+const FDAProSideBar = () => {
 
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
@@ -68,11 +68,11 @@ const MyProSideBar = () => {
           backgroundColor: "transparent !important",
         },
         "& .menu-item:hover": {
-          color: `${colors.blueAccent[500]} !important`,
+          
           backgroundColor: "transparent !important",
         },
         "& .menu-item.active": {
-          color: `${colors.greenAccent[500]} !important`,
+          
           backgroundColor: "transparent !important",
         },
       }}
@@ -80,7 +80,7 @@ const MyProSideBar = () => {
       <Sidebar
         breakPoint="md"
         
-        backgroundColor={colors.primary[400]}
+        backgroundColor={colors.sidebarColor[200]}
         
       >
         <Menu iconshape="square">
@@ -92,7 +92,7 @@ const MyProSideBar = () => {
             }
             style={{
               margin: "10px 0 20px 0",
-              color: colors.grey[100],
+              color: colors.sidebarColor[400],
             }}
           >
             {!collapsed && (
@@ -102,8 +102,8 @@ const MyProSideBar = () => {
                 alignItems="center"
                 ml="15px"
               >
-                <Typography variant="h5" color={colors.grey[100]}>
-                  Jane Hopkins
+                <Typography variant="h5" color={colors.sidebarColor[300]}>
+                  Food & Drug
                 </Typography>
                 <IconButton
                   onClick={
@@ -122,59 +122,29 @@ const MyProSideBar = () => {
                 display="flex" 
                 justifyContent="center" 
                 alignItems="center"
-                sx={{
-                  "& .avater-image": {
-                    backgroundColor: colors.primary[500],
-                  },
-                }}
-              >
-                {window.location.pathname === '/JaneHopkins/Admin'? (
-                  <Typography variant="h4">ADMIN</Typography>
-                  
-                ) : (
-
-                  
-                  <img
-                    className="avater-image"
-                    alt="profile-user"
-                    width="100px"
-                    height="100px"
-                    src={avatar}
-                    style={{cursor: "pointer", borderRadius: "50%"}}                                 
-                  />
-
-                )}
                 
+              >
+                <img
+                  className="avater-image"
+                  alt="profile-user"
+                  width="100px"
+                  height="100px"
+                  src={avatar}
+                  style={{cursor: "pointer", borderRadius: "50%"}}                                 
+                />
               </Box>
-
-             {window.location.pathname === '/JaneHopkins/Admin' ? (
-              <Box textAlign="center">
-                <Typography variant="h5" color={colors.greenAccent[500]}>
-                Administration
-              </Typography>
-
-              </Box>
-              
-             ) : (
 
               <Box textAlign="center">
                 <Typography
                   variant="h4"
-                  color={colors.grey[100]}
+                  color={colors.sidebarColor[300]}
                   fontWeight="bold"
                   sx={{m: "10px 0 0 0"}}
                 >
-                  Austin M.D.
-                </Typography>
-                
-                <Typography variant="h5" color={colors.greenAccent[500]}>
-                  Doctor
+                    Admin
                 </Typography>
                 
               </Box>
-             )}
-
-              
 
             </Box>
           )}
@@ -182,7 +152,7 @@ const MyProSideBar = () => {
           <Box paddingLeft={collapsed ? undefined : "10%"}>
             <Item
               title="Dashboard"
-              to="/JaneHopkins"
+              to="/fda"
               icon={<HomeOutlinedIcon/>}
               selected={selected}
               setSelected={setSelected}
@@ -190,55 +160,69 @@ const MyProSideBar = () => {
 
             <Typography
               variant="h6"
-              color={colors.grey[300]}
+              color={colors.sidebarColor[100]}
+              sx={{ m: "15px 20px 5px 20px" }}
+            >
+              Data
+            </Typography>
+
+            <Item
+              title="Patients"
+              to="/fda/patient"
+              icon={<PeopleOutlinedIcon/>}
+              selected={selected}
+              setSelected={setSelected}
+            />
+            
+            <Item
+              title="Assign Drugs"
+              to="/fda/drugs"
+              icon={<AssignmentReturnedIcon/>}
+              selected={selected}
+              setSelected={setSelected}
+            />
+
+            <Item
+              title="Studies"
+              to="/fda/studies"
+              icon={<ReceiptOutlinedIcon/>}
+              selected={selected}
+              setSelected={setSelected}
+            />
+            
+            
+            <Typography
+              variant="h6"
+              color={colors.sidebarColor[100]}
               sx={{m: "15px 0 5px 20px"}}
             >
               Pages
             </Typography>
 
             <Item
-              title="Admin"
-              to="/JaneHopkins/Admin"
-              icon={<PeopleOutlinedIcon/>}
-              selected={selected}
-              setSelected={setSelected}
-            />
-
-            <Typography
-              variant="h6"
-              color={colors.grey[300]}
-              sx={{ m: "15px 20px 5px 20px" }}
-            >
-              Data
-            </Typography>
-            
-
-            <Item
-              title="Patients"
-              to="/JaneHopkins/patient"
-              icon={<PeopleOutlinedIcon/>}
+              title="Jane Hopkins"
+              to="/"
+              icon={<LocalHospitalIcon/>}
               selected={selected}
               setSelected={setSelected}
             />
 
             <Item
-              title="Add Patient"
-              to="/JaneHopkins/addpatient"
-              icon={<PeopleOutlinedIcon/>}
+              title="Bavaria"
+              to="/bavaria"
+              icon={<VaccinesIcon/>}
               selected={selected}
               setSelected={setSelected}
             />
-            <Item
-              title="Track Dosage"
-              to="/JaneHopkins/trackdosage"
-              icon={<PeopleOutlinedIcon/>}
-              selected={selected}
-              setSelected={setSelected}
-            />
-            
-            
 
-            
+            <Item
+              title="Logout"
+              to="/"
+              icon={<PersonOutlinedIcon/>}
+              selected={selected}
+              setSelected={setSelected}
+            />
+           
           </Box> 
         </Menu>
       </Sidebar>
@@ -246,4 +230,5 @@ const MyProSideBar = () => {
   );
 }
 
-export default MyProSideBar;
+export default FDAProSideBar;
+

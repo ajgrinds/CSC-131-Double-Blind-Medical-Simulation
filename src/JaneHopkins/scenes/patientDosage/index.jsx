@@ -104,14 +104,6 @@ const PatientDosage = () => {
         window.location.href = "/JaneHopkins/trackdosage";
     };
     
-    
-    const [doseTaken, setDoseTaken] = useState([false, false, false, false, false]);
-
-    const handleDoseClick = (index) => {
-      const updatedDoseTaken = [...doseTaken];
-      updatedDoseTaken[index] = true;
-      setDoseTaken(updatedDoseTaken);
-    };
 
     
 
@@ -322,7 +314,7 @@ const PatientDosage = () => {
                                 alignItems="center"
                                 mr={{ xs: 1, sm: 2, md: 3, lg: 4 }}
                                 mb={{ xs: 2, sm: 3 }}
-                                onClick={() => handleDoseClick(index)}
+                                
                                 style={{ cursor: 'pointer' }}
                             >
                                 <Typography variant="body1">{index + 1}</Typography>
