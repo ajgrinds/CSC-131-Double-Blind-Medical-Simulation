@@ -136,17 +136,6 @@ const PatientDosage = () => {
                     <Header title="TRACK DOSAGE" subtitle="Post-Appointment Patient Information " />
                 </Box>
 
-                <Box
-                    width="100%"
-                    display="flex"
-                    justifyContent="space-around"  // Updated property
-                    alignItems="center"
-                >
-                    
-                    {/*<ColorButton variant="contained" size="large" onClick={handleSubmit}>Update Dose</ColorButton> */}
-                
-                </Box>
-
                 <Grid
                     mt="20px"
                     container
@@ -155,9 +144,8 @@ const PatientDosage = () => {
                     justifyContent="center"
                     backgroundColor={colors.primary[400]}
                 >
-
-                    <Grid
-                        item
+                     <Grid
+                        
                         xs={12}
                         sm={12}
                         md={12}
@@ -190,7 +178,7 @@ const PatientDosage = () => {
                     </Grid>
 
                     <Grid
-                        item
+                        
                         xs={12}
                         sm={12}
                         md={12}
@@ -220,7 +208,7 @@ const PatientDosage = () => {
                     </Grid>
 
                     <Grid
-                        item
+                        
                         xs={12}
                         sm={12}
                         md={12}
@@ -251,7 +239,7 @@ const PatientDosage = () => {
                     </Grid>
 
                     <Grid
-                        item
+                        
                         xs={12}
                         sm={12}
                         md={12}
@@ -282,7 +270,7 @@ const PatientDosage = () => {
                     </Grid>
 
                     <Grid
-                        item
+                        
                         xs={12}
                         sm={12}
                         md={12}
@@ -329,12 +317,24 @@ const PatientDosage = () => {
 
                     </Grid>
 
-                    
 
 
                 </Grid>
+
                 
-                <Grid mt="20px">
+
+                
+                
+                <Grid 
+                    
+                    mt="20px"
+                    container
+                    rowSpacing={2}
+                    columnSpacing={{xs: 1, sm: 2, md: 3, lg: 4}}
+                    justifyContent="center"
+                    backgroundColor={colors.primary[400]}
+                
+                >
 
                         <TableContainer component={Paper} style={{ backgroundColor: colors.primary[400]}}>
                             <Table>
