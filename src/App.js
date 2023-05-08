@@ -14,13 +14,15 @@ import RegisterPage from "./authentication/scenes/register/Index"
 import CreateDrug from "./Bavaria/scenes/createDrug";
 import TrackDosage from "./JaneHopkins/scenes/trackDosage";
 import PatientDosage from "./JaneHopkins/scenes/patientDosage";
-
+import { useState, useContext, Context } from "react";
+import { TrackChanges } from "@mui/icons-material";
+import { AuthProvider } from "./authentication/context/AuthContext";
 
 function App() {
 
   return ( 
-
-    <Routes>
+    <AuthProvider>
+      <Routes>
       
       { /* Login Page */}
 
@@ -30,35 +32,36 @@ function App() {
 
       <Route exact path="/Register" element={<RegisterPage/>}/>
 
-      
+        {/*Routes for JaneHopkins Page */}
+        <Route path="/JaneHopkins/*" element={<Doctor/>}>
+          
+          <Route path="patient" element={<Patient/>}/>
+          <Route path="addpatient" element={<AddPatient/>} />
+          <Route path="patient/:id" element={<PatientDetails/>}/>
+          <Route path="trackdosage" element={<TrackDosage/>}/>
+          <Route path="trackdosage/:id" element={<PatientDosage/>} />
 
-      {/*Routes for JaneHopkins Page */}
-      <Route path="/JaneHopkins/*" element={<Doctor/>}>
-        
-        <Route path="patient" element={<Patient/>}/>
-        <Route path="addpatient" element={<AddPatient/>} />
-        <Route path="patient/:id" element={<PatientDetails/>}/>
-        <Route path="trackdosage" element={<TrackDosage/>}/>
-        <Route path="trackdosage/:id" element={<PatientDosage/>} />
+        </Route>
 
-      </Route>
+        {/*Routes for FDA page */}
+        
+       
+        {/*Routes for Bavaria page */}
+        <Route path="/bavaria/*" element={<Bavaria/>}>
+          
+          <Route path="createDrug" element={<CreateDrug/>}/>
+          
+          
+        </Route>
+   
 
-      {/*Routes for FDA page */}
-      
-      <Route exact path="/fda/*" element={<FDA/>}>
-        
-      </Route>
+       <Route exact path="/fda/*" element={<FDA/>}>
+          
+        </Route>
 
-      {/*Routes for Bavaria page */}
-      <Route path="/bavaria/*" element={<Bavaria/>}>
-        
-        <Route path="createDrug" element={<CreateDrug/>}/>
-        
-        
-      </Route>
 
-    </Routes>
-    
+      </Routes>
+    </AuthProvider>
   );
 }
 
