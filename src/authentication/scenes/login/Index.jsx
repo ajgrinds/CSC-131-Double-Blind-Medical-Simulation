@@ -61,23 +61,20 @@ const Login = () => {
           );
           const email = auth.currentUser.email;
             if(email.match("@bavaria.com")) {
-              navigate("/bavaria");
               setAuthType('Bavaria');
+              navigate("/bavaria"); 
             }
             if(email.match("@fda.com")) {
-              navigate("/fda");
               setAuthType('FDA');
+              navigate("/fda");
             }
             if(email.match(/@JaneHopkins.com/gi)) {
-              navigate("/JaneHopkins");
               setAuthType('JaneHopkins');
+              navigate("/JaneHopkins");
             }
           authorization();
-          console.log(authTest);
-          console.log(typeTest);
         } catch (error) {
           console.log(error.message);
-          navigate("/");
           alert("Unrecognized Email and/or Password");
         }
         
@@ -246,6 +243,8 @@ const Login = () => {
                       Don't have an account? Click{" "}
                       <Link to="/Register"> Here </Link> to register
                     </Typography>
+
+                    <Button onClick = {() => console.log( typeTest, authTest )}> list creds </Button>
                     </Box>
                 </Grid>
               </Grid>
