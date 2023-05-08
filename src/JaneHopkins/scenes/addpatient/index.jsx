@@ -355,24 +355,7 @@ function AddPatient() {
               <ColorButton variant="contained" size="large">View All Patients</ColorButton>
             </Link>
 
-            {Studies && ( <>
-              <FormControl style={{ width: 200}}>
-                  <InputLabel>Study</InputLabel>
-                <Select
-                  label="Study"
-                  value={study}
-                  onChange={handleStudyChange}
-                >  
-                
-                  {Studies.items.map((study) => (
-                    <MenuItem key={study.studyName} value={study.studyName}>
-                        {study.studyName}
-                    </MenuItem>
-                ))}
-                  </Select>
-              </FormControl> 
-              </>
-              )}  
+            
 
             
             <ColorButton variant="contained" size="large" onClick={handleAddPatient}>Add Patient</ColorButton> 
@@ -409,6 +392,48 @@ function AddPatient() {
                 onChange={handleAddName}
                 variant="filled"
               />
+            </Grid>
+
+            <Grid
+              item
+              xs={12}
+              sm={6}
+              md={4}
+              component="form"
+              sx={{
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center',
+                mt: '8px',
+                '& .MuiTextField-root': { m: 1, width: '100%' },
+              }}
+              noValidate
+              autoComplete="off"
+            >
+
+
+            {Studies && ( 
+            <>
+              <FormControl variant='filled' style={{ width: '100%'}}>
+                  <InputLabel>Study</InputLabel>
+                <Select
+                  label="Study"
+                  value={study}
+                  onChange={handleStudyChange}
+                >  
+                
+                  {Studies.items.map((study) => (
+                    <MenuItem key={study.studyName} value={study.studyName}>
+                        {study.studyName}
+                    </MenuItem>
+                ))}
+                  </Select>
+              </FormControl>
+              
+            </>
+            )}  
+               
+              
             </Grid>
 
             <Grid
