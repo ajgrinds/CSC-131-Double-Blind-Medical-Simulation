@@ -14,6 +14,9 @@ import RegisterPage from "./authentication/scenes/register/Index"
 import CreateDrug from "./Bavaria/scenes/createDrug";
 import TrackDosage from "./JaneHopkins/scenes/trackDosage";
 import PatientDosage from "./JaneHopkins/scenes/patientDosage";
+import Login from "./authentication/scenes/login/Index";
+import Register from "./authentication/scenes/register/Index";
+
 
 
 function App() {

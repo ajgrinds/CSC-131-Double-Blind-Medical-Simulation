@@ -30,7 +30,7 @@ function PatientDetails() {
   const { id } = useParams();
   const { entities } = useJaneHopkins();
   const [patient, setPatient] = useState(null);
-  const [Studies, setStudies] = useState(null);
+  const [studies, setStudies] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
   
 
@@ -124,6 +124,7 @@ function PatientDetails() {
           const response = await entities.patient.get(id);
           console.log(response);
           setPatient(response);
+          setStudy(response.study);
           setIsLoading(true);
           
           // set the values of each entity to the current value of the patients
@@ -150,10 +151,8 @@ function PatientDetails() {
           }
           
           //console.log(newAllergies);
-          setStudy(response.study);
-
-
-          setStudies(await entities.study.list());
+          
+          setStudies(response.study);
       }
       catch(error){
           console.log(error);
@@ -257,6 +256,13 @@ function PatientDetails() {
     window.location.reload();
 
   }
+
+
+  useEffect(() => {
+
+
+
+  })
  
   return (
 
@@ -277,24 +283,7 @@ function PatientDetails() {
             <Link to="/JaneHopkins/patient" style={{ textDecoration: "none"}}>
               <ColorButton size='large' variant="contained"> Back </ColorButton>
             </Link>
-            {Studies && Studies.items && ( <>
-             <FormControl style={{ width: 200}}>
-                <InputLabel style={{ color:"secondary" }}>{patient.study == null ? "Study" : patient.study}</InputLabel>
-              <Select
-                label="Study"
-                width="100"
-                onChange={handleStudyChange}
-              >  
-              <MenuItem value=""></MenuItem>
-                {Studies.items.map((study, index) => (
-                    <MenuItem key={study.studyName} value={study.studyName}>
-                        {study.studyName}
-                    </MenuItem>
-                ))}
-                </Select>
-                </FormControl> 
-                </>
-                )}         
+                   
             <DeleteButton id={patient?._id} onDelete={handleDelete} />
             
           </Box>
@@ -330,6 +319,9 @@ function PatientDetails() {
                 src={patient.patientPicture}
                 style={{cursor: "pointer", borderRadius: "50%"}}                                 
               />
+
+              <Box mt="10px">Study: {patient.study}</Box>
+              
 
             </Grid>
 

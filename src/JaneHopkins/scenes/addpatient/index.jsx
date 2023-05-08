@@ -27,7 +27,7 @@ function AddPatient() {
     const smScreen = useMediaQuery(theme.breakpoints.up("sm"));
 
     const [patient, setPatient] = useState(null);
-    const [Studies, setStudies] = useState(null);
+    const [Studies, setStudies] = useState("");
 
 
     useEffect(() => {
@@ -44,6 +44,7 @@ function AddPatient() {
         }
 
         fetchData();
+        console.log(Studies);
         
     }, [entities.study]);
 
@@ -67,6 +68,7 @@ function AddPatient() {
     const [icdHealthCodes, setIcdHealthCodes] = useState([]); 
     const [allergies, setAllergies] = useState([]); 
     const [study, setStudy] = useState("");
+    
 
     
     const [visits, setVisits] = useState([]);
@@ -152,11 +154,8 @@ function AddPatient() {
     };
 
      const handleStudyChange = (event) => {
-        const value = event.target.value;
-        setStudy(value);
+        setStudy(event.target.value);
     };
-    
-
     
     const [isLoading, setIsLoading] = useState(false);
     const handleAddPatient = async () => {
@@ -357,23 +356,26 @@ function AddPatient() {
             </Link>
 
             {Studies && ( <>
-             <FormControl style={{ width: 200}}>
-                <InputLabel>Study</InputLabel>
-              <Select
-                label="Study"
-                width="100"
-                onChange={handleStudyChange}
-              >  
-              <MenuItem value=""></MenuItem>
-                {Studies.items.map((study, index) => (
+              <FormControl style={{ width: 200}}>
+                  <InputLabel>Study</InputLabel>
+                <Select
+                  label="Study"
+                  value={study}
+                  
+                  onChange={handleStudyChange}
+                >  
+                
+                  {Studies.items.map((study) => (
                     <MenuItem key={study.studyName} value={study.studyName}>
                         {study.studyName}
                     </MenuItem>
                 ))}
-                </Select>
-                </FormControl> 
-                </>
-                )}         
+                  </Select>
+              </FormControl> 
+              </>
+              )}  
+
+            
             <ColorButton variant="contained" size="large" onClick={handleAddPatient}>Add Patient</ColorButton> 
            
         </Box>
