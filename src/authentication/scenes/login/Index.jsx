@@ -207,57 +207,51 @@ const Login = () => {
                       type={showPassword ? "text" : "password"}
                       onChange={(event) => {
                         setLoginPassword(event.target.value);
-                    } } />
-           
-            
-            </Box>
-
-            <Box sx ={{alignContent: 'center'}}>
-              <Button
-              type="submit"
-              fullWidth
-              variant="contained"
-              sx={{position:'center', mt: 3, mb: 2 }}
-              onClick={login}
-            >
-              Sign In
-            </Button>
-            </Box>
-
-        {/* logout functionality
-        <Typography component="h1" variant="h5">
-            Currently logged in as:
-            {user?.email}
-          </Typography>
-
-          <Box noValidate sx={{ mt: 1 }}>
-            <Button
-              type="submit"
-              fullWidth
-              variant="contained"
-              sx={{ mt: 3, mb: 2 }}
-              onClick={logout}
-            >
-              Sign Out
-            </Button>
-            </Box>
-                  */ }
-
-        <Box>
-          <Typography fontFamily={"Inter"} fontWeight={400} fontSize={16} marginTop={1}>
-            <Link to = "/JaneHopkins"> Continue as Guest </Link>
-          </Typography>
-        </Box>
-
-        <Box>
-          <Typography fontFamily={"Inter"} fontWeight={400} fontSize={16} marginTop={1}>
-            Dont have an account? Click 
-            <Link to = "/Register"> Here </Link>
-            to register
-          </Typography>
-        </Box>
-
-        </Box>
+                      }}
+                      InputProps={{
+                        endAdornment: (
+                          <InputAdornment position="end">
+                            <IconButton
+                              edge="end"
+                              color="inherit"
+                              onClick={handleClickShowPassword}
+                              onMouseDown={handleMouseDownPassword}
+                            >
+                              {showPassword ? <Visibility /> : <VisibilityOff />}
+                            </IconButton>
+                          </InputAdornment>
+                        )
+                      }}
+                    />
+                    <Button
+                      type="submit"
+                      fullWidth
+                      variant="contained"
+                      sx={{ mt: 3, mb: 2 }}
+                      onClick={login}
+                      disabled={loading}
+                    >
+                      {loading ? <CircularProgress size={24} /> : "Sign In"}
+                    </Button>
+                    <Typography
+                      fontFamily={"Inter"}
+                      fontWeight={400}
+                      fontSize={16}
+                      mb={1}
+                      onClick={() => handleNavigation("/JaneHopkins")} 
+                    >
+                      <Link to="#">Continue as Guest</Link> 
+                    </Typography>
+                    <Typography fontFamily={"Inter"} fontWeight={400} fontSize={16}>
+                      Don't have an account? Click{" "}
+                      <Link to="/Register"> Here </Link> to register
+                    </Typography>
+                    </Box>
+                </Grid>
+              </Grid>
+            </DialogContent>
+          </Fade>
+        </Dialog>
       </Container>
     </ThemeProvider>
   );
