@@ -6,7 +6,7 @@ import useJaneHopkins from '../../../vendiaHooks/useJaneHopkins';
 import { tokens } from "../../theme";
 import Header from "../../components/Header";
 
-import {Box, Typography, useTheme, useMediaQuery} from "@mui/material";
+import {Box, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography, useTheme, useMediaQuery, Modal} from "@mui/material";
 import Grid from "@mui/material/Unstable_Grid2";
 import Button from '@mui/material/Button';
 import { styled } from '@mui/material/styles';
@@ -39,6 +39,7 @@ const PatientDosage = () => {
 
     const [currentVisits, setCurrentVisits] = useState([]);
 
+    const [open, setOpen] = useState(false); 
 
     useEffect(() => {
         async function fetchPatient() {
@@ -50,6 +51,8 @@ const PatientDosage = () => {
                 
                 if(response.visits){
                     setCurrentVisits(response.visits);
+                    console.log(currentVisits)
+                    
                 }
                 
 
@@ -326,8 +329,68 @@ const PatientDosage = () => {
 
                     </Grid>
 
+                    
+
 
                 </Grid>
+                
+                <Grid mt="20px">
+
+                        <TableContainer component={Paper} style={{ backgroundColor: colors.primary[400]}}>
+                            <Table>
+                            <TableHead>
+                                <TableRow>
+                                <TableCell style={{fontWeight: 'bold'}}>DateTime</TableCell>
+                                <TableCell style={{fontWeight: 'bold'}}>HIV Viral Load</TableCell>
+                                <TableCell style={{fontWeight: 'bold'}}>Notes</TableCell>
+                                
+                                
+                                </TableRow>
+                            </TableHead>
+                            <TableBody>
+                                {currentVisits.map( (visit, index) => (
+                                <TableRow key={index}>
+                                    <TableCell>
+                                        {visit.dateTime}
+                                    </TableCell>
+                                    <TableCell >
+                                        {visit.hivViralLoad}
+                                        
+                                    </TableCell>
+                                    <TableCell>
+                                        {visit.notes}
+                                    
+                                    </TableCell>
+                                    
+                                </TableRow>
+                                ))}
+                            </TableBody>
+                            </Table>
+                        </TableContainer>
+                        
+
+                        <Modal open={open} onClose={() => setOpen(false)}>
+                            <Box 
+                                sx={{
+                                    position: 'absolute', 
+                                    top: '50%', 
+                                    left: '50%', 
+                                    transform: 'translate(-50%, -50%)', 
+                                    bgcolor: 'background.paper', 
+                                    boxShadow: 24, p: 4
+                                
+                                }}
+                                
+                            >
+                                
+                                
+                            </Box>
+
+                                            
+                        </Modal>
+                    </Grid>
+
+                
                     
             </Box>
 

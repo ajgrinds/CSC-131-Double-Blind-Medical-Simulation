@@ -361,7 +361,6 @@ function AddPatient() {
                 <Select
                   label="Study"
                   value={study}
-                  
                   onChange={handleStudyChange}
                 >  
                 
