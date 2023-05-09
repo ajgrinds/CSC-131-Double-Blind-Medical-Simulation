@@ -107,6 +107,7 @@ function PatientDetails() {
   const [newCurrentlyInsured, setNewCurrentlyInsured] = useState("");
   const [newCurrentlyEmployed, setNewCurrentlyEmployed] = useState("");
   const [study, setStudy] = useState("");
+  const [visits, setVisits] = useState([]);
 
   const ColorButton = styled(Button)(({ theme }) => ({
     color: theme.palette.getContrastText(purple[500]),
@@ -137,6 +138,7 @@ function PatientDetails() {
           setNewCurrentlyInsured(response.insuranceNumber === "" ? "No" : "Yes");
           setNewCurrentlyEmployed(response.currentlyEmployed);
           setNewFamilyHistory(response.familyHistory);
+          setVisits(response.visits);
 
           if(response.allergies){
             setNewAllergies(response.allergies);
@@ -162,6 +164,8 @@ function PatientDetails() {
       }
     }
     fetchPatient();
+
+    console.log(visits);
     setIsLoading(false);
   
   }, [entities.patient, id]);
@@ -706,7 +710,7 @@ function PatientDetails() {
                   id="outlined-read-only-input"
                   label="ICD Health Code"
                   color='secondary'
-                  defaultValue={patient.icdHealthCodes && patient.icdHealthCodes.map(codes => JSON.stringify(codes)).join(', ')}
+                  defaultValue={patient.icdHealthCodes != null ? patient.icdHealthCodes.map(codes => JSON.stringify(codes)).join(', ') : "none"}
                   onChange={handleICDHealthCodeChange}
                   variant="filled"
                 />
@@ -731,7 +735,7 @@ function PatientDetails() {
                   label="Doctor Visits"
                   type="number"
                   color='secondary'
-                  defaultValue=""
+                  defaultValue={patient.visits != null ? patient.visits.length : ""}
                   InputLabelProps={{
                     shrink: true,
                   }}
