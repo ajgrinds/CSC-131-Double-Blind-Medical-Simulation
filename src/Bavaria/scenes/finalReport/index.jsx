@@ -24,7 +24,7 @@ const FinalReport = () => {
                 const response = await entities.study.list();
                 console.log("fetchingStudies\n"+response);
 
-                setStudies(response.items.filter( study => study._id === id))
+                setStudies(response.items.filter( study => study._id === id & study.status === "Complete"))
                 setIsLoading(false);
 
             }catch(error){
