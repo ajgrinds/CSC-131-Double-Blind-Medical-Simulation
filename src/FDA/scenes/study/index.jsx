@@ -1,52 +1,68 @@
 import React, { useState, useEffect } from "react";
-import { Box, Link, Grid, Container, Dialog, DialogTitle, DialogContent, DialogContentText, DialogActions } from "@mui/material";
+import { Box, Link, Grid, Container, Button, useTheme } from "@mui/material";
+import { styled } from '@mui/system';
 import { GridColDef, DataGrid, GridComparatorFn } from "@mui/x-data-grid";
 import Header from "../../components/Header";
 import useFDA from "../../../vendiaHooks/useFDA";
-import "./index.css";
-import Button from "@mui/material/Button";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import CancelIcon from "@mui/icons-material/Cancel";
-import CloseIcon from "@mui/icons-material/Close";
 import { useNavigate } from "react-router-dom";
+import avatar from "../../pictures/fdaLogo.jpeg"
+import { useMediaQuery } from '@mui/material';
 
 
-/*Fetching data*/
+import "./index.css";
+
+const ViewStudyButton = styled(Button)(({ theme }) => ({
+  backgroundColor: theme.palette.mode === 'light' ? '#4CAF50' : '#2196F3',
+  '&:hover': {
+    backgroundColor: theme.palette.mode === 'light' ? '#388E3C' : '#1565C0',
+  },
+}));
+
+const ActionButton = styled(Button)(({ theme }) => ({
+  backgroundColor: theme.palette.error.main,
+  '&:hover': {
+    backgroundColor: theme.palette.error.dark,
+  },
+}));
+
+const DataGridContainer = styled(Box)(({ theme }) => ({
+  boxShadow: 3,
+  backgroundColor: theme.palette.background.paper,
+  borderRadius: 2,
+}));
+
 const FDAStudy = () => {
   const { entities } = useFDA();
   const [studyList, setStudyList] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [reload, setReload] = useState(true);
-  const [selectedStudy, setSelectedStudy] = useState(null);
   const navigate = useNavigate();
-
   const [patientList, setPatientList] = useState([]);
-  const [allPatients, setAllPatients] = useState([]);
+  const matches = useMediaQuery(theme => theme.breakpoints.down('sm'));
+
 
   useEffect(() => {
-    async function fetchData() {
-      try {
-        const response = await entities.study.list();
-        setStudyList(
-          response.items.map((study, index) => ({
-            id: index + 1,
-            _id: study._id, 
-            ...study,
-          }))
-        );
-        setAllPatients(await entities.patient.list())
-        console.log(allPatients)
-      } catch (error) {
-        console.log(error);
-      } finally {
-        setIsLoading(false);
-      }
-    }
-  
     fetchData();
   }, [entities.study, reload]);
-  
 
+  const fetchData = async () => {
+    try {
+      const response = await entities.study.list();
+      setStudyList(
+        response.items.map((study, index) => ({
+          id: index + 1,
+          _id: study._id, 
+          ...study,
+        }))
+      );
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setIsLoading(false);
+    }
+  }
 
   const handleApprove = async (row) => {
     // Update the fetched data
@@ -100,44 +116,38 @@ const FDAStudy = () => {
 
 
   const statuses = ["Cancelled", "Complete", "Created", "Approved", "Full", "In Progress", "Awaiting Results"];
-  const statusComparator: GridComparatorFn<Status> = (v1, v2) =>
-        statuses.indexOf(v1) - statuses.indexOf(v2);
   
+  const statusComparator = (v1, v2) =>
+  statuses.indexOf(v1) - statuses.indexOf(v2);
+    
   const columns = [
     {
       field: "viewStudy",
       headerName: "View Study",
       flex: 1,
+      hide: matches,  // hide this column on small screens
       renderCell: (cellValues) => {
         return (
-          <Button
-              variant="contained" 
-              style={{ backgroundColor: "primary"}} 
-              href={`/fda/details/${cellValues.row._id}`}
-          > 
-              View Study
-          </Button>  
+          <ViewStudyButton
+            variant="contained"
+            href={`/fda/details/${cellValues.row._id}`}
+          >
+            View Study
+          </ViewStudyButton>
         );
-        },
       },
+    },
 
-      { field: "studyName", headerName: "Study Name", flex: 1 },
+      { field: "studyName", headerName: "Study Name", flex: matches ? 0.8 : 1 },
       {
         field: "status",
         headerName: "Status",
-        flex: 1,
+        flex: matches ? 0.8 : 1,
+        
         sortComparator: statusComparator
       },
-      { 
-        field: "participants",
-        headerName: "Particiapnts",
-        flex: 1,
-        renderCell: (cellValues) => {
-          return <span>{allPatients.items.filter((item) => item.study == cellValues.row.studyName).length}</span>;
-        }
-      },
-      { field: "startDate", headerName: "Start Date", flex: 1 },
-      { field: "endDate", headerName: "End Date", flex: 1 },
+      { field: "startDate", headerName: "Start Date", flex: matches ? 0.8 : 1 },
+      { field: "endDate", headerName: "End Date", flex: matches ? 0.8 : 1 },
 
       {
         field: "studyComplete",
@@ -157,23 +167,23 @@ const FDAStudy = () => {
         flex: 1,
         renderCell: (cellValues) => {
           if (cellValues.row.status === "Created") {
-            return (<div style={{ display: "flex", gap: "10px" }}>
-                <Button
+            return (
+              <div style={{ display: "flex", gap: "10px" }}>
+                <ActionButton
                   variant="contained"
-                  color="primary"
                   onClick={() => handleApprove(cellValues.row)}
                 >
                   Approve
-                </Button>
-                <Button
+                </ActionButton>
+                <ActionButton
                   variant="contained"
-                  style={{ backgroundColor: "red" }}
                   onClick={() => handleDecline(cellValues.row)}
                 >
                   Deny
-                </Button>
-           </div>
-           )}
+                </ActionButton>
+              </div>
+            )
+          }
           else if (cellValues.row.status === "Approved")
           {
             return (
@@ -203,11 +213,11 @@ const FDAStudy = () => {
               </div>
             );
           }
-          //else if (cellValues.row.status === "In Progress")
-         // {
-         //   return <span style={{ color: "primary" }}>In Progress</span>
-         // }
           else if (cellValues.row.status === "In Progress")
+          {
+            return <span style={{ color: "primary" }}>In Progress</span>
+          }
+          else if (cellValues.row.status === "Awaiting Results")
           {
             return (<div style={{ display: "flex", gap: "10px" }}>
                 <Button
@@ -230,13 +240,14 @@ const FDAStudy = () => {
         },
     }
   ];
-  
   return (
-    <Container maxWidth="xl">
-      <Header subtitle="Managing FDA Studies" />
-      <Grid container spacing={3}>
-        <Grid item xs={12}>
-          <Box m="30px 0 0 0" flexGrow={1} height="75vh">
+    <Container maxWidth="xl" sx={{ backgroundColor: "background.default", minHeight: "100vh" }}>
+      <img className="avatar-image" alt="profile-user" width="210px" height="100px" src={avatar}
+      style={{cursor: "pointer", borderRadius: "0%", marginTop: "-50px"}}/>
+       <Grid container spacing={3}>
+       <Grid item xs={12}>
+          <DataGridContainer m="50px 0 0 0" flexGrow={1}>
+          <Header subtitle="Managing FDA Studies" />
             {isLoading ? (
               <Box>Loading...</Box>
             ) : (
@@ -245,6 +256,7 @@ const FDAStudy = () => {
                 columns={columns}
                 rowHeight={50}
                 headerHeight={50}
+                autoHeight
                 initialState={{
                 sorting: {
                   sortModel: [{ field: 'status', sort: 'asc' }],
@@ -252,7 +264,7 @@ const FDAStudy = () => {
               }}
               />
             )}
-          </Box>
+          </DataGridContainer>
         </Grid>
       </Grid>
     </Container>
