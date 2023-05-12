@@ -11,15 +11,14 @@ import { useParams } from 'react-router-dom';
 import CheckIcon from '@mui/icons-material/Check';
 import CloseIcon from '@mui/icons-material/Close';
 import { DataGrid } from "@mui/x-data-grid";
-import { tokens } from "../../../theme";
 import useFDA from "../../../vendiaHooks/useFDA";
 import { useNavigate } from 'react-router-dom';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
+import { useMediaQuery } from '@mui/material';
+
 
 const FDADetails = () => {
-
   const theme = useTheme();
-  const colors = tokens(theme.palette.mode);
 
   const { studyID } = useParams();
   const { entities } = useFDA();
@@ -29,41 +28,53 @@ const FDADetails = () => {
   const [study, setStudy] = useState(null);
   const [id, setID] = useState(null);
   const [name, setName] = useState(null);
-  const [, setStatus] = useState(null);
-  const [setStartDate] = useState(null);
-  const [setEndDate] = useState(null);
+  const [status, setStatus] = useState(null);
+  const [startDate, setStartDate] = useState(null);
+  const [endDate, setEndDate] = useState(null);
   const [drugID, setDrugID] = useState(null);
   const [placeboID, setPlaceboID] = useState(null);
-
-  const [patientList, setPatientList] = useState([]);
-  const [] = useState([]);
-
-  const [, setOpenDeleteDialog] = useState(false);
-  const [deleteRowId, setDeleteRowId] = useState(null);
   const navigate = useNavigate();
+  const [patientList, setPatientList] = useState([]);
+  const [drugList] = useState([]);
 
-  const handleDeleteClick = (id) => {
-    setPatientList((prevPatientList) => prevPatientList.filter((patient) => patient.id !== id));
-  };
-
-  const handleOpenDeleteDialog = (id) => {
-    setDeleteRowId(id);
-    setOpenDeleteDialog(true);
-  };
-
-  const handleCloseDeleteDialog = () => {
-    setOpenDeleteDialog(false);
-  };
-
-  const handleConfirmDelete = () => {
-    handleDeleteClick(deleteRowId);
-    handleCloseDeleteDialog();
-  };
+  const matches = useMediaQuery(theme.breakpoints.down("sm"));
 
   const navigateToStudy = () => {
     navigate("/fda");
   };
 
+
+  function assignDrugs() {
+    console.log(drugList)
+    for (var i=0; i < patientList.length; i++) {
+      if (patientList[i].eligible ) {
+        // Retrieving an item, changing a field, and saving the updated item
+        const drug_id = Math.floor(Math.random() * 100000000000000000n).toString();
+        var found = false;
+        for (var j=0; j < drugList.length; j++) {
+          if (drugList[j].drug == null) {
+            const updateDrugResponse = entities.drug.update({
+            _id: drugList[j]._id,
+            id: drug_id,
+            });
+            drugList[j].drug = drug_id;
+            found = true;
+            break;
+          }
+        }
+        if (!found) 
+        {
+          console.log("No drugs to assign")
+          break;
+        }
+        const updatePatientResponse = entities.patient.update({
+            _id: patientList[i]._id,
+            drug: drug_id,
+            });
+        console.log(updatePatientResponse)
+      }
+    } 
+  }
 
   useEffect(() => {
     async function getPatients(study) {
@@ -88,10 +99,11 @@ const FDADetails = () => {
         );
       } catch (error) {
         console.log(error);
+      }
     }
-  }
 
     async function fetchData() {
+      setIsLoading(true); // Set loading state to true before fetching data.
       try {
           const response = await entities.study.get(studyID);
           setStudy(response);
@@ -115,7 +127,7 @@ const FDADetails = () => {
       finally{
           setIsLoading(false);
       }
-  }
+    }
   fetchData();
 }, [entities.patient, studyID]);
 
@@ -123,7 +135,8 @@ const FDADetails = () => {
     {
       field: "uuid",
       headerName: "UUID",
-      flex: 1,
+      minWidth: 200,
+      flex: matches ? 1 : 1.5,
       headerAlign: "center",
       align: "center",
       headerClassName: "header--cell",
@@ -133,6 +146,7 @@ const FDADetails = () => {
       field: "eligible",
       headerName: "Eligibility",
       width: 100,
+      minWidth: 120,
       headerAlign: "center",
       align: "center",
       headerClassName: "header--cell",
@@ -162,7 +176,8 @@ const FDADetails = () => {
     {
       field: "drug",
       headerName: "Drug ID",
-      flex: 1,
+      minWidth: 110,
+      flex: matches ? 1 : 1.5,
       headerAlign: "center",
       align: "center",
       headerClassName: "header--cell",
@@ -175,8 +190,8 @@ const FDADetails = () => {
       <Box mt={-1} mb={1}>
         <Grid container spacing={5}>
           <Grid item xs={12} md={5}>
-            <Box bgcolor={theme.palette.mode === 'dark' ? '#171B21' : 'grey.10'} p={3} borderRadius={2}>
-            <Typography variant="h2" style={{marginTop: "-90px", color: theme.palette.mode === "dark" ? "#FFD700" :  "#000000"}}>
+            <Box bgcolor={theme.palette.mode == 'dark' ? '#171B21' : 'grey.10'} p={3} borderRadius={2}>
+            <Typography variant="h2" style={{marginTop: "-90px", color: theme.palette.mode == "dark" ? "#FFD700" :  "#000000"}}>
                 {name}
               </Typography>
               <Typography variant="subtitle1">
@@ -210,21 +225,21 @@ const FDADetails = () => {
             sx={{
               "& .MuiDataGrid-root": {
                 border: "none",
-                color: theme.palette.mode === "dark" ? "white" : "black",
-                backgroundColor: theme.palette.mode === "dark" ? "grey.800" : "white",
+                color: theme.palette.mode == "dark" ? "white" : "black",
+                backgroundColor: theme.palette.mode == "dark" ? "grey.800" : "white",
               },
               "& .MuiDataGrid-cell": {
                 borderBottom: "1px solid grey",
               },
               "& .MuiDataGrid-columnHeaders": {
-                backgroundColor: theme.palette.mode === "dark" ? "grey.900" : "grey.100",
+                backgroundColor: theme.palette.mode == "dark" ? "grey.900" : "grey.100",
               },
               "& .MuiDataGrid-virtualScroller": {
-                backgroundColor: theme.palette.mode === "dark" ? "grey.800" : "white",
+                backgroundColor: theme.palette.mode == "dark" ? "grey.800" : "white",
               },
               "& .MuiDataGrid-footerContainer": {
                 borderTop: "none",
-                backgroundColor: theme.palette.mode === "dark" ? "grey.900" : "grey.100",
+                backgroundColor: theme.palette.mode == "dark" ? "grey.900" : "grey.100",
               },
             }}
           >
