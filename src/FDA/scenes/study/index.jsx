@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Box, Link, Grid, Container, Button, useTheme } from "@mui/material";
 import { styled } from '@mui/system';
-import { GridColDef, DataGrid, GridComparatorFn } from "@mui/x-data-grid";
+import { DataGrid } from "@mui/x-data-grid";
 import Header from "../../components/Header";
 import useFDA from "../../../vendiaHooks/useFDA";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
@@ -40,10 +40,30 @@ const FDAStudy = () => {
   const [reload, setReload] = useState(true);
   const navigate = useNavigate();
   const [patientList, setPatientList] = useState([]);
+  const [allPatients, setAllPatients] = useState([]);
   const matches = useMediaQuery(theme => theme.breakpoints.down('sm'));
 
 
   useEffect(() => {
+    async function fetchData() {
+      try {
+        const response = await entities.study.list();
+        setStudyList(
+          response.items.map((study, index) => ({
+            id: index + 1,
+            _id: study._id, 
+            ...study,
+          }))
+        );
+        setAllPatients(await entities.patient.list())
+        console.log(allPatients)
+      } catch (error) {
+        console.log(error);
+      } finally {
+        setIsLoading(false);
+      }
+    }
+  
     fetchData();
   }, [entities.study, reload]);
 
@@ -124,8 +144,8 @@ const FDAStudy = () => {
     {
       field: "viewStudy",
       headerName: "View Study",
+      minWidth: 100, 
       flex: 1,
-      hide: matches,  // hide this column on small screens
       renderCell: (cellValues) => {
         return (
           <ViewStudyButton
@@ -138,106 +158,116 @@ const FDAStudy = () => {
       },
     },
 
-      { field: "studyName", headerName: "Study Name", flex: matches ? 0.8 : 1 },
-      {
-        field: "status",
-        headerName: "Status",
-        flex: matches ? 0.8 : 1,
-        
-        sortComparator: statusComparator
+    { field: "studyName", headerName: "Study Name", minWidth: 100, flex: matches ? 1 : 1.5 },
+    {
+      field: "status",
+      headerName: "Status",
+      minWidth: 100,
+      flex: matches ? 1 : 1.5,
+      sortComparator: statusComparator,
+    },
+    { 
+      field: "participants",
+      headerName: "Particiapnts",
+      minWidth: 100,
+      flex: matches ? 1 : 1.5,
+      renderCell: (cellValues) => {
+        return <span>{allPatients.items.filter((item) => item.study == cellValues.row.studyName).length}</span>;
+      }
+    },
+    { field: "startDate", headerName: "Start Date", minWidth: 100, flex: matches ? 1 : 1.5 },
+    { field: "endDate", headerName: "End Date", minWidth: 100, flex: matches ? 1 : 1.5 },
+    {
+      field: "studyComplete",
+      headerName: "Study Complete",
+      minWidth: 140,
+      flex: matches ? 1 : 1.5,
+      renderCell: (cellValues) => {
+        return cellValues.row.status == "Complete" ? (
+          <CheckCircleIcon style={{ color: "green" }} />
+        ) : (
+          <CancelIcon style={{ color: "red" }} />
+        );
       },
-      { field: "startDate", headerName: "Start Date", flex: matches ? 0.8 : 1 },
-      { field: "endDate", headerName: "End Date", flex: matches ? 0.8 : 1 },
-
-      {
-        field: "studyComplete",
-        headerName: "Study Complete",
-        flex: 1,
-        renderCell: (cellValues) => {
-          return cellValues.row.status == "Complete" ? (
-            <CheckCircleIcon style={{ color: "green" }} />
-          ) : (
-            <CancelIcon style={{ color: "red" }} />
+    },
+    {
+      field: "actions",
+      headerName: "Actions",
+      minWidth: 140,
+      flex: matches ? 1 : 1.5,
+      renderCell: (cellValues) => {
+        if (cellValues.row.status === "Created") {
+          return (
+            <div style={{ display: "flex", gap: "10px" }}>
+              <ActionButton
+                variant="contained"
+                onClick={() => handleApprove(cellValues.row)}
+              >
+                Approve
+              </ActionButton>
+              <ActionButton
+                variant="contained"
+                onClick={() => handleDecline(cellValues.row)}
+              >
+                Deny
+              </ActionButton>
+            </div>
+          )
+        }
+        else if (cellValues.row.status === "Approved")
+        {
+          return (
+            <div style={{ display: "flex", gap: "10px" }}>
+              <Button
+                variant="contained"
+                color="primary"
+                onClick={() => assignDrugs(cellValues.row)}
+              >
+                <span style={{ color: "red" }}>Start Immediately</span>
+              </Button>
+            </div>)
+        }
+        else if (cellValues.row.status === "Cancelled") {
+          return <span style={{ color: "red" }}>Cancelled</span>
+        }
+        else if (cellValues.row.status === "Full") {
+          return (
+            <div style={{ display: "flex", gap: "10px" }}>
+              <Button
+                variant="contained"
+                color="primary"
+                onClick={() => assignDrugs(cellValues.row)}
+              >
+                Assign Drugs
+              </Button>
+            </div>
           );
-        },
-      }, 
-      {
-        field: "actions",
-        headerName: "Actions",
-        flex: 1,
-        renderCell: (cellValues) => {
-          if (cellValues.row.status === "Created") {
-            return (
-              <div style={{ display: "flex", gap: "10px" }}>
-                <ActionButton
-                  variant="contained"
-                  onClick={() => handleApprove(cellValues.row)}
-                >
-                  Approve
-                </ActionButton>
-                <ActionButton
-                  variant="contained"
-                  onClick={() => handleDecline(cellValues.row)}
-                >
-                  Deny
-                </ActionButton>
-              </div>
-            )
-          }
-          else if (cellValues.row.status === "Approved")
-          {
-            return (
-              <div style={{ display: "flex", gap: "10px" }}>
-                <Button
-                  variant="contained"
-                  color="primary"
-                  onClick={() => assignDrugs(cellValues.row)}
-                >
-                  <span style={{ color: "red" }}>Start Immediately</span>
-                </Button>
-              </div>)
-          }
-          else if (cellValues.row.status === "Cancelled") {
-            return <span style={{ color: "red" }}>Cancelled</span>
-          }
-          else if (cellValues.row.status === "Full") {
-            return (
-              <div style={{ display: "flex", gap: "10px" }}>
-                <Button
-                  variant="contained"
-                  color="primary"
-                  onClick={() => assignDrugs(cellValues.row)}
-                >
-                  Assign Drugs
-                </Button>
-              </div>
-            );
-          }
-          else if (cellValues.row.status === "In Progress")
-          {
-            return <span style={{ color: "primary" }}>In Progress</span>
-          }
-          else if (cellValues.row.status === "Awaiting Results")
-          {
-            return (<div style={{ display: "flex", gap: "10px" }}>
-                <Button
-                  variant="contained"
-                  color="primary"
-                  onClick={() => complete(cellValues.row)}
-                >
-                  Release Results
-                </Button>
-              </div>)
-          }
-          else if (cellValues.row.status === "Complete")
-          {
-            return <span style={{ color: "green" }}>Complete</span>
-          }
-          else
-          {
-            return <span style={{ color: "red" }}>INVALID STATUS</span>
-          }
-        },
+        }
+        else if (cellValues.row.status === "In Progress")
+        {
+          return <span style={{ color: "primary" }}>In Progress</span>
+        }
+        else if (cellValues.row.status === "Awaiting Results")
+        {
+          return (<div style={{ display: "flex", gap: "10px" }}>
+              <Button
+                variant="contained"
+                color="primary"
+                onClick={() => complete(cellValues.row)}
+              >
+                Release Results
+              </Button>
+            </div>)
+        }
+        else if (cellValues.row.status === "Complete")
+        {
+          return <span style={{ color: "green" }}>Complete</span>
+        }
+        else
+        {
+          return <span style={{ color: "red" }}>INVALID STATUS</span>
+        }
+      },
     }
   ];
   return (
@@ -270,5 +300,4 @@ const FDAStudy = () => {
     </Container>
   );
 };
-
 export default FDAStudy;
