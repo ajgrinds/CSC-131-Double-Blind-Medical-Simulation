@@ -75,7 +75,7 @@ const TrialProgress = () => {
         ) : (
 
             <TableContainer component={Paper}>
-            <Table>    
+            <Table>
             <TableHead>
                 <TableRow>
                 <TableCell style={{fontWeight: 'bold'}}>Patient UUID</TableCell>

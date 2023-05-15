@@ -1,24 +1,32 @@
 import React, { useState, useEffect } from 'react';
 import {
   Box,
-  Button,
-  Container,
-  Grid,
-  Typography,
+  Icon,
   useTheme,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogContentText,
+  DialogTitle,
+  Button,
+  Typography
 } from "@mui/material";
 import { useParams } from 'react-router-dom';
 import CheckIcon from '@mui/icons-material/Check';
 import CloseIcon from '@mui/icons-material/Close';
 import { DataGrid } from "@mui/x-data-grid";
+import { tokens } from "../../../theme";
+import Header from "../../components/Header";
 import useFDA from "../../../vendiaHooks/useFDA";
-import { useNavigate } from 'react-router-dom';
-import ArrowBackIcon from '@mui/icons-material/ArrowBack';
-import { useMediaQuery } from '@mui/material';
+import { Grid, Container } from "@mui/material";
+import useMediaQuery from "@mui/material/useMediaQuery";
+
 
 
 const FDADetails = () => {
+
   const theme = useTheme();
+  const colors = tokens(theme.palette.mode);
 
   const { studyID } = useParams();
   const { entities } = useFDA();
@@ -33,23 +41,39 @@ const FDADetails = () => {
   const [endDate, setEndDate] = useState(null);
   const [drugID, setDrugID] = useState(null);
   const [placeboID, setPlaceboID] = useState(null);
-  const navigate = useNavigate();
+
   const [patientList, setPatientList] = useState([]);
-  const [drugList] = useState([]);
+  const [drugList, setDrugList] = useState([]);
 
-  const matches = useMediaQuery(theme.breakpoints.down("sm"));
+  const isSmallScreen = useMediaQuery(theme.breakpoints.down("sm"));
 
-  const navigateToStudy = () => {
-    navigate("/fda");
+  const [openDeleteDialog, setOpenDeleteDialog] = useState(false);
+  const [deleteRowId, setDeleteRowId] = useState(null);
+
+  const handleDeleteClick = (id) => {
+    setPatientList((prevPatientList) => prevPatientList.filter((patient) => patient.id !== id));
   };
 
+  const handleOpenDeleteDialog = (id) => {
+    setDeleteRowId(id);
+    setOpenDeleteDialog(true);
+  };
+
+  const handleCloseDeleteDialog = () => {
+    setOpenDeleteDialog(false);
+  };
+
+  const handleConfirmDelete = () => {
+    handleDeleteClick(deleteRowId);
+    handleCloseDeleteDialog();
+  };
 
   function assignDrugs() {
     console.log(drugList)
     for (var i=0; i < patientList.length; i++) {
       if (patientList[i].eligible ) {
         // Retrieving an item, changing a field, and saving the updated item
-        const drug_id = Math.floor(Math.random() * 100000000000000000n).toString();
+        const drug_id = Math.floor(Math.random() * 100000000000000000).toString();
         var found = false;
         for (var j=0; j < drugList.length; j++) {
           if (drugList[j].drug == null) {
@@ -76,6 +100,8 @@ const FDADetails = () => {
     } 
   }
 
+
+
   useEffect(() => {
     async function getPatients(study) {
       try {
@@ -99,11 +125,10 @@ const FDADetails = () => {
         );
       } catch (error) {
         console.log(error);
-      }
     }
+  }
 
     async function fetchData() {
-      setIsLoading(true); // Set loading state to true before fetching data.
       try {
           const response = await entities.study.get(studyID);
           setStudy(response);
@@ -127,7 +152,7 @@ const FDADetails = () => {
       finally{
           setIsLoading(false);
       }
-    }
+  }
   fetchData();
 }, [entities.patient, studyID]);
 
@@ -135,8 +160,7 @@ const FDADetails = () => {
     {
       field: "uuid",
       headerName: "UUID",
-      minWidth: 200,
-      flex: matches ? 1 : 1.5,
+      flex: 1,
       headerAlign: "center",
       align: "center",
       headerClassName: "header--cell",
@@ -146,7 +170,6 @@ const FDADetails = () => {
       field: "eligible",
       headerName: "Eligibility",
       width: 100,
-      minWidth: 120,
       headerAlign: "center",
       align: "center",
       headerClassName: "header--cell",
@@ -176,8 +199,7 @@ const FDADetails = () => {
     {
       field: "drug",
       headerName: "Drug ID",
-      minWidth: 110,
-      flex: matches ? 1 : 1.5,
+      flex: 1,
       headerAlign: "center",
       align: "center",
       headerClassName: "header--cell",
@@ -187,35 +209,18 @@ const FDADetails = () => {
 
   return ( study ? (
     <Container maxWidth="lg">
-      <Box mt={-1} mb={1}>
-        <Grid container spacing={5}>
-          <Grid item xs={12} md={5}>
-            <Box bgcolor={theme.palette.mode == 'dark' ? '#171B21' : 'grey.10'} p={3} borderRadius={2}>
-            <Typography variant="h2" style={{marginTop: "-90px", color: theme.palette.mode == "dark" ? "#FFD700" :  "#000000"}}>
-                {name}
-              </Typography>
-              <Typography variant="subtitle1">
-                Study ID: {id}
-              </Typography>
-              <Typography variant="subtitle1">
-                Drug ID: {drugID}
-              </Typography>
-              <Typography variant="subtitle1">
-                Placebo ID: {placeboID}
-              </Typography>
-            </Box>
-            <Button 
+      <Typography variant="h1">{name}</Typography>
+      <Typography>Study ID: {id}</Typography>
+      <Typography>Drug ID: {drugID}</Typography>
+      <Typography>Placebo ID: {placeboID}</Typography>
+      <Button
             variant="contained"
-            color="primary"
-            onClick={navigateToStudy}
-            startIcon={<ArrowBackIcon />}
-            style={{ marginBottom: '-40px'}}
-        >
-            Back to FDA
-        </Button>
-          </Grid>
-        </Grid>
-      </Box>
+            color="secondary"
+            onClick={() => assignDrugs()}
+            style={{right:"62.5%", bottom:"5px" }}
+          >
+            Assign Drugs to Eligible Patients
+          </Button>
       <Grid container spacing={3}>
         <Grid item xs={12}>
           <Box
@@ -225,21 +230,23 @@ const FDADetails = () => {
             sx={{
               "& .MuiDataGrid-root": {
                 border: "none",
-                color: theme.palette.mode == "dark" ? "white" : "black",
-                backgroundColor: theme.palette.mode == "dark" ? "grey.800" : "white",
               },
               "& .MuiDataGrid-cell": {
-                borderBottom: "1px solid grey",
+                borderBottom: "none",
+              },
+              "& .name-column--cell": {
+                color: colors.greenAccent[500],
               },
               "& .MuiDataGrid-columnHeaders": {
-                backgroundColor: theme.palette.mode == "dark" ? "grey.900" : "grey.100",
+                backgroundColor: colors.patientColor[200],
+                borderBottom: "none",
               },
               "& .MuiDataGrid-virtualScroller": {
-                backgroundColor: theme.palette.mode == "dark" ? "grey.800" : "white",
+                backgroundColor: colors.patientColor[100],
               },
               "& .MuiDataGrid-footerContainer": {
                 borderTop: "none",
-                backgroundColor: theme.palette.mode == "dark" ? "grey.900" : "grey.100",
+                backgroundColor: colors.patientColor[200],
               },
             }}
           >
@@ -253,18 +260,22 @@ const FDADetails = () => {
                 rowHeight={50}
                 headerHeight={50}
                 initialState={{
-                  sorting: {
-                    sortModel: [{ field: 'eligible', sort: 'desc' }],
-                  },
-                }}
+                sorting: {
+                  sortModel: [{ field: 'eligible', sort: 'desc' }],
+                },
+              }}
               />
             )}
           </Box>
         </Grid>
       </Grid>
-    </Container>  
+
+      
+    </Container>
   ) : (
-        <p>Loading...</p> 
+
+        <p>Loading...</p>
+        
       ));
 };
 

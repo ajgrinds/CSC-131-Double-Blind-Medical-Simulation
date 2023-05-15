@@ -1,40 +1,30 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged, signOut } from "firebase/auth";
 import { auth } from "../../firebase-config";
 import Button from "@mui/material/Button";
-import { Link, useNavigate, useLocation } from "react-router-dom";
-import Avatar from "@mui/material/Avatar";
-import CssBaseline from "@mui/material/CssBaseline";
-import TextField from "@mui/material/TextField";
-import FormControlLabel from "@mui/material/FormControlLabel";
-import Checkbox from "@mui/material/Checkbox";
-import Grid from "@mui/material/Grid";
-import Box from "@mui/material/Box";
-import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
-import Typography from "@mui/material/Typography";
-import Container from "@mui/material/Container";
-import { createTheme, ThemeProvider } from "@mui/material/styles";
-import AccountCircleIcon from "@mui/icons-material/AccountCircle";
-import Dialog from "@mui/material/Dialog";
-import DialogContent from "@mui/material/DialogContent";
-import Fade from "@mui/material/Fade";
-import CircularProgress from "@mui/material/CircularProgress";
-import IconButton from "@mui/material/IconButton";
-import InputAdornment from "@mui/material/InputAdornment";
-import Visibility from "@mui/icons-material/Visibility";
-import VisibilityOff from "@mui/icons-material/VisibilityOff";
-import SquiliemImage from "./logIn.jpeg";
-import Hidden from "@mui/material/Hidden";
-import useMediaQuery from "@mui/material/useMediaQuery";
+import { Link, useNavigate } from "react-router-dom";
+import * as React from 'react';
+import Avatar from '@mui/material/Avatar';
+import CssBaseline from '@mui/material/CssBaseline';
+import TextField from '@mui/material/TextField';
+import FormControlLabel from '@mui/material/FormControlLabel';
+import Checkbox from '@mui/material/Checkbox';
+import Grid from '@mui/material/Grid';
+import Box from '@mui/material/Box';
+import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
+import Typography from '@mui/material/Typography';
+import Container from '@mui/material/Container';
+import { createTheme, ThemeProvider } from '@mui/material/styles';
+import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 
-const Login = () => {
+const Login = () =>  {
 
     const[registerEmail, setRegisterEmail] = useState("");
     const[registerPassword, setRegisterPassword] = useState("");
     const[loginEmail, setLoginEmail] = useState("");
     const[loginPassword, setLoginPassword] = useState("");
     const navigate = useNavigate();
-    const location = useLocation();
+
 
     const[user, setUser] = useState({});
 
@@ -86,172 +76,94 @@ const Login = () => {
         await signOut(auth);
     };
 
-    /*Transition to pages*/
-    const handleNavigation = (path) => {
-      document.body.classList.add("page-transition");
-      setTimeout(() => {
-        navigate(path);
-        document.body.classList.remove("page-transition");
-      }, 500);
-    };
-
     const theme = createTheme();
-    const [loading, setLoading] = useState(false);
-    const [showPassword, setShowPassword] = useState(false);
 
-    /*Password visibility*/
-    const handleClickShowPassword = () => {
-      setShowPassword(!showPassword);
-    };
-    
-    const handleMouseDownPassword = (event) => {
-      event.preventDefault();
-    };
-
-    const isSmallScreen = useMediaQuery(theme.breakpoints.down("xs"));
-
-
-    return (
-      <ThemeProvider theme={theme}>
+return (
+    <ThemeProvider theme={theme}>
+      <Container component="main" maxWidth="xs">
         <CssBaseline />
-        <Container component="main" maxWidth="md">
-          <Dialog open={true} maxWidth={"md"} fullWidth>
-            <Fade in={true} timeout={1000}>
-              <DialogContent
-                style={{
-                  padding: 0,
-                  overflowY: isSmallScreen ? "auto" : "hidden",
-                  height: "70vh",
-                }}
-              >
-                <Grid container height="100%">
-                <Hidden smDown>
-                <Grid item sm={6} style={{ backgroundColor: "#f5f5f5", position: "relative" }}>
-                  <img
-                    src={SquiliemImage}
-                    alt="Your image"
-                    style={{ width: "100%", height: "100%" }}
-                  />
-                  <Box
-                    sx={{
-                      position: "absolute",
-                      top: "10%",
-                      left: "36%",
-                      transform: "translate(-50%, -50%)",
-                    }}
-                  >
-                    <Typography
-                      variant="h3"
-                      color="#FFFFFF"
-                      align="center"
-                      fontWeight="bold"
-                      style={{ textShadow: "2px 2px 4px rgba(0, 0, 0, 0.5)" }}
-                    >
-                      Pharmastudy
-                    </Typography>
-                    <Typography
-                      variant="h6"
-                      color="#FFFFFF"
-                      align="flex-start"
-                      fontWeight="semi-bold"
-                      style={{ textShadow: "1px 1px 2px rgba(0, 0, 0, 0.5)" }}
-                    >
-                      Jane Hopkins - FDA - Bavaria
-                    </Typography>
-                  </Box>
-                </Grid>
-                  </Hidden>
-                  <Grid item xs={12} sm={6}>
-                    <Box
-                      sx={{
-                        display: "flex",
-                        flexDirection: "column",
-                        alignItems: "center",
-                        bgcolor: "#FFFFFF",
-                        borderRadius: "0px",
-                        border: 1,
-                        borderColor: "white",
-                        p: 3,
-                        height: "100%",
-                        overflowY: "auto", // Make the content scrollable on mobile devices
-                      }}
-                    >
-                    <AccountCircleIcon sx={{ fontSize: 100, mt: 1 }} />
-                    <Typography
-                      component="h1"
-                      variant="h5"
-                      marginTop={2}
-                      fontFamily={"Inter"}
-                      fontWeight={900}
-                      fontSize={36}
-                    >
-                      Sign in
-                    </Typography>
-                    <TextField
-                      fullWidth
-                      margin="normal"
-                      label="Email"
-                      variant="outlined"
-                      onChange={(event) => {
+        <Box
+          sx={{
+            marginTop: 10,
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            bgcolor:'#CDCCCC',
+            borderRadius: '16px',
+            border: 1,
+            borderColor:'black'
+          }}
+        >
+          <AccountCircleIcon sx = {{fontSize: 100, mt: 3 }}/>
+
+          <Typography component="h1" variant="h5" marginTop={2} fontFamily={"Inter"} fontWeight={900} fontSize={36}>
+            Sign in
+          </Typography>
+
+          <Box sx={{ display:'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap:1, mt: 2 }}>
+                <input
+                    placeholder="Email..."
+                    onChange={(event) => {
                         setLoginEmail(event.target.value);
-                      }}
-                    />
-                    <TextField
-                      fullWidth
-                      margin="normal"
-                      label="Password"
-                      variant="outlined"
-                      type={showPassword ? "text" : "password"}
-                      onChange={(event) => {
+                    } } />
+
+                <input
+                    placeholder="Password..."
+                    onChange={(event) => {
                         setLoginPassword(event.target.value);
-                      }}
-                      InputProps={{
-                        endAdornment: (
-                          <InputAdornment position="end">
-                            <IconButton
-                              edge="end"
-                              color="inherit"
-                              onClick={handleClickShowPassword}
-                              onMouseDown={handleMouseDownPassword}
-                            >
-                              {showPassword ? <Visibility /> : <VisibilityOff />}
-                            </IconButton>
-                          </InputAdornment>
-                        )
-                      }}
-                    />
-                    <Button
-                      type="submit"
-                      fullWidth
-                      variant="contained"
-                      sx={{ mt: 3, mb: 2 }}
-                      onClick={login}
-                      disabled={loading}
-                    >
-                      {loading ? <CircularProgress size={24} /> : "Sign In"}
-                    </Button>
-                    <Typography
-                      fontFamily={"Inter"}
-                      fontWeight={400}
-                      fontSize={16}
-                      mb={1}
-                      onClick={() => handleNavigation("/JaneHopkins")} 
-                    >
-                      <Link to="#">Continue as Guest</Link> 
-                    </Typography>
-                    <Typography fontFamily={"Inter"} fontWeight={400} fontSize={16}>
-                      Don't have an account? Click{" "}
-                      <Link to="/Register"> Here </Link> to register
-                    </Typography>
-                    </Box>
-                </Grid>
-              </Grid>
-            </DialogContent>
-          </Fade>
-        </Dialog>
+                    } } />
+           
+            
+            </Box>
+
+            <Box sx ={{alignContent: 'center'}}>
+              <Button
+              type="submit"
+              fullWidth
+              variant="contained"
+              sx={{position:'center', mt: 3, mb: 2 }}
+              onClick={login}
+            >
+              Sign In
+            </Button>
+            </Box>
+
+        {/* logout functionality
+        <Typography component="h1" variant="h5">
+            Currently logged in as:
+            {user?.email}
+          </Typography>
+
+          <Box noValidate sx={{ mt: 1 }}>
+            <Button
+              type="submit"
+              fullWidth
+              variant="contained"
+              sx={{ mt: 3, mb: 2 }}
+              onClick={logout}
+            >
+              Sign Out
+            </Button>
+            </Box>
+                  */ }
+
+        <Box>
+          <Typography fontFamily={"Inter"} fontWeight={400} fontSize={16} marginTop={1}>
+            <Link to = "/JaneHopkins"> Continue as Guest </Link>
+          </Typography>
+        </Box>
+
+        <Box>
+          <Typography fontFamily={"Inter"} fontWeight={400} fontSize={16} marginTop={1}>
+            Dont have an account? Click 
+            <Link to = "/Register"> Here </Link>
+            to register
+          </Typography>
+        </Box>
+
+        </Box>
       </Container>
     </ThemeProvider>
-  );
-};
+  ); }
 
 export default Login;
