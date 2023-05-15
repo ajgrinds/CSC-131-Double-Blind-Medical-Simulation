@@ -81,7 +81,7 @@ const StudyContent = () => {
 
     useEffect(() => {
         const checkComplete = () => {
-          const isComplete = patientList.every(patient => patient.visits.length === 5);
+          const isComplete = patientList.every(patient => patient.vists !== NULL && patient.visits.length === 5);
           setComplete(isComplete);
         };
       
