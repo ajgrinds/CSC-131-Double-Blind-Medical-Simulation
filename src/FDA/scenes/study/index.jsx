@@ -229,7 +229,7 @@ const FDAStudy = () => {
                 color="primary"
                 onClick={() => assignDrugs(cellValues.row)}
               >
-                <span style={{ color: "primary" }}>Start Study</span>
+                <span style={{ color: "primary" }}>Assign Drugs</span>
               </Button>
             </div>)
         }

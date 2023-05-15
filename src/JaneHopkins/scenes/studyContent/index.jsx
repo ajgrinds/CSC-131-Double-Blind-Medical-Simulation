@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { Box, Button, useTheme, CircularProgress } from "@mui/material";
 import { DataGrid } from "@mui/x-data-grid";
@@ -8,10 +8,13 @@ import useJaneHopkins from "../../../vendiaHooks/useJaneHopkins";
 import { styled } from '@mui/material/styles';
 import { purple } from '@mui/material/colors';
 import CheckIcon from '@mui/icons-material/Check';
+import CloseIcon from '@mui/icons-material/Close';
+import { useParams } from 'react-router-dom';
 
 const StudyContent = () => {
 
 
+    const { id } = useParams();
     const theme = useTheme();
     const colors = tokens(theme.palette.mode);
 
@@ -36,8 +39,8 @@ const StudyContent = () => {
 
             try{
 
-                const response = await entities.patient.list();
-                console.log(response);
+                const response = await entities.patient.list({ filter: { study: { eq: id, }  }  }
+                    );
                 setPatientList(response.items.map((patient, index) => ({
                     ...patient,
                     id: index + 1,
@@ -51,7 +54,6 @@ const StudyContent = () => {
         }
 
         fetchData();
-        
     }, [entities.patient]);
 
 
@@ -81,9 +83,11 @@ const StudyContent = () => {
 
     useEffect(() => {
         const checkComplete = () => {
-          const isComplete = patientList.every(patient => patient.visits.length === 5);
+          const isComplete = patientList.every(patient => patient.visits && patient.visits.length === 5);
           setComplete(isComplete);
         };
+
+        console.log(patientList)
       
         checkComplete();
       }, [patientList]);
@@ -123,7 +127,25 @@ const StudyContent = () => {
             width: 150,
             renderCell: (params) => (
                 
-                <CheckIcon/>
+                <>
+          {!params.row.icdHealthCodes || params.row.icdHealthCodes.length == 0  ? (
+             <>
+                <CheckIcon
+                    edge="end"
+                    color="success"
+                >
+                </CheckIcon>
+            </>
+            ) : (
+             <>
+          <CloseIcon
+            edge="end"
+            color="error"
+          >
+          </CloseIcon>
+        </>
+          )}
+        </>
                      
             ),
         },
@@ -193,7 +215,7 @@ const StudyContent = () => {
                         <CircularProgress/>
                       </Box>
                     ) : (
-                        <DataGrid rows={patientList.filter(patient => !patient.icdHealthCodes || patient.icdHealthCodes.length === 0)} columns={columns} />
+                        <DataGrid rows={patientList} columns={columns} />
                     )}
 
 

@@ -147,10 +147,10 @@ const BavariaDashboard = () => {
                         {study.endDate}
                       </TableCell>
                       <TableCell style={{color: "green"}}>
-                        yes
+                        Yes
                       </TableCell>
-                      <TableCell style={{color: study.status !== "Create" && study.status != "Cancelled" ? "green" : "red"}}>
-                        {study.status !== "Created" && study.status !== "Cancelled" ? "Yes" : "No"}
+                      <TableCell style={{color: study.status !== "Pending" && study.status != "Cancelled" ? "green" : "red"}}>
+                        {study.status !== "Pending" && study.status !== "Cancelled" ? "Yes" : "No"}
                       </TableCell>
                       <TableCell>
                         <Link to={`/Bavaria/report/${study._id}`}>

@@ -197,6 +197,22 @@ enum Vendia_SyncMode {
   ASYNC
 }
 
+enum Vendia_EraseMode {
+  LOCAL
+  GLOBAL
+}
+
+type Vendia_Meta_Field {
+  _erased: [Vendia_Meta_Erased]
+  _hash: String!
+  _salt: String
+}
+
+type Vendia_Meta_Erased {
+  type: Vendia_EraseMode!
+  nodes: [String!]!
+}
+
 input Self_Drug_ConditionInput_ {
   batchNumber: Vendia_ModelStringInput_
   id: Vendia_ModelStringInput_
@@ -487,6 +503,7 @@ input Self_Study_ConditionInput_ {
   drugId: Vendia_ModelStringInput_
   endDate: Vendia_ModelStringInput_
   fdaApproved: Vendia_ModelBooleanInput_
+  maxParticipants: Vendia_ModelIntInput_
   placeboId: Vendia_ModelStringInput_
   startDate: Vendia_ModelStringInput_
   status: Vendia_ModelStringInput_
@@ -502,6 +519,7 @@ input Self_Study_FilterInput_ {
   drugId: Vendia_ModelStringInput_
   endDate: Vendia_ModelStringInput_
   fdaApproved: Vendia_ModelBooleanInput_
+  maxParticipants: Vendia_ModelIntInput_
   placeboId: Vendia_ModelStringInput_
   startDate: Vendia_ModelStringInput_
   status: Vendia_ModelStringInput_
@@ -521,6 +539,7 @@ type Self_Study {
   drugId: String
   endDate: String
   fdaApproved: Boolean
+  maxParticipants: Int
   placeboId: String
   startDate: String
   status: String
@@ -534,6 +553,7 @@ type Self_Study_Partial_ {
   drugId: String
   endDate: String
   fdaApproved: Boolean
+  maxParticipants: Int
   placeboId: String
   startDate: String
   status: String
@@ -567,6 +587,7 @@ input Self_Study_Input_ {
   drugId: String
   endDate: String
   fdaApproved: Boolean
+  maxParticipants: Int
   placeboId: String
   startDate: String
   status: String
@@ -578,6 +599,7 @@ input Self_Study_UpdateInput_ {
   drugId: String
   endDate: String
   fdaApproved: Boolean
+  maxParticipants: Int
   placeboId: String
   startDate: String
   status: String
@@ -589,6 +611,7 @@ input Self_Study_PartialInput_ {
   drugId: String
   endDate: String
   fdaApproved: Boolean
+  maxParticipants: Int
   placeboId: String
   startDate: String
   status: String
@@ -2701,6 +2724,7 @@ type Vendia_File {
   fileVersion: String
   vendia: Vendia_File_vendia
   _owner: String
+  _erased: [Vendia_Meta_Erased]
 }
 
 type Vendia_File_Partial_ {
@@ -3908,6 +3932,7 @@ type Mutation {
   putVendia_File(id: ID!, input: Vendia_File_Input_!, condition: Vendia_File_ConditionInput_, syncMode: Vendia_SyncMode!): Vendia_File_Transaction_Result_
   updateVendia_File(id: ID!, input: Vendia_File_UpdateInput_!, condition: Vendia_File_ConditionInput_, syncMode: Vendia_SyncMode!): Vendia_File_Transaction_Result_
   removeVendia_File(id: ID!, condition: Vendia_File_ConditionInput_, syncMode: Vendia_SyncMode!): Vendia_File_Delete_Transaction_Result_
+  eraseVendia_File(id: ID!, eraseMode: Vendia_EraseMode!, syncMode: Vendia_SyncMode!): Vendia_File_Transaction_Result_
   addVendia_Folder(input: Vendia_Folder_Input_!, syncMode: Vendia_SyncMode!): Vendia_Folder_Transaction_Result_
   removeVendia_Folder(id: ID!, condition: Vendia_Folder_ConditionInput_, syncMode: Vendia_SyncMode!): Vendia_Folder_Delete_Transaction_Result_
   addVendia_Contract(input: Vendia_Contract_Input_!, aclInput: Vendia_Acls_Input_, syncMode: Vendia_SyncMode!): Vendia_Contract_Transaction_Result_

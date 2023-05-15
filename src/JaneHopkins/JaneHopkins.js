@@ -36,7 +36,7 @@ const Doctor = () => {
                   <Route path="/patient/:id" element={<PatientDetails />} />
                   <Route path="/trackdosage" element={<TrackDosage/>} />
                   <Route path="/trackdosage/:id" element={<PatientDosage/>}/>
-                  <Route path="/studycontent" element={<StudyContent/>}/>
+                  <Route path="/studycontent/:id" element={<StudyContent/>}/>
                   
                 </Routes>
               </SmoothTransition>

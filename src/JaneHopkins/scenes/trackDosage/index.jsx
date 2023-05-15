@@ -56,6 +56,11 @@ const TrackDosage = () => {
             cellClassName: "name-column--cell"
         },
         {
+            field: "study",
+            headerName: "Study",
+            flex: 1
+        },
+        {
             field: "view",
             headerName: "Dosage",
             width: 100,
@@ -75,7 +80,7 @@ const TrackDosage = () => {
         
     ];
 
-
+    console.log(patientList);
   return (
 
     
@@ -108,7 +113,7 @@ const TrackDosage = () => {
             {isLoading ? (
                 <Box>Loading...</Box>
             ) : (
-                <DataGrid rows={patientList.filter( patient => !patient.icdHealthCodes || patient.icdHealthCodes.length == 0)} columns={columns}/>
+                <DataGrid rows={patientList.filter(patient => (!patient.icdHealthCodes || patient.icdHealthCodes.length === 0) && patient.study)} columns={columns}/>
             )}
             
         </Box>

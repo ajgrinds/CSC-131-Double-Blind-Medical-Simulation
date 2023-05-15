@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { Box, Button, useTheme, CircularProgress } from "@mui/material";
 import { DataGrid } from "@mui/x-data-grid";
@@ -86,7 +86,7 @@ const Patient = () =>{
         width: 150,
         renderCell: (params) => (
             
-            <Link style={{textDecoration: "none"}} to={`/JaneHopkins/studyContent/`}>
+            <Link style={{textDecoration: "none"}} to={`/JaneHopkins/studyContent/${params.row.studyName}`}>
                 <Button 
 
                     variant="contained" 
