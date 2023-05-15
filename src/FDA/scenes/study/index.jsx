@@ -229,7 +229,7 @@ const FDAStudy = () => {
                 color="primary"
                 onClick={() => assignDrugs(cellValues.row)}
               >
-                <span style={{ color: "green" }}>Start Study</span>
+                <span style={{ color: "primary" }}>Start Study</span>
               </Button>
             </div>)
         }
@@ -274,7 +274,7 @@ const FDAStudy = () => {
         }
         else if (cellValues.row.status === "Success")
         {
-          return <span style={{ color: "green" }}>Success</span>
+          return <span style={{ color: "primary" }}>Success</span>
         }
         else if (cellValues.row.status === "Failure")
         {
