@@ -13,6 +13,9 @@ import { useMediaQuery } from '@mui/material';
 
 import "./index.css";
 
+
+const theme = useTheme();
+
 const ViewStudyButton = styled(Button)(({ theme }) => ({
   backgroundColor: theme.palette.mode === 'light' ? '#4CAF50' : '#2196F3',
   '&:hover': {
