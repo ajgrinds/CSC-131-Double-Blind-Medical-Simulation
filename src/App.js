@@ -14,6 +14,8 @@ import RegisterPage from "./authentication/scenes/register/Index"
 import CreateDrug from "./Bavaria/scenes/createDrug";
 import TrackDosage from "./JaneHopkins/scenes/trackDosage";
 import PatientDosage from "./JaneHopkins/scenes/patientDosage";
+import TrialProgress from "./Bavaria/scenes/trialProgress";
+import FinalReport from "./Bavaria/scenes/finalReport";
 import { useState, useContext, Context } from "react";
 import { TrackChanges } from "@mui/icons-material";
 import { AuthProvider } from "./authentication/context/AuthContext";
@@ -53,12 +55,13 @@ function App() {
 
         <Route path="/bavaria/*" element={<Bavaria/>}>
           <Route path="createDrug" element={<CreateDrug/>}/>  
+          <Route path="study" element={<TrialProgress/>}/>
+          <Route path="report/:id" element={<FinalReport />} />
         </Route>
-
-      </Route>
         
-   
-      {/*Routes for FDA page */}
+      </Route>
+
+      {/*Routes for FDA page */}  
       <Route element = {<ProtectedRoute allowedRoles = {'FDA'} />}> 
 
         <Route exact path="/fda/*" element={<FDA/>} />

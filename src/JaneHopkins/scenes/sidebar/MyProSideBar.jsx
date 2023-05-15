@@ -191,10 +191,11 @@ const MyProSideBar = () => {
             <Typography
               variant="h6"
               color={colors.grey[300]}
-              sx={{ m: "15px 20px 5px 20px" }}
+              sx={{m: "15px 0 5px 20px"}}
             >
-              Data
+              Pages
             </Typography>
+
             <Item
               title="Admin"
               to="/JaneHopkins/Admin"
@@ -202,6 +203,15 @@ const MyProSideBar = () => {
               selected={selected}
               setSelected={setSelected}
             />
+
+            <Typography
+              variant="h6"
+              color={colors.grey[300]}
+              sx={{ m: "15px 20px 5px 20px" }}
+            >
+              Data
+            </Typography>
+            
 
             <Item
               title="Patients"
@@ -226,29 +236,9 @@ const MyProSideBar = () => {
               setSelected={setSelected}
             />
             
-            <Typography
-              variant="h6"
-              color={colors.grey[300]}
-              sx={{m: "15px 0 5px 20px"}}
-            >
-              Pages
-            </Typography>
+            
 
-            <Item
-              title="FDA"
-              to="/fda"
-              icon={<PersonOutlinedIcon/>}
-              selected={selected}
-              setSelected={setSelected}
-            />
-            <Item
-              title="Bavaria"
-              to="/Bavaria"
-              icon={<CalendarTodayOutlinedIcon/>}
-              selected={selected}
-              setSelected={setSelected}
-            />
-           
+            
           </Box> 
         </Menu>
       </Sidebar>
