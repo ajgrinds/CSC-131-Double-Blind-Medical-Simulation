@@ -193,7 +193,7 @@ const FDAStudy = () => {
       minWidth: 140,
       flex: matches ? 1 : 1.5,
       renderCell: (cellValues) => {
-        return cellValues.row.status == "Complete" ? (
+        return cellValues.row.status == "Success" ? (
           <CheckCircleIcon style={{ color: "green" }} />
         ) : (
           <CancelIcon style={{ color: "red" }} />
@@ -269,7 +269,7 @@ const FDAStudy = () => {
               </Button>
               <Button
                 variant="contained"
-                color="red"
+                color="secondary"
                 onClick={() => fail(cellValues.row)}
               >
                 Failure
