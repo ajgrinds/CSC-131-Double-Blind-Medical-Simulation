@@ -14,7 +14,7 @@ import { useMediaQuery } from '@mui/material';
 import "./index.css";
 
 
-const theme = useTheme();
+
 
 const ViewStudyButton = styled(Button)(({ theme }) => ({
   backgroundColor: theme.palette.mode === 'light' ? '#4CAF50' : '#2196F3',
@@ -37,6 +37,7 @@ const DataGridContainer = styled(Box)(({ theme }) => ({
 }));
 
 const FDAStudy = () => {
+  const theme = useTheme();
   const { entities } = useFDA();
   const [studyList, setStudyList] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
