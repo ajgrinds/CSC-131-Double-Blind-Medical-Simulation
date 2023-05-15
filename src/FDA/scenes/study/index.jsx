@@ -120,7 +120,7 @@ const FDAStudy = () => {
       response.items.map((patient, index) => ({
         id: index + 1,
         _id: patient._id,
-        eligible: patient.icdHealthCodes == null,
+        eligible: !patient.icdHealthCodes || patient.icdHealthCodes.length == 0 ,
         drug: patient.drug
       }))
     );
