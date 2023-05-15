@@ -39,12 +39,12 @@ const StudyContent = () => {
             try{
 
                 const response = await entities.patient.list();
-                console.log(response);
                 setPatientList(response.items.map((patient, index) => ({
                     ...patient,
                     id: index + 1,
 
                 }))); 
+                console.log(patientList.filter(patient => (!patient.icdHealthCodes || patient.icdHealthCodes.length === 0) && patient.study === id ))
             } catch(error){
                 console.log(error);
             } finally{
@@ -195,7 +195,7 @@ const StudyContent = () => {
                         <CircularProgress/>
                       </Box>
                     ) : (
-                        <DataGrid rows={patientList.filter(patient => !patient.icdHealthCodes || patient.icdHealthCodes.length === 0 && patient.study === id )} columns={columns} />
+                        <DataGrid rows={patientList.filter(patient => (!patient.icdHealthCodes || patient.icdHealthCodes.length === 0) && patient.study === id )} columns={columns} />
                     )}
 
 
