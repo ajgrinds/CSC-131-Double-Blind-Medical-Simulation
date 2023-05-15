@@ -4,6 +4,7 @@ import { Box, Button, useTheme, CircularProgress } from "@mui/material";
 import { DataGrid } from "@mui/x-data-grid";
 import { tokens } from "../../../theme";
 import Header from "../../components/Header";
+import { useParams } from 'react-router-dom';
 import useJaneHopkins from "../../../vendiaHooks/useJaneHopkins";
 import { styled } from '@mui/material/styles';
 import { purple } from '@mui/material/colors';
@@ -15,7 +16,7 @@ const StudyContent = () => {
     const theme = useTheme();
     const colors = tokens(theme.palette.mode);
 
-    const { name } = useParams();
+    const { study } = useParams();
 
     const ColorButton = styled(Button)(({ theme }) => ({
       color: theme.palette.getContrastText(purple[500]),
@@ -97,7 +98,7 @@ const StudyContent = () => {
 
     useEffect(() => {
         const checkComplete = () => {
-          const isComplete = patientList.every(patient => patient.study === name && patient.vists !== NULL && patient.visits.length === 5);
+          const isComplete = patientList.every(patient => patient.study === name && patient.vists !== null && patient.visits.length === 5);
           setComplete(isComplete);
         };
       
