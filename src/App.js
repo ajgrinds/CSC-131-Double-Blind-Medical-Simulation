@@ -15,6 +15,8 @@ import RegisterPage from "./authentication/scenes/register/Index"
 import CreateDrug from "./Bavaria/scenes/createDrug";
 import TrackDosage from "./JaneHopkins/scenes/trackDosage";
 import PatientDosage from "./JaneHopkins/scenes/patientDosage";
+import Login from "./authentication/scenes/login/Index";
+import Register from "./authentication/scenes/register/Index";
 import TrialProgress from "./Bavaria/scenes/trialProgress";
 import FinalReport from "./Bavaria/scenes/finalReport";
 
@@ -24,16 +26,9 @@ function App() {
   return ( 
 
     <Routes>
-      
-      { /* Login Page */}
-
+     
       <Route exact path="/" element={<LoginPage/>}/>
-
-      { /* Register Page */}
-
       <Route exact path="/Register" element={<RegisterPage/>}/>
-
-      
 
       {/*Routes for JaneHopkins Page */}
       <Route path="/JaneHopkins/*" element={<Doctor/>}>

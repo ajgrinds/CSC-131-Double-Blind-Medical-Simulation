@@ -128,7 +128,7 @@ const MyProSideBar = () => {
                   },
                 }}
               >
-                {window.location.pathname === '/JaneHopkins/Admin'? (
+                { (window.location.pathname === '/JaneHopkins/Admin' || window.location.pathname === '/JaneHopkins/studyContent/') ? (
                   <Typography variant="h4">ADMIN</Typography>
                   
                 ) : (
@@ -147,11 +147,11 @@ const MyProSideBar = () => {
                 
               </Box>
 
-             {window.location.pathname === '/JaneHopkins/Admin' ? (
+             {window.location.pathname === '/JaneHopkins/Admin' || window.location.pathname === '/JaneHopkins/studyContent/' ? (
               <Box textAlign="center">
                 <Typography variant="h5" color={colors.greenAccent[500]}>
-                Administration
-              </Typography>
+                  Administration
+                </Typography>
 
               </Box>
               
@@ -180,13 +180,23 @@ const MyProSideBar = () => {
           )}
 
           <Box paddingLeft={collapsed ? undefined : "10%"}>
-            <Item
-              title="Dashboard"
-              to="/JaneHopkins"
-              icon={<HomeOutlinedIcon/>}
-              selected={selected}
-              setSelected={setSelected}
-            />
+
+            {
+              window.location.pathname === '/JaneHopkins/Admin' || window.location.pathname === '/JaneHopkins/studyContent/' ? (
+                ""
+              ):(
+                
+                <Item
+                  title="Dashboard"
+                  to="/JaneHopkins"
+                  icon={<HomeOutlinedIcon/>}
+                  selected={selected}
+                  setSelected={setSelected}
+                />
+              )
+              
+            }
+            
 
             <Typography
               variant="h6"
@@ -204,40 +214,87 @@ const MyProSideBar = () => {
               setSelected={setSelected}
             />
 
-            <Typography
-              variant="h6"
-              color={colors.grey[300]}
-              sx={{ m: "15px 20px 5px 20px" }}
-            >
-              Data
-            </Typography>
-            
+            {
+              window.location.pathname === '/JaneHopkins/Admin' || window.location.pathname === '/JaneHopkins/studyContent/' ? (
+                <Item
+                  title="Doctor"
+                  to="/JaneHopkins"
+                  icon={<PeopleOutlinedIcon/>}
+                  selected={selected}
+                  setSelected={setSelected}
+                />
+              ):(
+                ""
 
-            <Item
-              title="Patients"
-              to="/JaneHopkins/patient"
-              icon={<PeopleOutlinedIcon/>}
-              selected={selected}
-              setSelected={setSelected}
-            />
+              )
+              
+            }
 
-            <Item
-              title="Add Patient"
-              to="/JaneHopkins/addpatient"
-              icon={<PeopleOutlinedIcon/>}
-              selected={selected}
-              setSelected={setSelected}
-            />
-            <Item
-              title="Track Dosage"
-              to="/JaneHopkins/trackdosage"
-              icon={<PeopleOutlinedIcon/>}
-              selected={selected}
-              setSelected={setSelected}
-            />
             
-            
+            {
+              window.location.pathname === '/JaneHopkins/Admin' || window.location.pathname === '/JaneHopkins/studyContent/' ? (
+                ""
+              ):(
+                <Typography
+                  variant="h6"
+                  color={colors.grey[300]}
+                  sx={{ m: "15px 20px 5px 20px" }}
+                >
+                  Data
+                </Typography>
 
+              )
+              
+            }
+
+            {
+              window.location.pathname === '/JaneHopkins/Admin' || window.location.pathname === '/JaneHopkins/studyContent/' ? (
+                ""
+              ):(
+                <Item
+                title="Patients"
+                to="/JaneHopkins/patient"
+                icon={<PeopleOutlinedIcon/>}
+                selected={selected}
+                setSelected={setSelected}
+              />
+                
+
+              )
+              
+            }
+            {
+              window.location.pathname === '/JaneHopkins/Admin' || window.location.pathname === '/JaneHopkins/studyContent/' ? (
+                ""
+              ):(
+                
+                <Item
+                  title="Add Patient"
+                  to="/JaneHopkins/addpatient"
+                  icon={<PeopleOutlinedIcon/>}
+                  selected={selected}
+                  setSelected={setSelected}
+                />
+
+              )
+              
+            }
+            {
+              window.location.pathname === '/JaneHopkins/Admin' || window.location.pathname === '/JaneHopkins/studyContent/' ? (
+                ""
+              ):(
+                <Item
+                  title="Track Dosage"
+                  to="/JaneHopkins/trackdosage"
+                  icon={<PeopleOutlinedIcon/>}
+                  selected={selected}
+                  setSelected={setSelected}
+                />
+                
+
+              )
+              
+            }
             
           </Box> 
         </Menu>

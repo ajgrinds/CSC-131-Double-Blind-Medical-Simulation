@@ -30,7 +30,7 @@ function PatientDetails() {
   const { id } = useParams();
   const { entities } = useJaneHopkins();
   const [patient, setPatient] = useState(null);
-  const [Studies, setStudies] = useState(null);
+  const [studies, setStudies] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
   
 
@@ -107,6 +107,7 @@ function PatientDetails() {
   const [newCurrentlyInsured, setNewCurrentlyInsured] = useState("");
   const [newCurrentlyEmployed, setNewCurrentlyEmployed] = useState("");
   const [study, setStudy] = useState("");
+  const [visits, setVisits] = useState([]);
 
   const ColorButton = styled(Button)(({ theme }) => ({
     color: theme.palette.getContrastText(purple[500]),
@@ -124,6 +125,7 @@ function PatientDetails() {
           const response = await entities.patient.get(id);
           console.log(response);
           setPatient(response);
+          setStudy(response.study);
           setIsLoading(true);
           
           // set the values of each entity to the current value of the patients
@@ -136,6 +138,7 @@ function PatientDetails() {
           setNewCurrentlyInsured(response.insuranceNumber === "" ? "No" : "Yes");
           setNewCurrentlyEmployed(response.currentlyEmployed);
           setNewFamilyHistory(response.familyHistory);
+          setVisits(response.visits);
 
           if(response.allergies){
             setNewAllergies(response.allergies);
@@ -150,10 +153,8 @@ function PatientDetails() {
           }
           
           //console.log(newAllergies);
-          setStudy(response.study);
-
-
-          setStudies(await entities.study.list());
+          
+          setStudies(response.study);
       }
       catch(error){
           console.log(error);
@@ -163,6 +164,8 @@ function PatientDetails() {
       }
     }
     fetchPatient();
+
+    console.log(visits);
     setIsLoading(false);
   
   }, [entities.patient, id]);
@@ -257,6 +260,13 @@ function PatientDetails() {
     window.location.reload();
 
   }
+
+
+  useEffect(() => {
+
+
+
+  })
  
   return (
 
@@ -277,24 +287,7 @@ function PatientDetails() {
             <Link to="/JaneHopkins/patient" style={{ textDecoration: "none"}}>
               <ColorButton size='large' variant="contained"> Back </ColorButton>
             </Link>
-            {Studies && Studies.items && ( <>
-             <FormControl style={{ width: 200}}>
-                <InputLabel style={{ color:"secondary" }}>{patient.study == null ? "Study" : patient.study}</InputLabel>
-              <Select
-                label="Study"
-                width="100"
-                onChange={handleStudyChange}
-              >  
-              <MenuItem value=""></MenuItem>
-                {Studies.items.map((study, index) => (
-                    <MenuItem key={study.studyName} value={study.studyName}>
-                        {study.studyName}
-                    </MenuItem>
-                ))}
-                </Select>
-                </FormControl> 
-                </>
-                )}         
+                   
             <DeleteButton id={patient?._id} onDelete={handleDelete} />
             
           </Box>
@@ -330,6 +323,9 @@ function PatientDetails() {
                 src={patient.patientPicture}
                 style={{cursor: "pointer", borderRadius: "50%"}}                                 
               />
+
+              <Box mt="10px">Study: {patient.study}</Box>
+              
 
             </Grid>
 
@@ -714,7 +710,7 @@ function PatientDetails() {
                   id="outlined-read-only-input"
                   label="ICD Health Code"
                   color='secondary'
-                  defaultValue={patient.icdHealthCodes && patient.icdHealthCodes.map(codes => JSON.stringify(codes)).join(', ')}
+                  defaultValue={patient.icdHealthCodes != null ? patient.icdHealthCodes.map(codes => JSON.stringify(codes)).join(', ') : "none"}
                   onChange={handleICDHealthCodeChange}
                   variant="filled"
                 />
@@ -739,7 +735,7 @@ function PatientDetails() {
                   label="Doctor Visits"
                   type="number"
                   color='secondary'
-                  defaultValue=""
+                  defaultValue={patient.visits != null ? patient.visits.length : ""}
                   InputLabelProps={{
                     shrink: true,
                   }}
