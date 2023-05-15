@@ -24,41 +24,14 @@ function App() {
   return ( 
 
     <Routes>
-      
-      { /* Login Page */}
-
+     
       <Route exact path="/" element={<LoginPage/>}/>
-
-      { /* Register Page */}
-
       <Route exact path="/Register" element={<RegisterPage/>}/>
-
       
-
-      {/*Routes for JaneHopkins Page */}
-      <Route path="/JaneHopkins/*" element={<Doctor/>}>
-        
-        <Route path="patient" element={<Patient/>}/>
-        <Route path="addpatient" element={<AddPatient/>} />
-        <Route path="patient/:id" element={<PatientDetails/>}/>
-        <Route path="trackdosage" element={<TrackDosage/>}/>
-        <Route path="trackdosage/:id" element={<PatientDosage/>} />
-
-      </Route>
-
-      {/*Routes for FDA page */}
-      
-      <Route exact path="/fda/*" element={<FDA/>}>
-        
-      </Route>
-
-      {/*Routes for Bavaria page */}
-      <Route path="/bavaria/*" element={<Bavaria/>}>
-        
-        <Route path="createDrug" element={<CreateDrug/>}/>
-        
-        
-      </Route>
+      <Route path="/JaneHopkins/*" element={<Doctor/>}/>
+      <Route exact path="/fda/*" element={<FDA/>}/>
+      <Route path="/bavaria/*" element={<Bavaria/>}/>
+       
 
     </Routes>
     
