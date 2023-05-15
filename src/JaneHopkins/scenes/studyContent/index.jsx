@@ -15,6 +15,8 @@ const StudyContent = () => {
     const theme = useTheme();
     const colors = tokens(theme.palette.mode);
 
+    const { name } = useParams();
+
     const ColorButton = styled(Button)(({ theme }) => ({
       color: theme.palette.getContrastText(purple[500]),
       backgroundColor: colors.greenAccent[600],
@@ -36,7 +38,14 @@ const StudyContent = () => {
 
             try{
 
-                const response = await entities.patient.list();
+                const response = await entities.patient.list({
+                    filter: {
+                        study: {
+                          eq: study,
+                        }
+                  }
+
+                });
                 console.log(response);
                 setPatientList(response.items.map((patient, index) => ({
                     ...patient,
@@ -61,7 +70,14 @@ const StudyContent = () => {
 
             try{
                 setIsLoading(true);
-                const response = await entities.study.list();
+                const response = await entities.study.list({
+                    filter: {
+                        studyName: {
+                          eq: study,
+                        }
+                  }
+
+                });
                 setStudyList(response.items.map((study, index) => ({
                     ...study, 
                     id: index + 1
@@ -81,7 +97,7 @@ const StudyContent = () => {
 
     useEffect(() => {
         const checkComplete = () => {
-          const isComplete = patientList.every(patient => patient.vists !== NULL && patient.visits.length === 5);
+          const isComplete = patientList.every(patient => patient.study === name && patient.vists !== NULL && patient.visits.length === 5);
           setComplete(isComplete);
         };
       
@@ -129,6 +145,13 @@ const StudyContent = () => {
         },
         
     ];
+
+    const sendResults = async (row) => {
+    // Send results
+    await entities.study.update({_id: studyList[0]._id, status: 'Awaiting Results'});
+  };
+
+
   return (
     <Box m="20px">
             <Header title="Study Content" subtitle="Patient List"/>   
@@ -147,6 +170,7 @@ const StudyContent = () => {
                     borderColor: !complete ? "grey" : "",
                     color: !complete ? "grey" : "primary",
                     }}
+                    onClick=sendResults()
                 >
                     Send FDA Results
                 </ColorButton>
