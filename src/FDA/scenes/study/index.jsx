@@ -98,7 +98,13 @@ const FDAStudy = () => {
 
   const complete = async (row) => {
     // Update the fetched data
-    await entities.study.update({_id: studyList[row.id - 1]._id, status: 'Complete'});
+    await entities.study.update({_id: studyList[row.id - 1]._id, status: 'Success'});
+    setReload(!reload);
+  };
+
+  const fail = async (row) => {
+    // Update the fetched data
+    await entities.study.update({_id: studyList[row.id - 1]._id, status: 'Failure'});
     setReload(!reload);
   };
     
@@ -196,7 +202,7 @@ const FDAStudy = () => {
       minWidth: 140,
       flex: matches ? 1 : 1.5,
       renderCell: (cellValues) => {
-        if (cellValues.row.status === "Created") {
+        if (cellValues.row.status === "Pending") {
           return (
             <div style={{ display: "flex", gap: "10px" }}>
               <ActionButton
@@ -223,7 +229,7 @@ const FDAStudy = () => {
                 color="primary"
                 onClick={() => assignDrugs(cellValues.row)}
               >
-                <span style={{ color: "red" }}>Start Immediately</span>
+                <span style={{ color: "green" }}>Start Study</span>
               </Button>
             </div>)
         }
@@ -255,13 +261,24 @@ const FDAStudy = () => {
                 color="primary"
                 onClick={() => complete(cellValues.row)}
               >
-                Release Results
+                Success
+              </Button>
+              <Button
+                variant="contained"
+                color="red"
+                onClick={() => fail(cellValues.row)}
+              >
+                Failure
               </Button>
             </div>)
         }
-        else if (cellValues.row.status === "Complete")
+        else if (cellValues.row.status === "Success")
         {
-          return <span style={{ color: "green" }}>Complete</span>
+          return <span style={{ color: "green" }}>Success</span>
+        }
+        else if (cellValues.row.status === "Failure")
+        {
+          return <span style={{ color: "red" }}>Failure</span>
         }
         else
         {
