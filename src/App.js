@@ -20,7 +20,7 @@ import { useState, useContext, Context } from "react";
 import { TrackChanges } from "@mui/icons-material";
 import { AuthProvider } from "./authentication/context/AuthContext";
 import Admin from "./JaneHopkins/scenes/admin";
-import ProtectedRoute from "./authentication/protectedRoutes/ProtectedRoutes"
+import ProtectedRoute from "./authentication/ProtectedRoutes/ProtectedRoutes"
 
 function App() {
 
