@@ -134,7 +134,7 @@ const FDAStudy = () => {
         const drug_id = Math.floor(Math.random() * 2).toString();
         const updatePatientResponse = entities.patient.update({
           _id: patientList[i]._id,
-          drug: drug_id == 1 ? "placebo" : "real",
+          drug: drug_id === 1 ? "placebo" : "real",
         });
       }
     }
@@ -182,7 +182,7 @@ const FDAStudy = () => {
       minWidth: 100,
       flex: matches ? 1 : 1.5,
       renderCell: (cellValues) => {
-        return <span>{allPatients.items.filter((item) => item.study == cellValues.row.studyName).length}</span>;
+        return <span>{allPatients.items.filter((item) => item.study === cellValues.row.studyName).length}</span>;
       }
     },
     { field: "startDate", headerName: "Start Date", minWidth: 100, flex: matches ? 1 : 1.5 },
@@ -193,7 +193,7 @@ const FDAStudy = () => {
       minWidth: 140,
       flex: matches ? 1 : 1.5,
       renderCell: (cellValues) => {
-        return cellValues.row.status == "Success" ? (
+        return cellValues.row.status === "Success" ? (
           <CheckCircleIcon style={{ color: "green" }} />
         ) : (
           <CancelIcon style={{ color: "red" }} />

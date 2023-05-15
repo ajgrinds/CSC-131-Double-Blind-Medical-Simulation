@@ -157,10 +157,10 @@ const BavariaDashboard = () => {
                         <Button 
                           variant="outlined" 
                           color="primary" 
-                          disabled={study.status !== "Complete"}
+                          disabled={study.status !== "Success" || study.status !== "Failure"}
                           sx={{
-                            borderColor: study.status !== "Complete" ? "grey" : "",
-                            color: study.status !== "Complete" ? "grey" : "primary",
+                            borderColor: (study.status !== "Success" || study.status !== "Failure") ? "grey" : "",
+                            color: (study.status !== "Success" || study.status !== "Failure") ? "grey" : "primary",
                           }}
                         >
                           View Report
@@ -171,10 +171,10 @@ const BavariaDashboard = () => {
                         <Button 
                           variant="outlined" 
                           color="primary" 
-                          disabled={study.status !== "Complete"}
+                          disabled={study.status !== "Success" || study.status !== "Failure"}
                           sx={{
-                            borderColor: study.status !== "Complete" ? "grey" : "",
-                            color: study.status !== "Complete" ? "grey" : "primary",
+                            borderColor: (study.status !== "Success" || study.status !=="Failure") ? "grey" : "",
+                            color: (study.status !== "Success" || study.status !== "Failure") ? "grey" : "primary",
                           }}
                         >
                           Send Drugs
