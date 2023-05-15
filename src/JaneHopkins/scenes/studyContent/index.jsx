@@ -146,7 +146,7 @@ const StudyContent = () => {
         
     ];
 
-    const sendResults = async (row) => {
+    const sendResults = async () => {
     // Send results
     await entities.study.update({_id: studyList[0]._id, status: 'Awaiting Results'});
   };
@@ -170,7 +170,7 @@ const StudyContent = () => {
                     borderColor: !complete ? "grey" : "",
                     color: !complete ? "grey" : "primary",
                     }}
-                    onClick=sendResults()
+                    onClick={() => sendResults()}
                 >
                     Send FDA Results
                 </ColorButton>
