@@ -1,9 +1,10 @@
-import { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { Box, Button, useTheme, CircularProgress } from "@mui/material";
 import { DataGrid } from "@mui/x-data-grid";
 import { tokens } from "../../../theme";
 import Header from "../../components/Header";
+import { useParams } from 'react-router-dom';
 import useJaneHopkins from "../../../vendiaHooks/useJaneHopkins";
 import { styled } from '@mui/material/styles';
 import { purple } from '@mui/material/colors';
@@ -16,6 +17,8 @@ const StudyContent = () => {
     const { id } = useParams();
     const theme = useTheme();
     const colors = tokens(theme.palette.mode);
+
+    const { study } = useParams();
 
     const ColorButton = styled(Button)(({ theme }) => ({
       color: theme.palette.getContrastText(purple[500]),
@@ -38,7 +41,14 @@ const StudyContent = () => {
 
             try{
 
-                const response = await entities.patient.list();
+                const response = await entities.patient.list({
+                    filter: {
+                        study: {
+                          eq: study,
+                        }
+                  }
+
+                });
                 console.log(response);
                 setPatientList(response.items.map((patient, index) => ({
                     ...patient,
@@ -63,7 +73,14 @@ const StudyContent = () => {
 
             try{
                 setIsLoading(true);
-                const response = await entities.study.list();
+                const response = await entities.study.list({
+                    filter: {
+                        studyName: {
+                          eq: study,
+                        }
+                  }
+
+                });
                 setStudyList(response.items.map((study, index) => ({
                     ...study, 
                     id: index + 1
@@ -131,6 +148,13 @@ const StudyContent = () => {
         },
         
     ];
+
+    const sendResults = async () => {
+    // Send results
+    await entities.study.update({_id: studyList[0]._id, status: 'Awaiting Results'});
+  };
+
+
   return (
     <Box m="20px">
             <Header title="Study Content" subtitle="Patient List"/>   
@@ -149,6 +173,7 @@ const StudyContent = () => {
                     borderColor: !complete ? "grey" : "",
                     color: !complete ? "grey" : "primary",
                     }}
+                    onClick={() => sendResults()}
                 >
                     Send FDA Results
                 </ColorButton>

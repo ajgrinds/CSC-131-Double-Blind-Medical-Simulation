@@ -1,40 +1,27 @@
 import { Box, IconButton, Menu, MenuItem, Typography, useTheme } from '@mui/material';
-import { useContext, useState } from 'react';
-import { ColorModeContext, tokens } from '../../theme';
-import InputBase from '@mui/material/InputBase';
+import React, { useContext, useState } from 'react';
+import { ColorModeContext } from '../../theme';
 import LightModeOutlinedIcon from "@mui/icons-material/LightModeOutlined";
-import DarkModeOutlinedIcon from "@mui/icons-material/DarkModeOutlined"
-import NotificationsOutlinedIcon from "@mui/icons-material/NotificationsOutlined"
-import SettingsOutlinedIcon from "@mui/icons-material/SettingsOutlined"
-import PersonOutlinedIcon from "@mui/icons-material/PersonOutlined"
-import SearchIcon from "@mui/icons-material/Search"
-import MenuOutlinedIcon from "@mui/icons-material/MenuOutlined"
+import DarkModeOutlinedIcon from "@mui/icons-material/DarkModeOutlined";
+import PersonOutlinedIcon from "@mui/icons-material/PersonOutlined";
 import { Link } from 'react-router-dom';
 
-
 const TopBar = () => {
-
-    const theme = useTheme();
-    const colors = tokens(theme.palette.mode);
-    const colorMode = useContext(ColorModeContext);
-    const [anchorEl, setAnchorEl] = useState(null);
+  const theme = useTheme();
+  const colorMode = useContext(ColorModeContext);
+  const [anchorEl, setAnchorEl] = useState(null);
 
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
-};
+  };
 
-const handleClose = () => {
+  const handleClose = () => {
     setAnchorEl(null);
-};
-
+  };
 
   return (
     <Box display="flex" justifyContent="space-between" p={2}>
-
-      <Box display="flex">
-        <Typography variant="h3">FDA STUDIES</Typography>
-      </Box>
-
+      <Box display="flex" />
       <Box display="flex">
         <IconButton onClick={colorMode.toggleColorMode}>
           {theme.palette.mode === 'dark' ? (
@@ -43,31 +30,28 @@ const handleClose = () => {
             <LightModeOutlinedIcon />
           )}
         </IconButton>
-        <IconButton>
-          <NotificationsOutlinedIcon />
-        </IconButton>
-        <IconButton>
-          <SettingsOutlinedIcon />
-        </IconButton>
         <IconButton
-                    onClick={handleClick}
-                >
-                    <PersonOutlinedIcon/>
-                </IconButton>
-                <Menu
-                    anchorEl={anchorEl}
-                    open={Boolean(anchorEl)}
-                    onClose={handleClose}
-                >
-                    <MenuItem onClick={handleClose}>
-                        <Link to="/" style={{ textDecoration: 'none', color: 'inherit' }}>
-                            <Typography variant="body1">Logout</Typography>
-                        </Link>
-                    </MenuItem>
-                </Menu>
+          aria-controls="user-menu"
+          aria-haspopup="true"
+          onClick={handleClick}
+        >
+          <PersonOutlinedIcon />
+        </IconButton>
+        <Menu
+          id="user-menu"
+          anchorEl={anchorEl}
+          open={Boolean(anchorEl)}
+          onClose={handleClose}
+        >
+          <MenuItem onClick={handleClose}>
+            <Typography variant="body1" component={Link} to="/" color="inherit" underline="none">
+              Logout
+            </Typography>
+          </MenuItem>
+        </Menu>
       </Box>
     </Box>
   );
-}
+};
 
-export default TopBar
+export default TopBar;

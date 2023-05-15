@@ -1,7 +1,8 @@
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import useBavaria from "../../../vendiaHooks/useBavaria";
 import { Box, Button, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TextField, Typography, CircularProgress } from "@mui/material";
 import TrialProgress from "../trialProgress";
+import { Link } from "react-router-dom";
 
 
 
@@ -152,26 +153,28 @@ const BavariaDashboard = () => {
                         {study.status !== "Created" && study.status !== "Cancelled" ? "Yes" : "No"}
                       </TableCell>
                       <TableCell>
+                        <Link to={`/Bavaria/report/${study._id}`}>
                         <Button 
                           variant="outlined" 
                           color="primary" 
-                          disabled={study.status !== "Complete"}
+                          disabled={study.status !== "Success" || study.status !== "Failure"}
                           sx={{
-                            borderColor: study.status !== "Complete" ? "grey" : "",
-                            color: study.status !== "Complete" ? "grey" : "primary",
+                            borderColor: (study.status !== "Success" || study.status !== "Failure") ? "grey" : "",
+                            color: (study.status !== "Success" || study.status !== "Failure") ? "grey" : "primary",
                           }}
                         >
                           View Report
                         </Button>
+                        </Link>
                       </TableCell>
                       <TableCell>
                         <Button 
                           variant="outlined" 
                           color="primary" 
-                          disabled={study.status !== "Complete"}
+                          disabled={study.status !== "Success" || study.status !== "Failure"}
                           sx={{
-                            borderColor: study.status !== "Complete" ? "grey" : "",
-                            color: study.status !== "Complete" ? "grey" : "primary",
+                            borderColor: (study.status !== "Success" || study.status !=="Failure") ? "grey" : "",
+                            color: (study.status !== "Success" || study.status !== "Failure") ? "grey" : "primary",
                           }}
                         >
                           Send Drugs

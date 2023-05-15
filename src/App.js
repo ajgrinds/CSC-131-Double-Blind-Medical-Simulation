@@ -1,3 +1,4 @@
+import React from "react";
 import {Routes, Route, Navigate} from "react-router-dom";
 import Dashboard from "./JaneHopkins/scenes/dashboard";
 import Patient from "./JaneHopkins/scenes/patient";
@@ -16,7 +17,8 @@ import TrackDosage from "./JaneHopkins/scenes/trackDosage";
 import PatientDosage from "./JaneHopkins/scenes/patientDosage";
 import Login from "./authentication/scenes/login/Index";
 import Register from "./authentication/scenes/register/Index";
-
+import TrialProgress from "./Bavaria/scenes/trialProgress";
+import FinalReport from "./Bavaria/scenes/finalReport";
 
 
 function App() {
@@ -27,11 +29,31 @@ function App() {
      
       <Route exact path="/" element={<LoginPage/>}/>
       <Route exact path="/Register" element={<RegisterPage/>}/>
+
+      {/*Routes for JaneHopkins Page */}
+      <Route path="/JaneHopkins/*" element={<Doctor/>}>
+        
+        <Route path="patient" element={<Patient/>}/>
+        <Route path="addpatient" element={<AddPatient/>} />
+        <Route path="patient/:id" element={<PatientDetails/>}/>
+        <Route path="trackdosage" element={<TrackDosage/>}/>
+        <Route path="trackdosage/:id" element={<PatientDosage/>} />
+
+      </Route>
+
+      {/*Routes for FDA page */}
       
-      <Route path="/JaneHopkins/*" element={<Doctor/>}/>
-      <Route exact path="/fda/*" element={<FDA/>}/>
-      <Route path="/bavaria/*" element={<Bavaria/>}/>
-       
+      <Route exact path="/fda/*" element={<FDA/>}>
+        
+      </Route>
+
+      {/*Routes for Bavaria page */}
+      <Route path="/bavaria/*" element={<Bavaria/>}>
+        
+        <Route path="createDrug" element={<CreateDrug/>}/>
+        <Route path="study" element={<TrialProgress/>}/>
+        <Route path="report/:id" element={<FinalReport />} />
+      </Route>
 
     </Routes>
     
