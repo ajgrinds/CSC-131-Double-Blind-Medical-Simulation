@@ -103,7 +103,7 @@ const CreateDrug = () => {
     setIsLoading(false);
 
 
-    window.location.href("/Bavaria/")
+    window.location.href= "/Bavaria/"
 
   }
 

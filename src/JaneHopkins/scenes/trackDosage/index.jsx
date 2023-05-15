@@ -17,6 +17,7 @@ const TrackDosage = () => {
     const [patientList, setPatientList] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
 
+
     useEffect(() => {
 
         async function fetchData() {
@@ -66,7 +67,7 @@ const TrackDosage = () => {
                         variant="contained" 
                         style={{ backgroundColor: colors.blueAccent[600]}}                     
                     > 
-                        Dosage
+                        View
                     </Button>
                 </Link>     
             ),
@@ -107,7 +108,7 @@ const TrackDosage = () => {
             {isLoading ? (
                 <Box>Loading...</Box>
             ) : (
-                <DataGrid rows={patientList} columns={columns}/>
+                <DataGrid rows={patientList.filter( patient => !patient.icdHealthCodes || patient.icdHealthCodes.length == 0)} columns={columns}/>
             )}
             
         </Box>

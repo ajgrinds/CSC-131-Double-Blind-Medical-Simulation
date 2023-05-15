@@ -54,6 +54,19 @@ const BavariaDashboard = () => {
   }, [entities.study]);
  
 
+  const getStatusColor = (status) => {
+    switch (status) {
+      case "Pending":
+        return "Red";
+      case "Active":
+        return "Orange";
+      case "Complete":
+        return "Green";
+      default:
+        return "inherit";
+    }
+  };
+
   
 
   return (
@@ -81,10 +94,10 @@ const BavariaDashboard = () => {
           <Box display="flex" flexDirection="row" flexWrap="wrap" justifyContent="space-between" mb={4}>
             <Box width="30%" p={2} boxShadow={1} borderRadius={2}>
               <Typography variant="h6" gutterBottom>
-                Pending Studies
+                Created Studies
               </Typography>
               <Typography variant="h4">
-                {studies.filter(study => study.status === "Pending").length}
+                {studies.filter(study => study.status === "Created").length}
               </Typography>
             </Box>
             <Box width="30%" p={2} boxShadow={1} borderRadius={2}>
@@ -92,7 +105,7 @@ const BavariaDashboard = () => {
                 Active Studies
               </Typography>
               <Typography variant="h4">
-                {studies.filter(study => study.status === "Active").length}
+                {studies.filter(study => study.status === "In Progress").length}
               </Typography>
             </Box>
             <Box width="30%" p={2} boxShadow={1} borderRadius={2}>
@@ -123,7 +136,7 @@ const BavariaDashboard = () => {
                   {studies.map(study => (
                     <TableRow key={study._id}>
                       <TableCell>{study.studyName}</TableCell>
-                      <TableCell>
+                      <TableCell style={{ color: getStatusColor(study.status) }}>
                         {study.status}
                         
                       </TableCell>
@@ -133,18 +146,39 @@ const BavariaDashboard = () => {
                       <TableCell>
                         {study.endDate}
                       </TableCell>
-                      <TableCell>
+                      <TableCell style={{color: "green"}}>
                         yes
                       </TableCell>
-                      <TableCell>
-                        {study.fdaApproved === true ? "Yes" : "No"}
+                      <TableCell style={{color: study.status !== "Create" && study.status != "Cancelled" ? "green" : "red"}}>
+                        {study.status !== "Created" && study.status !== "Cancelled" ? "Yes" : "No"}
                       </TableCell>
                       <TableCell>
                         <Link to={`/Bavaria/report/${study._id}`}>
-                        <Button variant="outlined" color="primary">
+                        <Button 
+                          variant="outlined" 
+                          color="primary" 
+                          disabled={study.status !== "Complete"}
+                          sx={{
+                            borderColor: study.status !== "Complete" ? "grey" : "",
+                            color: study.status !== "Complete" ? "grey" : "primary",
+                          }}
+                        >
                           View Report
                         </Button>
                         </Link>
+                      </TableCell>
+                      <TableCell>
+                        <Button 
+                          variant="outlined" 
+                          color="primary" 
+                          disabled={study.status !== "Complete"}
+                          sx={{
+                            borderColor: study.status !== "Complete" ? "grey" : "",
+                            color: study.status !== "Complete" ? "grey" : "primary",
+                          }}
+                        >
+                          Send Drugs
+                        </Button>
                       </TableCell>
                     </TableRow>
                   ))}
@@ -157,7 +191,7 @@ const BavariaDashboard = () => {
           <Box mt='50px'>
 
             <Typography variant="h4" gutterBottom>
-              Clinical Trails Progress 
+              Clinical Trials Progress 
             </Typography>
 
             {studies.some(study => study.fdaApproved === true) ? "No current trials, awaiting FDA approval..." :  <TrialProgress />}

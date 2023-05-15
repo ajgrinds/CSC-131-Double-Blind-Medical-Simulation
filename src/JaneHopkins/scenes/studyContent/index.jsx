@@ -7,10 +7,11 @@ import Header from "../../components/Header";
 import useJaneHopkins from "../../../vendiaHooks/useJaneHopkins";
 import { styled } from '@mui/material/styles';
 import { purple } from '@mui/material/colors';
-import StudyContent from '../studyContent';
+import CheckIcon from '@mui/icons-material/Check';
+
+const StudyContent = () => {
 
 
-const Patient = () =>{
     const theme = useTheme();
     const colors = tokens(theme.palette.mode);
 
@@ -23,31 +24,52 @@ const Patient = () =>{
     }));
 
     const {entities} = useJaneHopkins();
-    
+    const [patientList, setPatientList] = useState([]);
     const [studyList, setStudyList] = useState([]);
-    const [isLoading, setIsLoading] = useState(false);
-   
+    const [isLoading, setIsLoading] = useState(true);
+    const [complete, setComplete] = useState(false);
     
 
-   
+    useEffect(() => {
+
+        async function fetchData() {
+
+            try{
+
+                const response = await entities.patient.list();
+                console.log(response);
+                setPatientList(response.items.map((patient, index) => ({
+                    ...patient,
+                    id: index + 1,
+
+                }))); 
+            } catch(error){
+                console.log(error);
+            } finally{
+                setIsLoading(false);
+            }
+        }
+
+        fetchData();
+        
+    }, [entities.patient]);
+
+
     useEffect (() => {
 
         async function fetchStudy() {
 
             try{
-
-
                 setIsLoading(true);
                 const response = await entities.study.list();
-                console.log(response);
                 setStudyList(response.items.map((study, index) => ({
                     ...study, 
                     id: index + 1
-                })));
+                })))
 
             }catch(error){
                 console.log(error);
-            } finally{
+            }finally{
                 setIsLoading(false);
             }
 
@@ -57,61 +79,82 @@ const Patient = () =>{
 
     }, [entities.study]);
 
-   
+    useEffect(() => {
+        const checkComplete = () => {
+          const isComplete = patientList.every(patient => patient.visits.length === 5);
+          setComplete(isComplete);
+        };
+      
+        checkComplete();
+      }, [patientList]);
+      
+
+    
+
     const columns = [
 
         {   
-            field: "studyName", 
-            headerName: "Study Name",
+            field: "uuid", 
+            headerName: "UUID",
             flex:1,           
         }, 
-       
+        {   
+            field: "name", 
+            headerName: "Name",
+            flex:1,           
+        }, 
 
         {
-            field: "startDate",
-            headerName: "Start Date",
-            flex : 1,
-        },
-        
-        {
-            field: "endDate",
-            headerName: "End Date",
+            field: "dob",
+            headerName: "DOB",
             flex : 1,
         }, 
 
+        {
+          field: "visits",
+          headerName: "Dose #",
+          flex : 1,
+          valueGetter: (params) => params.row.visits ? params.row.visits.length : 0,
+      }, 
        
-    {
-        field: "",
-        headerName: "Study Details",
-        width: 150,
-        renderCell: (params) => (
-            
-            <Link style={{textDecoration: "none"}} to={`/JaneHopkins/studyContent/`}>
-                <Button 
-
-                    variant="contained" 
-                    style={{ backgroundColor: colors.blueAccent[600]}} 
-                    
-                > 
-                    View/Edit
-                </Button>
-            </Link>  
-                    
-        ),
-    },
+        {
+            field: "view",
+            headerName: "Eligible Patient",
+            width: 150,
+            renderCell: (params) => (
+                
+                <CheckIcon/>
+                     
+            ),
+        },
         
     ];
+  return (
+    <Box m="20px">
+            <Header title="Study Content" subtitle="Patient List"/>   
+            <Box position="flex" justifyContent="center" alignItems="center">
+                <ColorButton variant="contained" size ='large' style={{ marginRight: "10px" }}>
+                   Notify FDA
+                </ColorButton>
+           
+                <ColorButton 
+                    variant="contained"
+                    size = 'large'
+                    
+                    color="primary" 
+                    disabled={complete === false}
+                    sx={{
+                    borderColor: !complete ? "grey" : "",
+                    color: !complete ? "grey" : "primary",
+                    }}
+                >
+                    Send FDA Results
+                </ColorButton>
 
-   
 
-    return(
-        <Box m="20px">
+            </Box>   
 
-            
-
-               
-
-            <Header title="ADMINISTRATION" subtitle="Welcome to your dashboard"/>       
+                
 
             {studyList.length >= 0 ? (
                 <Box
@@ -150,7 +193,7 @@ const Patient = () =>{
                         <CircularProgress/>
                       </Box>
                     ) : (
-                        <DataGrid rows={studyList} columns={columns} />
+                        <DataGrid rows={patientList.filter(patient => !patient.icdHealthCodes || patient.icdHealthCodes.length === 0)} columns={columns} />
                     )}
 
 
@@ -160,7 +203,18 @@ const Patient = () =>{
             ) : (
 
                 <Box display="flex" justifyContent="center" alignItems="center">
-                    No Studies...
+                    {isLoading ? (
+                        <Box>
+                            <CircularProgress color={colors.greenAccent[400]}/>
+
+                        </Box>
+                        
+                    ) : (
+                    
+                    
+                        <Box>No Studies...</Box>
+                    
+                    )}
                 </Box>
                 
             )}
@@ -171,7 +225,7 @@ const Patient = () =>{
            
         </Box>
     )
-
+  
 }
 
-export default Patient;
+export default StudyContent;
