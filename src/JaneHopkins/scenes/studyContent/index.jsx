@@ -8,7 +8,6 @@ import useJaneHopkins from "../../../vendiaHooks/useJaneHopkins";
 import { styled } from '@mui/material/styles';
 import { purple } from '@mui/material/colors';
 import CheckIcon from '@mui/icons-material/Check';
-import { useParams } from 'react-router-dom';
 
 const StudyContent = () => {
 
