@@ -269,7 +269,7 @@ const FDAStudy = () => {
               </Button>
               <Button
                 variant="contained"
-                color="secondary"
+                color="primary"
                 onClick={() => fail(cellValues.row)}
               >
                 Failure
