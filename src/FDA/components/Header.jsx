@@ -5,7 +5,7 @@ const Header= ({title, subtitle}) =>{
     const theme = useTheme();
     const colors = tokens(theme.palette.mode);
 
-    return <Box mb="30px">
+    return <Box mb="30px" display="flex" flexDirection="column" alignItems="center" justifyContent="center" mt="-80px">
         <Typography
             variant="h4"
             color={colors.grey[100]}
