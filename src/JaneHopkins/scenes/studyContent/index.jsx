@@ -83,7 +83,7 @@ const StudyContent = () => {
 
     useEffect(() => {
         const checkComplete = () => {
-          const isComplete = patientList.every(patient => patient.visits && patient.visits.length === 5);
+          const isComplete = patientList.every(patient => (patient.visits && patient.visits.length === 5) || patient.icdHealthCodes);
           setComplete(isComplete);
         };
 
@@ -151,6 +151,13 @@ const StudyContent = () => {
         },
         
     ];
+
+    const sendResults = async () => {
+        // Send results
+        await entities.study.update({_id: studyList[0]._id, status: 'Awaiting Results'});
+      };
+
+
   return (
     <Box m="20px">
             <Header title="Study Content" subtitle="Patient List"/>   
@@ -169,6 +176,8 @@ const StudyContent = () => {
                     borderColor: !complete ? "grey" : "",
                     color: !complete ? "grey" : "primary",
                     }}
+                    onClick={() => sendResults()}
+
                 >
                     Send FDA Results
                 </ColorButton>
