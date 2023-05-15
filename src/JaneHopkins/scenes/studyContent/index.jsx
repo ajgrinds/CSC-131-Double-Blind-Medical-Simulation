@@ -9,12 +9,10 @@ import useJaneHopkins from "../../../vendiaHooks/useJaneHopkins";
 import { styled } from '@mui/material/styles';
 import { purple } from '@mui/material/colors';
 import CheckIcon from '@mui/icons-material/Check';
-import { useParams } from 'react-router-dom';
 
 const StudyContent = () => {
 
 
-    const { id } = useParams();
     const theme = useTheme();
     const colors = tokens(theme.palette.mode);
 
@@ -100,7 +98,7 @@ const StudyContent = () => {
 
     useEffect(() => {
         const checkComplete = () => {
-          const isComplete = patientList.every(patient => patient.visits && patient.visits.length === 5);
+          const isComplete = patientList.every(patient => patient.visits.length === 5);
           setComplete(isComplete);
         };
       
@@ -220,7 +218,7 @@ const StudyContent = () => {
                         <CircularProgress/>
                       </Box>
                     ) : (
-                        <DataGrid rows={patientList.filter(patient => !patient.icdHealthCodes || patient.icdHealthCodes.length === 0 && patient.study === id )} columns={columns} />
+                        <DataGrid rows={patientList.filter(patient => !patient.icdHealthCodes || patient.icdHealthCodes.length === 0)} columns={columns} />
                     )}
 
 
