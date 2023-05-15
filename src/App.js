@@ -17,6 +17,8 @@ import PatientDosage from "./JaneHopkins/scenes/patientDosage";
 import { useState, useContext, Context } from "react";
 import { TrackChanges } from "@mui/icons-material";
 import { AuthProvider } from "./authentication/context/AuthContext";
+import Admin from "./JaneHopkins/scenes/admin";
+import ProtectedRoute from "./authentication/protectedRoutes/ProtectedRoutes"
 
 function App() {
 
@@ -32,33 +34,36 @@ function App() {
 
       <Route exact path="/Register" element={<RegisterPage/>}/>
 
-        {/*Routes for JaneHopkins Page */}
-        <Route path="/JaneHopkins/*" element={<Doctor/>}>
+      {/*Routes for JaneHopkins Page */}
+      <Route path="/JaneHopkins/*" element={<Doctor/>} />
+
+      <Route element={<ProtectedRoute allowedRoles={'JaneHopkins'} />} >
+
+        <Route path="/JaneHopkins/admin" element={<Admin/>}/>
+        <Route path="/JaneHopkins/patient" element={<Patient/>}/>
+        <Route path="/JaneHopkins/addpatient" element={<AddPatient/>} />
+        <Route path="/JaneHopkins/patient/:id" element={<PatientDetails/>}/>
+        <Route path="/JaneHopkins/trackdosage" element={<TrackDosage/>}/>
+        <Route path="/JaneHopkins/trackdosage/:id" element={<PatientDosage/>} />
+
+      </Route>
           
-          <Route path="patient" element={<Patient/>}/>
-          <Route path="addpatient" element={<AddPatient/>} />
-          <Route path="patient/:id" element={<PatientDetails/>}/>
-          <Route path="trackdosage" element={<TrackDosage/>}/>
-          <Route path="trackdosage/:id" element={<PatientDosage/>} />
+      {/*Routes for Bavaria page */}
+      <Route element = {<ProtectedRoute allowedRoles={'Bavaria'} />} >
 
-        </Route>
-
-        {/*Routes for FDA page */}
-        
-       
-        {/*Routes for Bavaria page */}
         <Route path="/bavaria/*" element={<Bavaria/>}>
-          
-          <Route path="createDrug" element={<CreateDrug/>}/>
-          
-          
+          <Route path="createDrug" element={<CreateDrug/>}/>  
         </Route>
+
+      </Route>
+        
    
+      {/*Routes for FDA page */}
+      <Route element = {<ProtectedRoute allowedRoles = {'FDA'} />}> 
 
-       <Route exact path="/fda/*" element={<FDA/>}>
-          
-        </Route>
+        <Route exact path="/fda/*" element={<FDA/>} />
 
+      </Route>
 
       </Routes>
     </AuthProvider>
