@@ -168,6 +168,9 @@
           },
           "studyComplete": {
             "type": "boolean"
+          },
+          "maxParticipants": {
+            "type": "integer"
           }
         }
       }

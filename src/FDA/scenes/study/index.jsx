@@ -120,7 +120,7 @@ const FDAStudy = () => {
       response.items.map((patient, index) => ({
         id: index + 1,
         _id: patient._id,
-        eligible: patient.icdHealthCodes == null,
+        eligible: !patient.icdHealthCodes || patient.icdHealthCodes.length == 0 ,
         drug: patient.drug
       }))
     );
@@ -141,7 +141,7 @@ const FDAStudy = () => {
   }   
 
 
-  const statuses = ["Cancelled", "Complete", "Created", "Approved", "Full", "In Progress", "Awaiting Results"];
+  const statuses = ["Cancelled", "Failure", "Success", "Pending", "Approved", "Full", "In Progress", "Awaiting Results"];
   
   const statusComparator = (v1, v2) =>
   statuses.indexOf(v1) - statuses.indexOf(v2);
@@ -189,7 +189,7 @@ const FDAStudy = () => {
       minWidth: 140,
       flex: matches ? 1 : 1.5,
       renderCell: (cellValues) => {
-        return cellValues.row.status == "Complete" ? (
+        return cellValues.row.status == "Success" ? (
           <CheckCircleIcon style={{ color: "green" }} />
         ) : (
           <CancelIcon style={{ color: "red" }} />
@@ -229,7 +229,7 @@ const FDAStudy = () => {
                 color="primary"
                 onClick={() => assignDrugs(cellValues.row)}
               >
-                <span style={{ color: "primary" }}>Start Study</span>
+                <span style={{ color: "primary" }}>Assign Drugs</span>
               </Button>
             </div>)
         }
@@ -265,7 +265,7 @@ const FDAStudy = () => {
               </Button>
               <Button
                 variant="contained"
-                color="red"
+                color="primary"
                 onClick={() => fail(cellValues.row)}
               >
                 Failure
