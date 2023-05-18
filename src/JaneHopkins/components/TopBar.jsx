@@ -7,6 +7,7 @@ import SearchIcon from "@mui/icons-material/Search";
 import { signOut  } from 'firebase/auth';
 import { auth } from '../../authentication/firebase-config'
 import { useProSidebar } from 'react-pro-sidebar';
+import { UpdateAuthState } from '../../authentication/context/AuthContext'
 
 const TopBar = () => {
   
@@ -15,6 +16,7 @@ const TopBar = () => {
   const colors = tokens(theme.palette.mode);
   const colorMode = useContext(ColorModeContext);
   const { toggleSidebar, broken, rtl } = useProSidebar();
+  const setAuthType = UpdateAuthState();
 
   const handleMenuButtonClick = () => {
     toggleSidebar();
@@ -36,6 +38,7 @@ const TopBar = () => {
       .then(() => {
         console.log('User signed out!');
         window.location.href = '/';
+        setAuthType('Guest');
       })
       .catch((error) => {
         console.log(error.message);

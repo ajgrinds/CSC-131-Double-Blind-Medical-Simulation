@@ -243,8 +243,6 @@ const Login = () => {
                       Don't have an account? Click{" "}
                       <Link to="/Register"> Here </Link> to register
                     </Typography>
-
-                    <Button onClick = {() => console.log( typeTest, authTest )}> list creds </Button>
                     </Box>
                 </Grid>
               </Grid>

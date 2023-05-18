@@ -5,11 +5,13 @@ import LightModeOutlinedIcon from "@mui/icons-material/LightModeOutlined";
 import DarkModeOutlinedIcon from "@mui/icons-material/DarkModeOutlined";
 import PersonOutlinedIcon from "@mui/icons-material/PersonOutlined";
 import { Link } from 'react-router-dom';
+import { UpdateAuthState } from '../../../authentication/context/AuthContext';
 
 const TopBar = () => {
   const theme = useTheme();
   const colorMode = useContext(ColorModeContext);
   const [anchorEl, setAnchorEl] = useState(null);
+  const setAuthType = UpdateAuthState();
 
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
@@ -17,6 +19,10 @@ const TopBar = () => {
 
   const handleClose = () => {
     setAnchorEl(null);
+  };
+
+  const handleSignOut = () => {
+    setAuthType("Guest");
   };
 
   return (
@@ -44,7 +50,7 @@ const TopBar = () => {
           onClose={handleClose}
         >
           <MenuItem onClick={handleClose}>
-            <Typography variant="body1" component={Link} to="/" color="inherit" underline="none">
+            <Typography variant="body1" component={Link} to="/" color="inherit" underline="none" onClick={handleSignOut}>
               Logout
             </Typography>
           </MenuItem>
