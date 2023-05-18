@@ -258,15 +258,6 @@ const Login = () => {
                     >
                       {loading ? <CircularProgress size={24} /> : "Sign In"}
                     </Button>
-                    <Typography
-                      fontFamily={"Inter"}
-                      fontWeight={400}
-                      fontSize={16}
-                      mb={1}
-                      onClick={() => handleNavigation("/JaneHopkins")} 
-                    >
-                      <Link to="#">Continue as Guest</Link> 
-                    </Typography>
                     <Typography fontFamily={"Inter"} fontWeight={400} fontSize={16}>
                       Don't have an account? Click{" "}
                       <Link to="/Register"> Here </Link> to register
