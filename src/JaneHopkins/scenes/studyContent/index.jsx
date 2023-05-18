@@ -63,7 +63,13 @@ const StudyContent = () => {
 
             try{
                 setIsLoading(true);
-                const response = await entities.study.list();
+                const response = await entities.study.list({
+                        filter: {
+                            studyName: {
+                              eq: id,
+                            }
+                      }
+                    });
                 setStudyList(response.items.map((study, index) => ({
                     ...study, 
                     id: index + 1
