@@ -1,3 +1,4 @@
+import React from "react";
 import {Routes, Route, Navigate} from "react-router-dom";
 import Dashboard from "./JaneHopkins/scenes/dashboard";
 import Patient from "./JaneHopkins/scenes/patient";

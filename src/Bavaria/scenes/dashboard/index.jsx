@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import useBavaria from "../../../vendiaHooks/useBavaria";
 import { Box, Button, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TextField, Typography, CircularProgress } from "@mui/material";
 import TrialProgress from "../trialProgress";
@@ -147,10 +147,10 @@ const BavariaDashboard = () => {
                         {study.endDate}
                       </TableCell>
                       <TableCell style={{color: "green"}}>
-                        yes
+                        Yes
                       </TableCell>
-                      <TableCell style={{color: study.status !== "Create" && study.status != "Cancelled" ? "green" : "red"}}>
-                        {study.status !== "Created" && study.status !== "Cancelled" ? "Yes" : "No"}
+                      <TableCell style={{color: study.status !== "Pending" && study.status != "Cancelled" ? "green" : "red"}}>
+                        {study.status !== "Pending" && study.status !== "Cancelled" ? "Yes" : "No"}
                       </TableCell>
                       <TableCell>
                         <Link to={`/Bavaria/report/${study._id}`}>

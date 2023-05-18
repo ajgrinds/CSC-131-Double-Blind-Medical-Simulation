@@ -24,7 +24,7 @@ const FinalReport = () => {
                 const response = await entities.study.list();
                 console.log("fetchingStudies\n"+response);
 
-                setStudies(response.items.filter( study => study._id === id & study.status === "Complete"))
+                setStudies(response.items.filter( study => study._id === id & (study.status === "Success" || study.status == "Failure")))
                 setIsLoading(false);
 
             }catch(error){
@@ -127,10 +127,9 @@ const FinalReport = () => {
             <TableHead>
                 <TableRow>
                 <TableCell style={{fontWeight: 'bold'}}>Study Name</TableCell>
-                <TableCell style={{fontWeight: 'bold'}}>Status</TableCell>
+                <TableCell style={{fontWeight: 'bold'}}>Success or Failure</TableCell>
                 <TableCell style={{fontWeight: 'bold'}}>Start</TableCell>
                 <TableCell style={{fontWeight: 'bold'}}>End</TableCell>
-                <TableCell style={{fontWeight: 'bold'}}>Success</TableCell>
                 <TableCell style={{fontWeight: 'bold'}}>Drug ID</TableCell>
                 <TableCell style={{fontWeight: 'bold'}}>Placebo ID</TableCell>
                 <TableCell style={{fontWeight: 'bold'}}>Total # of Drugs</TableCell>
@@ -154,9 +153,6 @@ const FinalReport = () => {
                     </TableCell>
                     <TableCell>
                     {study.endDate}
-                    </TableCell>
-                    <TableCell>
-                    {study.fdaApproved}
                     </TableCell>
                     <TableCell>
                     {study.drugId}
