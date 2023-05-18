@@ -17,51 +17,62 @@ import TrackDosage from "./JaneHopkins/scenes/trackDosage";
 import PatientDosage from "./JaneHopkins/scenes/patientDosage";
 import TrialProgress from "./Bavaria/scenes/trialProgress";
 import FinalReport from "./Bavaria/scenes/finalReport";
+import { useState, useContext, Context } from "react";
+import { TrackChanges } from "@mui/icons-material";
+import { AuthProvider } from "./authentication/context/AuthContext";
+import Admin from "./JaneHopkins/scenes/admin";
+import ProtectedRoute from "./authentication/ProtectedRoutes/ProtectedRoutes";
 
 
 function App() {
 
   return ( 
-
-    <Routes>
-      
-      { /* Login Page */}
-
-      <Route exact path="/" element={<LoginPage/>}/>
-
-      { /* Register Page */}
-
-      <Route exact path="/Register" element={<RegisterPage/>}/>
-
-      
-
-      {/*Routes for JaneHopkins Page */}
-      <Route path="/JaneHopkins/*" element={<Doctor/>}>
+    <AuthProvider>
+      <Routes>
         
-        <Route path="patient" element={<Patient/>}/>
-        <Route path="addpatient" element={<AddPatient/>} />
-        <Route path="patient/:id" element={<PatientDetails/>}/>
-        <Route path="trackdosage" element={<TrackDosage/>}/>
-        <Route path="trackdosage/:id" element={<PatientDosage/>} />
+        { /* Login Page */}
 
-      </Route>
+        <Route exact path="/" element={<LoginPage/>}/>
 
-      {/*Routes for FDA page */}
-      
-      <Route exact path="/fda/*" element={<FDA/>}>
+        { /* Register Page */}
+
+        <Route exact path="/Register" element={<RegisterPage/>}/>
+
         
-      </Route>
 
-      {/*Routes for Bavaria page */}
-      <Route path="/bavaria/*" element={<Bavaria/>}>
+        {/*Routes for JaneHopkins Page */}
         
-        <Route path="createDrug" element={<CreateDrug/>}/>
-        <Route path="study" element={<TrialProgress/>}/>
-        <Route path="report/:id" element={<FinalReport />} />
-      </Route>
+        
+        <Route element={<ProtectedRoute allowedRoles={'JaneHopkins'} />} >
+          
+          <Route path="/JaneHopkins/*" element={<Doctor/>}/>
+          <Route path="patient" element={<Patient/>}/>
+          <Route path="addpatient" element={<AddPatient/>} />
+          <Route path="patient/:id" element={<PatientDetails/>}/>
+          <Route path="trackdosage" element={<TrackDosage/>}/>
+          <Route path="trackdosage/:id" element={<PatientDosage/>} />
 
-    </Routes>
-    
+        </Route>
+
+        {/*Routes for FDA page */}
+        
+        <Route element = {<ProtectedRoute allowedRoles = {'FDA'} />}>
+          <Route exact path="/fda/*" element={<FDA/>}/>
+        </Route>
+
+        {/*Routes for Bavaria page */}
+          
+        <Route element = {<ProtectedRoute allowedRoles = {'Bavaria'} />}>
+          <Route path="/bavaria/*" element={<Bavaria/>}>
+            
+            <Route path="createDrug" element={<CreateDrug/>}/>
+            <Route path="study" element={<TrialProgress/>}/>
+            <Route path="report/:id" element={<FinalReport />} />
+          </Route>
+        </Route>
+
+      </Routes>
+      </AuthProvider>
   );
 }
 
