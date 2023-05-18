@@ -174,7 +174,7 @@ const FDAStudy = () => {
     },
     { 
       field: "participants",
-      headerName: "Particiapnts",
+      headerName: "Participants",
       minWidth: 100,
       flex: matches ? 1 : 1.5,
       renderCell: (cellValues) => {
