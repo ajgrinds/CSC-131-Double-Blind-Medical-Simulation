@@ -1,4 +1,4 @@
-import { createContext, useState, useContext } from "react";
+import { createContext, useState, useContext, useEffect } from "react";
 
 const LoginContext = createContext();
 const AuthType = createContext();
@@ -30,7 +30,9 @@ export function AuthProvider ({children}) {
     const[loggedIn, setLoggedIn] = useState(false);
     const[userType, setUserType] = useState('Guest');
 
+
     function updateUser (s) {
+        localStorage.setItem("my-auth-type", JSON.stringify(s));
         return setUserType(s);
     }
 

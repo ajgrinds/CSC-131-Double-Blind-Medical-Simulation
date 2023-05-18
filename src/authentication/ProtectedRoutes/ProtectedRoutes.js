@@ -1,14 +1,21 @@
 import {useLocation, Navigate, Outlet} from 'react-router-dom'
 import { UseAuth, UseAuthType } from '../context/AuthContext'
+import { useEffect, useState } from 'react';
 
 const ProtectedRoutes = ({allowedRoles}) => {
-    const useAuth = UseAuth();
     const location = useLocation();
-    const authRole = UseAuthType();
+    const [authType, setAuthType] = useState("")
+
+    useEffect(() => {
+        const data = JSON.parse(localStorage.getItem("my-auth-type"));
+        if(data){
+            setAuthType(data);
+        }
+      }, [] );
 
     return (
-        allowedRoles?.includes(authRole)
-        ? <Outlet /> 
+        allowedRoles?.includes(authType)
+        ? <Outlet/> 
         : <Navigate to = "/" state={{from:location}} replace/>
     );
 }
