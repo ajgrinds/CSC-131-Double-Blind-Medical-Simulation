@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState, useContext } from "react";
 import { createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged, signOut } from "firebase/auth";
 import { auth } from "../../firebase-config";
 import Button from "@mui/material/Button";
@@ -26,6 +26,7 @@ import VisibilityOff from "@mui/icons-material/VisibilityOff";
 import SquiliemImage from "./logIn.jpeg";
 import Hidden from "@mui/material/Hidden";
 import useMediaQuery from "@mui/material/useMediaQuery";
+import { UseGiveAuth, UpdateAuthState, UseAuth, UseAuthType, useTakeauth, UseTakeAuth } from "../../context/AuthContext";
 
 const Login = () => {
 
@@ -34,29 +35,30 @@ const Login = () => {
     const[loginEmail, setLoginEmail] = useState("");
     const[loginPassword, setLoginPassword] = useState("");
     const navigate = useNavigate();
-    const location = useLocation();
 
     const[user, setUser] = useState({});
+
+    const authorization = UseGiveAuth();
+    const setAuthType = UpdateAuthState();
+    const signOut = UseTakeAuth();
+    const authTest = UseAuth();
+    const typeTest = UseAuthType();
+
+    const [signedIn, setSignedIn] = useState(false);
+
+    useEffect(() => {
+      const data = JSON.parse(localStorage.getItem("my-auth-status"));
+      if(data){
+          setSignedIn(data);
+      }
+    }, [] );
+    
 
     useEffect (() => {
         onAuthStateChanged(auth, (currentUser) => {
             setUser(currentUser);
           });
     });
-
-    const register = async () => {
-        try {
-          const user = await createUserWithEmailAndPassword(
-            auth,
-            registerEmail,
-            registerPassword
-          );
-          console.log(user);
-        } catch (error) {
-          console.log(error.message);
-          alert("Invalid Email and/or Password");
-        }
-    };    
 
     const login = async () => {
         try {
@@ -65,25 +67,31 @@ const Login = () => {
             loginEmail,
             loginPassword
           );
-          console.log(user);
+          const email = auth.currentUser.email;
+            if(email.match("@bavaria.com")) {
+              setAuthType('Bavaria');
+              navigate("/bavaria"); 
+            }
+            if(email.match("@fda.com")) {
+              setAuthType('FDA');
+              navigate("/fda");
+            }
+            if(email.match(/@JaneHopkins.com/gi)) {
+              setAuthType('JaneHopkins');
+              navigate("/JaneHopkins");
+            }
+          authorization();
         } catch (error) {
           console.log(error.message);
           alert("Unrecognized Email and/or Password");
         }
-        const email = auth.currentUser.email;
-        if(email.match("@bavaria.com")) {
-          navigate("/bavaria");
-        }
-        if(email.match("@fda.com")) {
-          navigate("/fda");
-        }
-        if(email.match(/@JaneHopkins.com/gi)) {
-          navigate("/JaneHopkins");
-        }
+        
     };  
     
     const logout = async () => {
-        await signOut(auth);
+        //await signOut(auth);
+        setAuthType("Guest");
+        signOut();
     };
 
     /*Transition to pages*/
@@ -177,25 +185,45 @@ const Login = () => {
                       }}
                     >
                     <AccountCircleIcon sx={{ fontSize: 100, mt: 1 }} />
-                    <Typography
-                      component="h1"
-                      variant="h5"
-                      marginTop={2}
-                      fontFamily={"Inter"}
-                      fontWeight={900}
-                      fontSize={36}
-                    >
-                      Sign in
-                    </Typography>
+                    {!signedIn && (
+                      <>
+                            <Typography
+                          component="h1"
+                          variant="h5"
+                          marginTop={2}
+                          fontFamily={"Inter"}
+                          fontWeight={900}
+                          fontSize={36}
+                        >
+                          Sign in
+                        </Typography>
+                        
+                      </>
+                    )}
+                    {signedIn && (
+                      <>
+                            <Typography
+                          component="h1"
+                          variant="h5"
+                          marginTop={2}
+                          fontFamily={"Inter"}
+                          fontWeight={900}
+                          fontSize={36}
+                          align={"center"}
+                        >
+                          Sign in to Another Account
+                        </Typography>
+                      </>
+                    )}
                     <TextField
-                      fullWidth
-                      margin="normal"
-                      label="Email"
-                      variant="outlined"
-                      onChange={(event) => {
-                        setLoginEmail(event.target.value);
-                      }}
-                    />
+                          fullWidth
+                          margin="normal"
+                          label="Email"
+                          variant="outlined"
+                          onChange={(event) => {
+                            setLoginEmail(event.target.value);
+                          }}
+                        />
                     <TextField
                       fullWidth
                       margin="normal"
