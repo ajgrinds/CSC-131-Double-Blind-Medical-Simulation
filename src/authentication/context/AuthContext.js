@@ -37,10 +37,12 @@ export function AuthProvider ({children}) {
     }
 
     function giveAuthTo () {
+        localStorage.setItem("my-auth-status", JSON.stringify(true));
         return setLoggedIn(true);
     }
 
     function takeAuthFrom () {
+        localStorage.setItem("my-auth-status", JSON.stringify(false));
         return setLoggedIn(false);
     }
 

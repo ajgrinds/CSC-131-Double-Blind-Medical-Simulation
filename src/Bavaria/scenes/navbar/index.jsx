@@ -15,7 +15,7 @@ import AdbIcon from '@mui/icons-material/Adb';
 import { Link } from 'react-router-dom';
 import { auth } from '../../../authentication/firebase-config'
 import { signOut } from 'firebase/auth';
-import { UpdateAuthState} from '../../../authentication/context/AuthContext'
+import { UpdateAuthState, UseTakeAuth} from '../../../authentication/context/AuthContext'
 
 
 const pages = ['Add Study', 'View Study'];
@@ -25,6 +25,7 @@ function ResponsiveAppBar() {
   const [anchorElNav, setAnchorElNav] = React.useState(null);
   const [anchorElUser, setAnchorElUser] = React.useState(null);
   const setAuthType = UpdateAuthState();
+  const resetAuthStatus = UseTakeAuth();
   
 
   const handleOpenNavMenu = (event) => {
@@ -48,6 +49,7 @@ function ResponsiveAppBar() {
         console.log('User signed out');
         window.location.href = '/';
         setAuthType('Guest');
+        resetAuthStatus();
       })
       .catch((error) => {
         console.log(error.message);

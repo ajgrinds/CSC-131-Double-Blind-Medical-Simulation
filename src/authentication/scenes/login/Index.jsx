@@ -36,7 +36,6 @@ const Login = () => {
     const[loginPassword, setLoginPassword] = useState("");
     const navigate = useNavigate();
 
-
     const[user, setUser] = useState({});
 
     const authorization = UseGiveAuth();
@@ -44,6 +43,15 @@ const Login = () => {
     const signOut = UseTakeAuth();
     const authTest = UseAuth();
     const typeTest = UseAuthType();
+
+    const [signedIn, setSignedIn] = useState(false);
+
+    useEffect(() => {
+      const data = JSON.parse(localStorage.getItem("my-auth-status"));
+      if(data){
+          setSignedIn(data);
+      }
+    }, [] );
     
 
     useEffect (() => {
@@ -177,25 +185,45 @@ const Login = () => {
                       }}
                     >
                     <AccountCircleIcon sx={{ fontSize: 100, mt: 1 }} />
-                    <Typography
-                      component="h1"
-                      variant="h5"
-                      marginTop={2}
-                      fontFamily={"Inter"}
-                      fontWeight={900}
-                      fontSize={36}
-                    >
-                      Sign in
-                    </Typography>
+                    {!signedIn && (
+                      <>
+                            <Typography
+                          component="h1"
+                          variant="h5"
+                          marginTop={2}
+                          fontFamily={"Inter"}
+                          fontWeight={900}
+                          fontSize={36}
+                        >
+                          Sign in
+                        </Typography>
+                        
+                      </>
+                    )}
+                    {signedIn && (
+                      <>
+                            <Typography
+                          component="h1"
+                          variant="h5"
+                          marginTop={2}
+                          fontFamily={"Inter"}
+                          fontWeight={900}
+                          fontSize={36}
+                          align={"center"}
+                        >
+                          Sign in to Another Account
+                        </Typography>
+                      </>
+                    )}
                     <TextField
-                      fullWidth
-                      margin="normal"
-                      label="Email"
-                      variant="outlined"
-                      onChange={(event) => {
-                        setLoginEmail(event.target.value);
-                      }}
-                    />
+                          fullWidth
+                          margin="normal"
+                          label="Email"
+                          variant="outlined"
+                          onChange={(event) => {
+                            setLoginEmail(event.target.value);
+                          }}
+                        />
                     <TextField
                       fullWidth
                       margin="normal"

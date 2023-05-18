@@ -5,13 +5,14 @@ import LightModeOutlinedIcon from "@mui/icons-material/LightModeOutlined";
 import DarkModeOutlinedIcon from "@mui/icons-material/DarkModeOutlined";
 import PersonOutlinedIcon from "@mui/icons-material/PersonOutlined";
 import { Link } from 'react-router-dom';
-import { UpdateAuthState } from '../../../authentication/context/AuthContext';
+import { UpdateAuthState, UseTakeAuth } from '../../../authentication/context/AuthContext';
 
 const TopBar = () => {
   const theme = useTheme();
   const colorMode = useContext(ColorModeContext);
   const [anchorEl, setAnchorEl] = useState(null);
   const setAuthType = UpdateAuthState();
+  const resetAuthStatus = UseTakeAuth();
 
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
@@ -23,6 +24,7 @@ const TopBar = () => {
 
   const handleSignOut = () => {
     setAuthType("Guest");
+    resetAuthStatus();
   };
 
   return (
